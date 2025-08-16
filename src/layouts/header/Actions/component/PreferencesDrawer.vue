@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { throttle } from 'lodash-es'
-import {
-  NColorPicker,
-  NDivider,
-  NDrawer,
-  NDrawerContent,
-  NSwitch,
-  useModal,
-} from 'naive-ui'
+import { NColorPicker, NDivider, NDrawer, NDrawerContent, NSwitch, useModal } from 'naive-ui'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation } from '@/components'

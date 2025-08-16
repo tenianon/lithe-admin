@@ -12,7 +12,6 @@ const DEFAULT_SYSTEM_INFO_OPTIONS: SystemInfoOptions = {
 }
 
 export const useSystemStore = defineStore('systemStore', () => {
-
   const systemInfo = useStorage<SystemInfoOptions>('systemInfo', DEFAULT_SYSTEM_INFO_OPTIONS)
 
   return {
