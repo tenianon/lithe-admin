@@ -45,7 +45,6 @@ export function setupRouterGuard(router: Router) {
           name: 'layouts',
           component: Layouts,
           // if you need to have a redirect when accessing / routing
-          redirect: '/dashboard',
           children: userStore.routeList,
         })
 
