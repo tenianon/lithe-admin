@@ -59,7 +59,6 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
       iconMargin: '0 6px 0 0',
       padding: '10px 18px',
     },
-
     Popconfirm: {
       iconSize: '20px',
     },
