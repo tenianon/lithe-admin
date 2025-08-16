@@ -2,17 +2,13 @@
 import { useDialog } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import { useComponentModifier } from '@/composable/useComponentModifier'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 const dialog = useDialog()
 
-const { getModalModifier } = useComponentModifier()
-
 const handleSignOutClick = () => {
   dialog.info({
-    ...getModalModifier(),
     title: '退出登录',
     content: '确定要退出登录吗？',
     positiveText: '确定',

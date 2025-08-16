@@ -7,19 +7,16 @@ import {
   NDrawerContent,
   NSwitch,
   useModal,
-  NScrollbar,
 } from 'naive-ui'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation } from '@/components'
-import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { usePersonalization } from '@/composable/usePersonalization'
 import { usePreferencesStore } from '@/stores/preferences'
 import { useSystemStore } from '@/stores/system'
 import twColors from '@/utils/tailwindColor'
 
 import NoiseModal from './NoiseModal.vue'
-import WatermarkModal from './WatermarkModal.vue'
 
 const preferencesStore = usePreferencesStore()
 const systemStore = useSystemStore()
@@ -29,8 +26,6 @@ const { color, setColor } = usePersonalization()
 const { modify, reset } = preferencesStore
 
 const modal = useModal()
-
-const { scrollbarInModal } = useComponentThemeOverrides()
 
 const showDrawer = ref(false)
 
@@ -56,31 +51,6 @@ const colorSwatches = [
 const modifyColor = throttle((value: string) => {
   setColor(value)
 }, 1000)
-
-const showWatermarkModal = () => {
-  modal.create({
-    title: '修改水印信息',
-    preset: 'dialog',
-    content: () =>
-      h(
-        NScrollbar,
-        {
-          themeOverrides: scrollbarInModal.value,
-          style: {
-            maxHeight: '400px',
-          },
-          contentClass: 'pr-3 py-6',
-        },
-        {
-          default: () => h(WatermarkModal),
-        },
-      ),
-    closable: true,
-    draggable: true,
-    showIcon: false,
-    zIndex: 99999,
-  })
-}
 
 const showNoiseModal = () => {
   modal.create({
@@ -238,27 +208,6 @@ const showNoiseModal = () => {
         </div>
         <div>
           <NDivider>页面相关</NDivider>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-x-1">
-              <span>显示水印</span>
-              <ButtonAnimation
-                size="small"
-                @click="showWatermarkModal"
-                label="修改"
-              >
-                <span class="iconify size-4 ph--pencil-simple-line" />
-              </ButtonAnimation>
-            </div>
-            <NSwitch
-              :value="preferencesStore.preferences.showWatermark"
-              @update-value="
-                (value) =>
-                  modify({
-                    showWatermark: value,
-                  })
-              "
-            />
-          </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-x-1">
               <span>显示磨砂效果</span>

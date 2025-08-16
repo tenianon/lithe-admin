@@ -4,7 +4,6 @@ import { NScrollbar } from 'naive-ui'
 
 import texturePng from '@/assets/texture.png'
 import { EmptyPlaceholder } from '@/components'
-import { useComponentThemeOverrides } from '@/composable/useComponentThemeOverrides'
 import { usePreferencesStore } from '@/stores/preferences'
 import { useTabsStore } from '@/stores/tabs'
 
@@ -20,7 +19,6 @@ defineOptions({
 
 const tabsStore = useTabsStore()
 const preferencesStore = usePreferencesStore()
-const { scrollbarInMainLayout } = useComponentThemeOverrides()
 </script>
 <template>
   <div class="flex h-dvh flex-col overflow-hidden">
@@ -53,7 +51,6 @@ const { scrollbarInMainLayout } = useComponentThemeOverrides()
           :container-style="{
             backgroundImage: `url(${texturePng})`,
           }"
-          :theme-overrides="scrollbarInMainLayout"
         >
           <MainLayout />
         </NScrollbar>
