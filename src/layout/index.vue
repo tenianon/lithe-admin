@@ -81,7 +81,7 @@ watch(isSmallScreen, (isSmallScreen) => {
           <AsideLayout />
         </CollapseTransition>
 
-        <div class="flex flex-1 flex-col overflow-hidden">
+        <div class="relative flex flex-1 flex-col overflow-hidden">
           <CollapseTransition
             v-if="!isSmallScreen"
             :display="!isEmpty(tabsStore.tabs) && preferencesStore.preferences.showTabs"

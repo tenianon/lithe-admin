@@ -70,11 +70,7 @@ function toLayout() {
   const { r } = router.currentRoute.value.query
 
   setTimeout(() => {
-    if (signInForm.account.includes('admin')) {
-      userStore.setToken('admin')
-    } else {
-      userStore.setToken('user')
-    }
+    userStore.setToken('token')
 
     router.replace({
       path: (r as string) || '/',
