@@ -35,6 +35,22 @@ English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/READM
 - **Node.js**: `^20.19.0` or `>=22.12.0`
 - **Package Manager**: `pnpm` (recommended), or `npm`, or `yarn`
 
+### Clone the project
+
+```bash
+git clone https://github.com/tenianon/lithe-admin.git
+```
+
+### Lite version
+
+Branch address [lite](https://github.com/tenianon/lithe-admin/tree/lite), the **lite version** does not include routing pages, only preserving the basic page structure
+
+```bash
+git clone -b lite https://github.com/tenianon/lithe-admin.git
+```
+
+
+
 ### Install Dependencies
 
 ```bash

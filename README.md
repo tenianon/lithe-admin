@@ -35,6 +35,20 @@
 - **Node.js**: `^20.19.0` 或 `>=22.12.0`
 - **包管理器**: `pnpm` (推荐) 或 `npm` 或 `yarn`
 
+### 克隆项目
+
+```bash
+git clone https://github.com/tenianon/lithe-admin.git
+```
+
+### 精简版
+
+分支地址 [lite](https://github.com/tenianon/lithe-admin/tree/lite)，**精简版**不包含路由页面，只保留了页面基本架构
+
+```bash
+git clone -b lite https://github.com/tenianon/lithe-admin.git
+```
+
 ### 安装依赖
 
 ```bash
