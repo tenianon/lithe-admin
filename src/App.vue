@@ -6,7 +6,6 @@ import {
   NDialogProvider,
   NNotificationProvider,
   NMessageProvider,
-  NWatermark,
   NGlobalStyle,
   NEl,
 } from 'naive-ui'
@@ -57,11 +56,6 @@ provide(layoutInjectionKey, {
           <NMessageProvider>
             <NDialogProvider>
               <RouterView />
-              <NWatermark
-                v-if="preferencesStore.preferences.showWatermark"
-                fullscreen
-                v-bind="preferencesStore.preferences.watermarkOptions"
-              />
               <Noise v-if="preferencesStore.preferences.showNoise" />
             </NDialogProvider>
           </NMessageProvider>

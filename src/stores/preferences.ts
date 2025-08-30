@@ -3,8 +3,6 @@ import { mergeWith } from 'lodash-es'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { watch } from 'vue'
 
-import type { WatermarkProps } from 'naive-ui'
-
 type NavigationMode = 'sidebar' | 'horizontal'
 
 export interface PreferencesOptions {
@@ -25,7 +23,6 @@ export interface PreferencesOptions {
   showTopLoadingBar: boolean
   enableNavigationTransition: boolean
   enableTextSelect: boolean
-  watermarkOptions: Partial<WatermarkProps>
   noiseOpacity: number
 }
 
@@ -47,28 +44,6 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
   showTopLoadingBar: true,
   enableNavigationTransition: true,
   enableTextSelect: true,
-  watermarkOptions: {
-    content: 'Watermark',
-    fontColor: '#D81E1E96',
-    fontSize: 16,
-    width: 384,
-    height: 384,
-    xGap: 0,
-    yGap: 0,
-    xOffset: 12,
-    yOffset: 60,
-    globalRotate: 0,
-    rotate: -20,
-    textAlign: 'center',
-    cross: true,
-    fontStyle: 'normal',
-    fontWeight: 400,
-    lineHeight: 16,
-    image: '',
-    imageHeight: 64,
-    imageWidth: 64,
-    imageOpacity: 0.5,
-  },
   noiseOpacity: 0.02,
 } as const
 
