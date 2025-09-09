@@ -45,13 +45,18 @@ const { tabs } = toRefsTabsStore()
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
-const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
+const {
+  layoutSlideDirection,
+  setLayoutSlideDirection,
+  mobileLeftAsideWidth,
+  mobileRightAsideWidth,
+} = useInjection(layoutInjectionKey)
 
 const layoutTranslateOffset = computed(() => {
   return layoutSlideDirection.value === 'right'
-    ? sidebarMenu.value.maxWidth || 0
+    ? mobileLeftAsideWidth.value || 0
     : layoutSlideDirection.value === 'left'
-      ? -(sidebarMenu.value.width || 0)
+      ? -(mobileRightAsideWidth.value || 0)
       : 0
 })
 

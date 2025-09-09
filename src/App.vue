@@ -50,6 +50,8 @@ provide(layoutInjectionKey, {
   layoutSlideDirection,
   setLayoutSlideDirection,
   isSidebarColResizing,
+  mobileLeftAsideWidth: ref(0),
+  mobileRightAsideWidth: ref(0),
 })
 </script>
 

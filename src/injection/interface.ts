@@ -15,4 +15,6 @@ export interface LayoutProvider {
   layoutSlideDirection: Ref<LayoutSlideDirection>
   setLayoutSlideDirection: (direction: LayoutSlideDirection) => void
   isSidebarColResizing: Ref<boolean>
+  mobileLeftAsideWidth: Ref<number>
+  mobileRightAsideWidth: Ref<number>
 }
