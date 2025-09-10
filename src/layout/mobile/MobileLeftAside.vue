@@ -13,7 +13,9 @@ const { layoutSlideDirection, mobileLeftAsideWidth } = useInjection(layoutInject
 const mobileLeftAsideRef = useTemplateRef<HTMLElement>('mobileLeftAside')
 
 onMounted(() => {
-  if (mobileLeftAsideRef.value) mobileLeftAsideWidth.value = mobileLeftAsideRef.value.clientWidth
+  if (mobileLeftAsideRef.value) {
+    mobileLeftAsideWidth.value = mobileLeftAsideRef.value.clientWidth
+  }
 })
 </script>
 <template>

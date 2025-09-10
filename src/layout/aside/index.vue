@@ -42,12 +42,12 @@ function handleCollapseClick() {
 
 const onSidelineMouseDown = () => {
   isSidebarColResizing.value = true
-  document.documentElement.style.userSelect = 'none'
+  document.documentElement.style.cssText = 'user-select: none; cursor: col-resize;'
   document.addEventListener(
     'mouseup',
     () => {
       isSidebarColResizing.value = false
-      document.documentElement.style.userSelect = 'auto'
+      document.documentElement.style.cssText = 'user-select: auto;'
     },
     {
       once: true,
