@@ -22,7 +22,7 @@ import {
 } from 'naive-ui'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
-import { ContentWrapper } from '@/components'
+import { ScrollContainer } from '@/components'
 import { useInjection, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -221,7 +221,7 @@ watch(
 )
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-2">
+  <ScrollContainer wrapper-class="flex flex-col gap-y-2">
     <NAlert
       type="info"
       closable
@@ -543,5 +543,5 @@ watch(
         </template>
       </NSplit>
     </NCard>
-  </ContentWrapper>
+  </ScrollContainer>
 </template>

@@ -2,7 +2,7 @@
 import { NAlert, NCard, useMessage, NButton, useModal, NModal, useNotification } from 'naive-ui'
 import { reactive } from 'vue'
 
-import { ContentWrapper } from '@/components'
+import { ScrollContainer } from '@/components'
 
 import type { ModalProps } from 'naive-ui'
 
@@ -77,7 +77,7 @@ const createDialogApi = (type: ModalProps['type'] = 'success') => {
 }
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-2">
+  <ScrollContainer wrapper-class="flex flex-col gap-y-2">
     <NAlert
       type="info"
       closable
@@ -460,5 +460,5 @@ const createDialogApi = (type: ModalProps['type'] = 'success') => {
       negative-text="算了"
     >
     </NModal>
-  </ContentWrapper>
+  </ScrollContainer>
 </template>

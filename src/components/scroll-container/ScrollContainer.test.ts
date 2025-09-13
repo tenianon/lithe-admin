@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
 
-import { ContentWrapper } from '../index'
+import { ScrollContainer } from '../index'
 ;(window as any).matchMedia ||= (q: string) => ({
   matches: false,
   media: q,
@@ -15,9 +15,9 @@ import { ContentWrapper } from '../index'
   },
 })
 
-describe('ContentWrapper Component', () => {
+describe('ScrollContainer Component', () => {
   it('render component', () => {
-    const wrapper = mount(ContentWrapper, {
+    const wrapper = mount(ScrollContainer, {
       slots: {
         default: '<div class="context">context</div>',
       },

@@ -3,7 +3,7 @@ import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
-import { ContentWrapper } from '@/components'
+import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -57,9 +57,6 @@ const dir = ` 📂 lithe-admin
 │    └── 📂 collapse-transition/
 │      ├── 📄 CollapseTransition.test.ts
 │      ├── 📄 CollapseTransition.vue
-│    └── 📂 content-wrapper/
-│      ├── 📄 ContentWrapper.test.ts
-│      ├── 📄 ContentWrapper.vue
 │    └── 📂 empty-placeholder/
 │      ├── 📄 EmptyPlaceholder.test.ts
 │      ├── 📄 EmptyPlaceholder.vue
@@ -67,6 +64,9 @@ const dir = ` 📂 lithe-admin
 │      ├── 📄 HintHelp.test.ts
 │      ├── 📄 HintHelp.vue
 │    ├── 📄 index.ts
+│    └── 📂 scroll-container/
+│      ├── 📄 ScrollContainer.test.ts
+│      ├── 📄 ScrollContainer.vue
 │  └── 📂 composables/
 │    ├── 📄 index.ts
 │    ├── 📄 useComponentModifier.ts
@@ -215,7 +215,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-2">
+  <ScrollContainer wrapper-class="flex flex-col gap-y-2">
     <NCard
       :title="`关于 ${APP_NAME}`"
       :size="isMaxMd ? 'small' : undefined"
@@ -340,5 +340,5 @@ onMounted(async () => {
         </NSplit>
       </NCard>
     </div>
-  </ContentWrapper>
+  </ScrollContainer>
 </template>

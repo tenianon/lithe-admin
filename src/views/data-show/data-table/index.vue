@@ -19,7 +19,7 @@ import {
 } from 'naive-ui'
 import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
 
-import { ContentWrapper } from '@/components'
+import { ScrollContainer } from '@/components'
 import { useInjection, useComponentModifier, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
@@ -438,8 +438,8 @@ async function getDataList() {
 getDataList()
 </script>
 <template>
-  <ContentWrapper
-    content-class="flex flex-col gap-y-2"
+  <ScrollContainer
+    wrapper-class="flex flex-col gap-y-2"
     :scrollable="isMaxLg"
   >
     <NAlert
@@ -615,5 +615,5 @@ getDataList()
       v-bind="dropdownOptions"
       :show="enableContextmenu && showDropdown"
     />
-  </ContentWrapper>
+  </ScrollContainer>
 </template>

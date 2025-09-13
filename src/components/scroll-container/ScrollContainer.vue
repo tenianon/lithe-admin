@@ -9,15 +9,15 @@ import type { CSSProperties, ComponentPublicInstance } from 'vue'
 
 export interface ContentWrapperProps extends /* @vue-ignore */ ScrollbarProps {
   scrollable?: boolean
-  contentClass?: string
-  contentStyle?: CSSProperties
+  wrapperClass?: string
+  wrapperStyle?: CSSProperties
 }
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const { scrollable = true, contentClass, contentStyle } = defineProps<ContentWrapperProps>()
+const { scrollable = true, wrapperClass, wrapperStyle } = defineProps<ContentWrapperProps>()
 
 const { scrollbarInMainLayout } = useComponentThemeOverrides()
 
@@ -40,8 +40,8 @@ function forwardRef(ref: Element | ComponentPublicInstance | null) {
     >
       <div
         class="p-4 max-sm:p-2"
-        :class="contentClass"
-        :style="contentStyle"
+        :class="wrapperClass"
+        :style="wrapperStyle"
       >
         <slot />
       </div>
@@ -49,8 +49,8 @@ function forwardRef(ref: Element | ComponentPublicInstance | null) {
     <div
       v-else
       class="h-full p-4 max-sm:p-2"
-      :class="contentClass"
-      :style="contentStyle"
+      :class="wrapperClass"
+      :style="wrapperStyle"
     >
       <slot />
     </div>

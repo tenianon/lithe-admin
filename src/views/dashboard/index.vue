@@ -5,7 +5,7 @@ import * as echarts from 'echarts'
 import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
 
-import { ContentWrapper } from '@/components'
+import { ScrollContainer } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
 import twc from '@/utils/tailwindColor'
 
@@ -1108,7 +1108,7 @@ watch([isDark, themeColor], () => {
 })
 </script>
 <template>
-  <ContentWrapper content-class="flex flex-col gap-y-4 max-sm:gap-y-2">
+  <ScrollContainer wrapper-class="flex flex-col gap-y-4 max-sm:gap-y-2">
     <div class="grid grid-cols-1 gap-4 max-sm:gap-2 md:grid-cols-2 lg:grid-cols-4">
       <div
         v-for="{
@@ -1215,5 +1215,5 @@ watch([isDark, themeColor], () => {
         </div>
       </div>
     </div>
-  </ContentWrapper>
+  </ScrollContainer>
 </template>
