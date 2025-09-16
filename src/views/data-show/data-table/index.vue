@@ -393,6 +393,7 @@ function createOrEditData(data?: UserInfo) {
   }
 
   const m = modal.create({
+    autoFocus: false,
     title,
     preset: 'card',
     draggable: true,

@@ -73,6 +73,7 @@ const colorSwatches = [
 
 const showWatermarkModal = () => {
   modal.create({
+    autoFocus: false,
     title: '修改水印信息',
     preset: 'dialog',
     content: () =>
@@ -98,6 +99,7 @@ const showWatermarkModal = () => {
 
 const showNoiseModal = () => {
   modal.create({
+    autoFocus: false,
     title: '修改磨砂细腻度',
     preset: 'dialog',
     content: () => h(NoiseModal),
