@@ -114,9 +114,9 @@ const showNoiseModal = () => {
   <div>
     <ButtonAnimation
       @click="showPreferencesDrawer = true"
-      title="侧边栏"
+      title="系统设定"
     >
-      <span class="iconify rotate-180 ph--sidebar-simple-duotone" />
+      <span class="iconify-[carbon--settings] rotate-180" />
     </ButtonAnimation>
     <ButtonAnimationProvider>
       <NDrawer
