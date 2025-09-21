@@ -47,7 +47,7 @@ const onSidelineMouseDown = () => {
     'mouseup',
     () => {
       isSidebarColResizing.value = false
-      document.documentElement.style.cssText = 'user-select: auto;'
+      document.documentElement.style.cssText = ''
     },
     {
       once: true,

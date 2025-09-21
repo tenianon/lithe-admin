@@ -107,7 +107,7 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
   watch(
     () => preferences.value.enableTextSelect,
     (enabled) => {
-      document.documentElement.style.userSelect = enabled ? 'auto' : 'none'
+      document.documentElement.style.userSelect = enabled ? '' : 'none'
     },
     {
       immediate: true,
