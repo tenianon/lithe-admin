@@ -52,7 +52,7 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
   enableNavigationTransition: true,
   enableTextSelect: true,
   watermarkOptions: {
-    content: 'Watermark',
+    content: import.meta.env.VITE_WATERMARK_CONTENT || '',
     fontColor: '#D81E1E96',
     fontSize: 16,
     width: 384,
