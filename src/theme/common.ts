@@ -3,6 +3,10 @@ import twc from '@/utils/tailwindColor'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
+const BASE = {
+  fontWeight: '400',
+}
+
 export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
   return {
     common: {
@@ -24,15 +28,23 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
       textColorSupplPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
       textColorFocusPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
     },
+    Card: {
+      titleFontWeight: BASE.fontWeight,
+    },
     Checkbox: {
       checkMarkColor: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[800]),
     },
     Dialog: {
       iconSize: '24px',
       iconMargin: '0 8px 0 0',
+      titleFontWeight: BASE.fontWeight,
+    },
+    Divider: {
+      fontWeight: BASE.fontWeight,
     },
     Drawer: {
       borderRadius: 0,
+      titleFontWeight: '400',
     },
     Dropdown: {
       padding: '6px 2px',
