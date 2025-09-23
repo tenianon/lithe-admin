@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import {
-  NColorPicker,
-  NDivider,
-  NDrawer,
-  NDrawerContent,
-  NSwitch,
-  useModal,
-  NScrollbar,
-} from 'naive-ui'
+import { NColorPicker, NDivider, NDrawer, NDrawerContent, NSwitch, useModal } from 'naive-ui'
 import { h, ref } from 'vue'
 
 import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
-import { useComponentThemeOverrides, useInjection } from '@/composables'
+import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, useSystemStore, toRefsPreferencesStore } from '@/stores'
 import { ccAPCA } from '@/utils/chromaHelper'
@@ -48,8 +40,6 @@ const systemStore = useSystemStore()
 
 const modal = useModal()
 
-const { scrollbarInModal } = useComponentThemeOverrides()
-
 const showPreferencesDrawer = ref(false)
 
 const colorSwatches = [
@@ -76,20 +66,7 @@ const showWatermarkModal = () => {
     autoFocus: false,
     title: '修改水印信息',
     preset: 'dialog',
-    content: () =>
-      h(
-        NScrollbar,
-        {
-          themeOverrides: scrollbarInModal.value,
-          style: {
-            maxHeight: '400px',
-          },
-          contentClass: 'pr-3 py-6',
-        },
-        {
-          default: () => h(WatermarkModal),
-        },
-      ),
+    content: () => h(WatermarkModal),
     closable: true,
     draggable: true,
     showIcon: false,

@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { NForm, NFormItem, NInput, NSelect, NButton, NInputNumber, NDatePicker } from 'naive-ui'
+import {
+  NForm,
+  NFormItem,
+  NInput,
+  NSelect,
+  NButton,
+  NInputNumber,
+  NDatePicker,
+  NConfigProvider,
+} from 'naive-ui'
 import { onMounted, useTemplateRef } from 'vue'
 
 import { useComponentThemeOverrides, useResettableReactive } from '@/composables'
@@ -11,14 +20,14 @@ const { data } = defineProps<{
   data: Partial<UserInfo>
 }>()
 
-const { selectInPopover, datePickerInPopover } = useComponentThemeOverrides()
-
-const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
-
 const emits = defineEmits<{
   (e: 'submit' | 'update', value: Partial<UserInfo>): void
   (e: 'cancel'): void
 }>()
+
+const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
+
+const { inModal } = useComponentThemeOverrides()
 
 const [form, setUserForm, reset, updateInitialState] = useResettableReactive<Partial<UserInfo>>({
   fullName: '',
@@ -68,107 +77,107 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="p-2">
-    <NForm
-      :model="form"
-      :rules="rules"
-      label-placement="left"
-      style="width: 100%"
-      ref="formRef"
-      label-width="88px"
-    >
-      <NFormItem
-        label="姓名"
-        path="fullName"
+  <NConfigProvider :theme-overrides="inModal">
+    <div class="p-2">
+      <NForm
+        :model="form"
+        :rules="rules"
+        label-placement="left"
+        style="width: 100%"
+        ref="formRef"
+        label-width="88px"
       >
-        <NInput v-model:value="form.fullName" />
-      </NFormItem>
-      <div class="flex gap-x-2">
         <NFormItem
-          label="性别"
-          path="sex"
-          class="flex-1"
+          label="姓名"
+          path="fullName"
         >
-          <NSelect
-            v-model:value="form.sex"
-            :options="sexSelectOptions"
-            :theme-overrides="selectInPopover"
+          <NInput v-model:value="form.fullName" />
+        </NFormItem>
+        <div class="flex gap-x-2">
+          <NFormItem
+            label="性别"
+            path="sex"
+            class="flex-1"
+          >
+            <NSelect
+              v-model:value="form.sex"
+              :options="sexSelectOptions"
+            />
+          </NFormItem>
+          <NFormItem
+            label="年龄"
+            path="age"
+            class="flex-1"
+            label-width="60px"
+          >
+            <NInputNumber v-model:value="form.age" />
+          </NFormItem>
+        </div>
+        <NFormItem
+          label="邮箱"
+          path="email"
+        >
+          <NInput v-model:value="form.email" />
+        </NFormItem>
+        <NFormItem
+          label="手机号"
+          path="phone"
+        >
+          <NInput v-model:value="form.phone" />
+        </NFormItem>
+        <NFormItem
+          label="注册日期"
+          path="registerDate"
+        >
+          <NDatePicker
+            v-model:formatted-value="form.registerDate"
+            value-format="yyyy-MM-dd"
+            type="datetime"
+            clearable
+            style="width: 100%"
           />
         </NFormItem>
         <NFormItem
-          label="年龄"
-          path="age"
-          class="flex-1"
-          label-width="60px"
+          label="公司"
+          path="company"
         >
-          <NInputNumber v-model:value="form.age" />
+          <NInput
+            type="textarea"
+            v-model:value="form.company"
+          />
         </NFormItem>
-      </div>
-      <NFormItem
-        label="邮箱"
-        path="email"
-      >
-        <NInput v-model:value="form.email" />
-      </NFormItem>
-      <NFormItem
-        label="手机号"
-        path="phone"
-      >
-        <NInput v-model:value="form.phone" />
-      </NFormItem>
-      <NFormItem
-        label="注册日期"
-        path="registerDate"
-      >
-        <NDatePicker
-          v-model:formatted-value="form.registerDate"
-          value-format="yyyy-MM-dd"
-          type="datetime"
-          clearable
-          style="width: 100%"
-          :theme-overrides="datePickerInPopover"
-        />
-      </NFormItem>
-      <NFormItem
-        label="公司"
-        path="company"
-      >
-        <NInput
-          type="textarea"
-          v-model:value="form.company"
-        />
-      </NFormItem>
 
-      <NFormItem
-        label="地址"
-        path="address"
-      >
-        <NInput
-          type="textarea"
-          v-model:value="form.address"
-        />
-      </NFormItem>
-    </NForm>
-    <div class="flex justify-end gap-x-4">
-      <NButton
-        secondary
-        @click="emits('cancel')"
-      >
-        取消
-      </NButton>
-      <NButton
-        secondary
-        type="warning"
-        @click="reset"
-      >
-        重置
-      </NButton>
-      <NButton
-        type="success"
-        @click="handleSubmitClick"
-      >
-        确定
-      </NButton>
+        <NFormItem
+          label="地址"
+          path="address"
+        >
+          <NInput
+            type="textarea"
+            v-model:value="form.address"
+          />
+        </NFormItem>
+      </NForm>
+      <div class="flex justify-end gap-x-4">
+        <NButton
+          secondary
+          @click="emits('cancel')"
+        >
+          取消
+        </NButton>
+        <NButton
+          secondary
+          type="warning"
+          @click="reset"
+        >
+          重置
+        </NButton>
+        <NButton
+          type="success"
+          @click="handleSubmitClick"
+        >
+          确定
+        </NButton>
+      </div>
     </div>
-  </div>
+  </NConfigProvider>
 </template>

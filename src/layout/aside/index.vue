@@ -91,7 +91,7 @@ watch(sidebarLineX, (newSidebarLineX) => {
     >
       <div
         ref="sidebarLine"
-        class="absolute z-10 h-full left-0 w-1 cursor-col-resize"
+        class="absolute left-0 z-10 h-full w-1 cursor-col-resize"
         @mousedown="onSidelineMouseDown"
       />
       <div

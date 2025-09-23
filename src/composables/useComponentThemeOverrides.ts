@@ -8,18 +8,6 @@ import type { GlobalThemeOverrides } from 'naive-ui'
 export function useComponentThemeOverrides() {
   const { isDark } = toRefsPreferencesStore()
 
-  const scrollbarInModal = computed<GlobalThemeOverrides['Scrollbar']>(() =>
-    isDark.value
-      ? {
-          color: twc.neutral[750],
-          colorHover: twc.neutral[700],
-        }
-      : {
-          color: twc.neutral[200],
-          colorHover: twc.neutral[250],
-        },
-  )
-
   const scrollbarInMainLayout = computed<GlobalThemeOverrides['Scrollbar']>(() =>
     isDark.value
       ? {
@@ -32,40 +20,77 @@ export function useComponentThemeOverrides() {
         },
   )
 
-  const selectInPopover = computed<GlobalThemeOverrides['Select']>(() =>
-    isDark.value
-      ? {
-          peers: {
-            InternalSelectMenu: {
-              color: twc.neutral[700],
-              optionColorPending: twc.neutral[600],
-            },
-          },
-        }
-      : {
-          peers: {
-            InternalSelectMenu: {
-              color: '#fff',
-              optionColorPending: twc.neutral[150],
-            },
-          },
-        },
-  )
+  const inModal = computed<GlobalThemeOverrides>(() => {
+    const DARK = {
+      input: {
+        color: twc.neutral[750],
+        border: `1px solid ${twc.neutral[700]}`,
+      },
+    }
 
-  const datePickerInPopover = computed<GlobalThemeOverrides['DatePicker']>(() =>
-    isDark.value
+    return isDark.value
       ? {
-          panelColor: twc.neutral[700],
+          DatePicker: {
+            peers: {
+              Button: {
+                border: `1px solid ${twc.neutral[650]}`,
+              },
+              Input: {
+                color: twc.neutral[700],
+                border: `1px solid ${twc.neutral[650]}`,
+              },
+              TimePicker: {
+                panelColor: twc.neutral[700],
+                peers: {
+                  Button: {
+                    border: `1px solid ${twc.neutral[550]}`,
+                  },
+                  Input: {
+                    color: twc.neutral[700],
+                    border: `1px solid ${twc.neutral[650]}`,
+                  },
+                  Scrollbar: {
+                    color: twc.neutral[600],
+                    colorHover: twc.neutral[550],
+                  },
+                },
+              },
+            },
+          },
+          Input: DARK.input,
+          Scrollbar: {
+            color: twc.neutral[750],
+            colorHover: twc.neutral[700],
+          },
+          Select: {
+            peers: {
+              InternalSelection: {
+                ...DARK.input,
+              },
+              InternalSelectMenu: {
+                color: twc.neutral[700],
+                optionColorActivePending: twc.neutral[600],
+                optionColorPending: twc.neutral[600],
+                peers: {
+                  Scrollbar: {
+                    color: twc.neutral[600],
+                    colorHover: twc.neutral[550],
+                  },
+                },
+              },
+            },
+          },
         }
       : {
-          panelColor: '#fff',
-        },
-  )
+          Scrollbar: {
+            color: twc.neutral[200],
+            colorHover: twc.neutral[250],
+          },
+        }
+  })
 
   return {
-    scrollbarInModal,
     scrollbarInMainLayout,
-    selectInPopover,
-    datePickerInPopover,
+    inModal,
   }
 }
