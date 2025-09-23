@@ -29,7 +29,6 @@ const onSliderUpdate: SliderProps['onUpdateValue'] = (value) => {
     />
     <NInputNumber
       v-model:value="opacity"
-      size="small"
       v-bind="sliderRange"
     />
   </div>
