@@ -9,6 +9,10 @@ const LIGHT = {
   textColor2: twc.neutral[700],
   textColor3: twc.neutral[500],
   borderColor: twc.neutral[150],
+  input: {
+    color: twc.neutral[25],
+    border: `1px solid ${twc.neutral[200]}`,
+  }
 }
 
 const closeIconColor = (primaryColor: string) => {
@@ -137,6 +141,9 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
         },
       },
     },
+    Input: {
+      ...LIGHT.input,
+    },
     Message: {
       textColorSuccess: twc.lime[500],
       textColorInfo: twc.sky[500],
@@ -179,6 +186,9 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
     },
     Select: {
       peers: {
+        InternalSelection: {
+          ...LIGHT.input,
+        },
         InternalSelectMenu: {
           actionDividerColor: twc.neutral[200],
           peers: {
@@ -195,7 +205,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       indicatorTextColor: LIGHT.textColor2,
     },
     Upload: {
-      draggerColor: twc.neutral[100],
+      draggerColor: twc.neutral[50],
     },
   }
 }

@@ -10,6 +10,10 @@ const DARK = {
   textColor2: twc.neutral[350],
   textColor3: twc.neutral[450],
   borderColor: twc.neutral[800],
+  input: {
+    color: twc.neutral[800],
+    border: `1px solid ${twc.neutral[750]}`,
+  }
 }
 
 const closeIconColor = (primaryColor: string) => {
@@ -142,6 +146,9 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     Menu: {
       itemColorHover: twc.neutral[800],
     },
+    Input: {
+      ...DARK.input,
+    },
     Message: {
       textColorSuccess: twc.lime[500],
       textColorInfo: twc.sky[500],
@@ -180,6 +187,9 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     },
     Select: {
       peers: {
+        InternalSelection: {
+          ...DARK.input,
+        },
         InternalSelectMenu: {
           peers: {
             Scrollbar: {
