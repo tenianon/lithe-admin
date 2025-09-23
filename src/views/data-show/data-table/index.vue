@@ -193,7 +193,7 @@ const columns: DataTableColumns<UserInfo> = [
       },
     ],
     disabled: (row) => {
-      return ['4', '5', '8', '9'].includes(String(row.number)[0])
+      return ['4', '5', '8', '9'].includes(String(row.number)[0] || '')
     },
   },
   {
@@ -216,7 +216,9 @@ const columns: DataTableColumns<UserInfo> = [
       <ShowOrEdit
         value={row.fullName}
         onUpdateValue={(value) => {
-          dataList.value[index].fullName = value
+          if (dataList.value[index]) {
+            dataList.value[index].fullName = value
+          }
         }}
       />
     ),

@@ -13,7 +13,7 @@ const DARK = {
   input: {
     color: twc.neutral[800],
     border: `1px solid ${twc.neutral[750]}`,
-  }
+  },
 }
 
 const closeIconColor = (primaryColor: string) => {

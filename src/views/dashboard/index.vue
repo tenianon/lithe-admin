@@ -44,33 +44,34 @@ const CHART_CONFIG = {
   MONTHS: Array.from({ length: 12 }, (_, i) => `${i + 1}月`),
 }
 
-const getBusinessLinesConfig = () => [
-  {
-    name: '主要收入',
-    color: themeColor.value,
-    dataRange: { min: 30000, max: 85000 },
-  },
-  {
-    name: '核心业务',
-    color: twc.cyan[500],
-    dataRange: { min: 25000, max: 75000 },
-  },
-  {
-    name: '辅助收入',
-    color: twc.lime[500],
-    dataRange: { min: 15000, max: 50000 },
-  },
-  {
-    name: '订阅收入',
-    color: twc.orange[500],
-    dataRange: { min: 10000, max: 35000 },
-  },
-  {
-    name: '广告收入',
-    color: twc.pink[500],
-    dataRange: { min: 8000, max: 25000 },
-  },
-]
+const getBusinessLinesConfig = () =>
+  [
+    {
+      name: '主要收入',
+      color: themeColor.value,
+      dataRange: { min: 30000, max: 85000 },
+    },
+    {
+      name: '核心业务',
+      color: twc.cyan[500],
+      dataRange: { min: 25000, max: 75000 },
+    },
+    {
+      name: '辅助收入',
+      color: twc.lime[500],
+      dataRange: { min: 15000, max: 50000 },
+    },
+    {
+      name: '订阅收入',
+      color: twc.orange[500],
+      dataRange: { min: 10000, max: 35000 },
+    },
+    {
+      name: '广告收入',
+      color: twc.pink[500],
+      dataRange: { min: 8000, max: 25000 },
+    },
+  ] as const
 
 const barChartSelectedLegend = ref(getBusinessLinesConfig()[0].name)
 
@@ -797,7 +798,7 @@ function initHighestRevenueChart() {
       color: lowestLine.color,
       data: lowestLine.data,
     },
-  ]
+  ] as const
 
   const chart = echarts.init(highestRevenueChart.value)
 

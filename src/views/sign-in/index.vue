@@ -106,6 +106,7 @@ function onMouseMove(e: MouseEvent) {
 }
 
 function onTouchMove(e: TouchEvent) {
+  if (!e.touches[0]) return
   updateTexturePosition(e.touches[0].clientX, e.touches[0].clientY)
 }
 

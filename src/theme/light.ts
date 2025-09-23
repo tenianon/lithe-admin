@@ -12,7 +12,7 @@ const LIGHT = {
   input: {
     color: twc.neutral[25],
     border: `1px solid ${twc.neutral[200]}`,
-  }
+  },
 }
 
 const closeIconColor = (primaryColor: string) => {

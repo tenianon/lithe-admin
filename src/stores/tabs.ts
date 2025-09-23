@@ -1,4 +1,5 @@
 import { useStorage } from '@vueuse/core'
+import { isEmpty } from 'lodash-es'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 
 import { pinia } from '.'
@@ -56,11 +57,11 @@ export const useTabsStore = defineStore('tabsStore', () => {
   function updateTab(id: Key, updateProperties: Partial<Tab>) {
     const index = findTabIndex(id)
 
-    if (index !== -1) {
-      const targetTab = tabs.value[index]
-      tabs.value[index] = { ...targetTab, ...updateProperties }
+    if (index !== -1 && tabs.value[index]) {
+      const tab = tabs.value[index]
+      tabs.value[index] = { ...tab, ...updateProperties }
 
-      if ('pinned' in updateProperties && updateProperties.pinned !== targetTab.pinned) {
+      if ('pinned' in updateProperties && updateProperties.pinned !== tab.pinned) {
         sortTabs()
       }
     }
@@ -77,24 +78,31 @@ export const useTabsStore = defineStore('tabsStore', () => {
 
     for (let i = 0; i < tabs.value.length; i++) {
       const tab = tabs.value[i]
+      if (isEmpty(tab)) continue
       if (tab.path === tabActivePath.value) activeIndex = i
       if (!removeIdsSet.has(tab.id)) nextTabs.push(tab)
     }
 
-    if (activeIndex !== -1 && removeIdsSet.has(tabs.value[activeIndex].id)) {
+    const activeTab = tabs.value[activeIndex]
+
+    if (activeIndex !== -1 && activeTab && removeIdsSet.has(activeTab.id)) {
       let nextActivePath = ''
 
       for (let i = activeIndex + 1; i < tabs.value.length; i++) {
-        if (!removeIdsSet.has(tabs.value[i].id)) {
-          nextActivePath = tabs.value[i].path
+        const tab = tabs.value[i]
+        if (isEmpty(tab)) continue
+        if (!removeIdsSet.has(tab.id)) {
+          nextActivePath = tab.path
           break
         }
       }
 
       if (!nextActivePath) {
         for (let i = activeIndex - 1; i >= 0; i--) {
-          if (!removeIdsSet.has(tabs.value[i].id)) {
-            nextActivePath = tabs.value[i].path
+          const tab = tabs.value[i]
+          if (isEmpty(tab)) continue
+          if (!removeIdsSet.has(tab.id)) {
+            nextActivePath = tab.path
             break
           }
         }
@@ -131,10 +139,14 @@ export const useTabsStore = defineStore('tabsStore', () => {
     const removableIds: Key[] = []
 
     for (let i = tabs.value.length - 1; i >= 0; i--) {
-      if (tabs.value[i].id === id) break
+      const tab = tabs.value[i]
 
-      if (!tabs.value[i].locked && !tabs.value[i].pinned) {
-        removableIds.push(tabs.value[i].id)
+      if (isEmpty(tab)) continue
+
+      if (tab.id === id) break
+
+      if (!tab.locked && !tab.pinned) {
+        removableIds.push(tab.id)
       }
     }
 

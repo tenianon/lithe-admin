@@ -61,15 +61,21 @@ function generateTailwindColor() {
     }
 
     for (let i = 0; i < sortedShades.length; i++) {
-      const [shade, raw] = sortedShades[i]
+      const entry = sortedShades[i]
+      if (!entry) continue
+      const [shade, raw] = entry
       const shadeKey = shade as ColorShade
       colorObj[shadeKey] = toHex(raw)
 
       if (Number(shade) % 100 === 0 && i + 1 < sortedShades.length) {
-        const nextShade = sortedShades[i + 1][0]
-        if (Number(nextShade) === Number(shade) + 100) {
-          const midShade = `${Number(shade) + 50}` as ColorShade
-          colorObj[midShade] = mixHex(toHex(raw), toHex(sortedShades[i + 1][1]))
+        const nextEntry = sortedShades[i + 1]
+        if (nextEntry) {
+          const nextShade = nextEntry[0]
+          const nextRaw = nextEntry[1]
+          if (Number(nextShade) === Number(shade) + 100) {
+            const midShade = `${Number(shade) + 50}` as ColorShade
+            colorObj[midShade] = mixHex(toHex(raw), toHex(nextRaw))
+          }
         }
       }
     }
@@ -114,10 +120,10 @@ describe('tailwindColor', () => {
   })
 
   it('should have 150 shade', () => {
-    expect(extractShades(twc).blue['150']).not.toBeUndefined()
+    expect(extractShades(twc).blue?.['150']).not.toBeUndefined()
   })
 
   it('should have not 200 shade', () => {
-    expect(extractShades(twc).blue['200']).toBeUndefined()
+    expect(extractShades(twc).blue?.['200']).toBeUndefined()
   })
 })
