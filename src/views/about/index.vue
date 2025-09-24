@@ -7,6 +7,8 @@ import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
+import directories from './dir.txt?raw'
+
 defineOptions({
   name: 'About',
 })
@@ -23,159 +25,6 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = ` 📂 lithe-admin
-├── 📄 README.en_US.md
-├── 📄 README.md
-├── 📄 eslint.config.ts
-├── 📄 index.html
-├── 📄 package.json
-├── 📄 pnpm-lock.yaml
-└── 📂 public/
-│  └── 📂 assets/
-│    ├── 📄 preloader.css
-│  ├── 📄 favicon.ico
-└── 📂 src/
-│  ├── 📄 App.vue
-│  └── 📂 assets/
-│    ├── 📄 base.css
-│    ├── 📄 main.css
-│    ├── 📄 noise.png
-│    ├── 📄 texture.png
-│    ├── 📄 topography.svg
-│  └── 📂 components/
-│    ├── 📄 AppLogo.vue
-│    ├── 📄 Noise.vue
-│    ├── 📄 UserAvatar.vue
-│    ├── 📄 UserDropdown.vue
-│    └── 📂 button-animation/
-│      ├── 📄 ButtonAnimation.test.ts
-│      ├── 📄 ButtonAnimation.vue
-│      ├── 📄 ButtonAnimationProvider.vue
-│      ├── 📄 index.ts
-│      ├── 📄 injection.ts
-│      ├── 📄 interface.ts
-│    └── 📂 collapse-transition/
-│      ├── 📄 CollapseTransition.test.ts
-│      ├── 📄 CollapseTransition.vue
-│    └── 📂 empty-placeholder/
-│      ├── 📄 EmptyPlaceholder.test.ts
-│      ├── 📄 EmptyPlaceholder.vue
-│    └── 📂 hint-help/
-│      ├── 📄 HintHelp.test.ts
-│      ├── 📄 HintHelp.vue
-│    ├── 📄 index.ts
-│    └── 📂 scroll-container/
-│      ├── 📄 ScrollContainer.test.ts
-│      ├── 📄 ScrollContainer.vue
-│  └── 📂 composables/
-│    ├── 📄 index.ts
-│    ├── 📄 useComponentModifier.ts
-│    ├── 📄 useComponentThemeOverrides.ts
-│    ├── 📄 useDiscreteApi.ts
-│    ├── 📄 useInjection.ts
-│    ├── 📄 useResettable.ts
-│    ├── 📄 useTheme.ts
-│  └── 📂 injection/
-│    ├── 📄 index.ts
-│    ├── 📄 interface.ts
-│  └── 📂 layout/
-│    └── 📂 aside/
-│      ├── 📄 SidebarMenu.vue
-│      ├── 📄 SidebarUserPanel.vue
-│      ├── 📄 index.vue
-│    └── 📂 footer/
-│      ├── 📄 index.vue
-│    └── 📂 header/
-│      └── 📂 action/
-│        ├── 📄 AvatarDropdown.vue
-│        ├── 📄 FullScreen.vue
-│        ├── 📄 PreferencesDrawer.vue
-│        ├── 📄 SignOut.vue
-│        ├── 📄 ThemeModePopover.vue
-│        └── 📂 component/
-│          ├── 📄 LayoutThumbnail.vue
-│          ├── 📄 NoiseModal.vue
-│          ├── 📄 WatermarkModal.vue
-│        ├── 📄 index.vue
-│      ├── 📄 index.vue
-│      └── 📂 logo/
-│        ├── 📄 index.vue
-│      └── 📂 navigation/
-│        ├── 📄 Breadcrumb.vue
-│        ├── 📄 HorizontalMenu.vue
-│        ├── 📄 NavigationButton.vue
-│        ├── 📄 index.vue
-│    ├── 📄 index.vue
-│    └── 📂 main/
-│      ├── 📄 index.vue
-│    └── 📂 mobile/
-│      ├── 📄 MobileHeader.vue
-│      ├── 📄 MobileLeftAside.vue
-│      ├── 📄 MobileRightAside.vue
-│    └── 📂 tabs/
-│      ├── 📄 index.vue
-│  ├── 📄 main.ts
-│  └── 📂 router/
-│    ├── 📄 guard.ts
-│    ├── 📄 helper.ts
-│    ├── 📄 index.ts
-│    ├── 📄 record.ts
-│  └── 📂 stores/
-│    ├── 📄 index.ts
-│    ├── 📄 preferences.ts
-│    ├── 📄 system.ts
-│    ├── 📄 tabs.ts
-│    ├── 📄 user.ts
-│  └── 📂 theme/
-│    ├── 📄 common.ts
-│    ├── 📄 dark.ts
-│    ├── 📄 light.ts
-│  └── 📂 types/
-│    ├── 📄 env.d.ts
-│    ├── 📄 vue-router.d.ts
-│    ├── 📄 window.d.ts
-│  └── 📂 utils/
-│    ├── 📄 chromaHelper.ts
-│    ├── 📄 tailwindColor.test.ts
-│    ├── 📄 tailwindColor.ts
-│  └── 📂 views/
-│    └── 📂 about/
-│      ├── 📄 index.vue
-│    └── 📂 dashboard/
-│      ├── 📄 index.vue
-│    └── 📂 data-show/
-│      └── 📂 data-form/
-│        ├── 📄 index.vue
-│      └── 📂 data-table/
-│        ├── 📄 ActionModal.vue
-│        ├── 📄 index.vue
-│    └── 📂 drag-drop/
-│      ├── 📄 index.vue
-│    └── 📂 dynamic-route/
-│      ├── 📄 index.vue
-│    └── 📂 error-page/
-│      ├── 📄 404.vue
-│      ├── 📄 index.vue
-│    └── 📂 feedback/
-│      ├── 📄 discreteApi.ts
-│      ├── 📄 index.vue
-│    └── 📂 multi-level-menu/
-│      ├── 📄 index.vue
-│    └── 📂 sign-in/
-│      └── 📂 component/
-│        ├── 📄 Illustration1.vue
-│        ├── 📄 Illustration2.vue
-│        ├── 📄 Illustration3.vue
-│        ├── 📄 ThemeColorPopover.vue
-│      ├── 📄 index.vue
-├── 📄 tailwind.config.ts
-├── 📄 tsconfig.app.json
-├── 📄 tsconfig.json
-├── 📄 tsconfig.node.json
-├── 📄 tsconfig.vitest.json
-├── 📄 vite.config.ts
-└── 📄 vitest.config.ts`
-
 onMounted(async () => {
   if (!codeToHtml) {
     // @ts-ignore
@@ -183,7 +32,7 @@ onMounted(async () => {
     codeToHtml = shiki.codeToHtml
   }
 
-  codeToHtml(dir, {
+  codeToHtml(directories, {
     lang: 'markdown',
     themes: {
       light: 'min-light',
@@ -191,7 +40,7 @@ onMounted(async () => {
     },
   })
     .then((result: string) => (directoryStructureHighlight.value = result))
-    .catch(() => (directoryStructureHighlight.value = dir))
+    .catch(() => (directoryStructureHighlight.value = directories))
 
   codeToHtml(JSON.stringify(dependencies, null, 2), {
     lang: 'json',

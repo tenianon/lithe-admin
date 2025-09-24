@@ -17,7 +17,8 @@
     "lint:check": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "format:check": "prettier --check src/",
-    "format:fix": "prettier --write src/"
+    "format:fix": "prettier --write src/",
+    "tree": "npx --yes tree-node-cli -a -L 5 -F -I 'node_modules|.git|.DS_Store|dist|.output|.idea|.vscode' > src/views/about/dir.txt"
   },
   "dependencies": {
     "@vueuse/core": "^13.6.0",
