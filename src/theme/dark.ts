@@ -130,6 +130,29 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       tdColorHover: cbh(twc.neutral[850], 0.06),
       thColor: twc.neutral[850],
     },
+    DatePicker: {
+      peers: {
+        Button: {
+          border: `1px solid ${twc.neutral[650]}`,
+        },
+        TimePicker: {
+          panelColor: twc.neutral[700],
+          peers: {
+            Button: {
+              border: `1px solid ${twc.neutral[550]}`,
+            },
+            Input: {
+              color: twc.neutral[700],
+              border: `1px solid ${twc.neutral[650]}`,
+            },
+            Scrollbar: {
+              color: twc.neutral[600],
+              colorHover: twc.neutral[550],
+            },
+          },
+        },
+      },
+    },
     Divider: {
       color: cdh(twc.neutral[750], 0.24),
     },

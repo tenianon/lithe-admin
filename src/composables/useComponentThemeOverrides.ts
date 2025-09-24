@@ -30,33 +30,6 @@ export function useComponentThemeOverrides() {
 
     return isDark.value
       ? {
-          DatePicker: {
-            peers: {
-              Button: {
-                border: `1px solid ${twc.neutral[650]}`,
-              },
-              Input: {
-                color: twc.neutral[700],
-                border: `1px solid ${twc.neutral[650]}`,
-              },
-              TimePicker: {
-                panelColor: twc.neutral[700],
-                peers: {
-                  Button: {
-                    border: `1px solid ${twc.neutral[550]}`,
-                  },
-                  Input: {
-                    color: twc.neutral[700],
-                    border: `1px solid ${twc.neutral[650]}`,
-                  },
-                  Scrollbar: {
-                    color: twc.neutral[600],
-                    colorHover: twc.neutral[550],
-                  },
-                },
-              },
-            },
-          },
           Input: DARK.input,
           Scrollbar: {
             color: twc.neutral[750],
