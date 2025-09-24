@@ -172,7 +172,8 @@ const businessLinesWithData = computed(() =>
 const createTooltipConfig = (formatter?: any) => ({
   trigger: 'axis',
   backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
-  borderWidth: 0,
+  borderWidth: 1,
+  borderColor: isDark.value ? twc.neutral[700] : twc.neutral[150],
   padding: 8,
   extraCssText: 'box-shadow: none;',
   textStyle: {
@@ -506,36 +507,22 @@ function initRevenueBarChart() {
       if (!selectedLine) return
 
       revenueBarChart2Instance.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'none',
-          },
-          backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
-          borderWidth: 0,
-          padding: 8,
-          extraCssText: 'box-shadow: none;',
-          textStyle: {
-            color: isDark.value ? twc.neutral[400] : twc.neutral[600],
-            fontSize: 12,
-          },
-          formatter(params: any) {
-            const date = params[0].axisValue
-            const seriesName = params[0].seriesName
-            const value = params[0].value.toLocaleString()
-            let result = `<div>${date}数据</div>`
-            params.forEach(() => {
-              result += `
+        tooltip: createTooltipConfig((params: any) => {
+          const date = params[0].axisValue
+          const seriesName = params[0].seriesName
+          const value = params[0].value.toLocaleString()
+          let result = `<div>${date}数据</div>`
+          params.forEach(() => {
+            result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${selectedLine.color};"></span>
           <span style="margin-right: 10px">${seriesName}</span>
           <span>${value}</span>
         </div>
       `
-            })
-            return result
-          },
-        },
+          })
+          return result
+        }),
         series: [
           {
             name: params.name,
@@ -571,36 +558,22 @@ function initRevenueBarChart2() {
   const option = {
     color: chartDataManager.getAllColors(),
     grid: { left: 0, right: 0, top: 0, bottom: 0, containLabel: false },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'none',
-      },
-      backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
-      borderWidth: 0,
-      padding: 8,
-      extraCssText: 'box-shadow: none;',
-      textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
-        fontSize: 12,
-      },
-      formatter(params: any) {
-        const date = params[0].axisValue
-        const value = params[0].value.toLocaleString()
-        const seriesName = params[0].seriesName
-        let result = `<div>${date}数据</div>`
-        params.forEach(() => {
-          result += `
+    tooltip: createTooltipConfig((params: any) => {
+      const date = params[0].axisValue
+      const value = params[0].value.toLocaleString()
+      const seriesName = params[0].seriesName
+      let result = `<div>${date}数据</div>`
+      params.forEach(() => {
+        result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${selectedLine.color};"></span>
           <span style="margin-right: 10px">${seriesName}</span>
           <span>${value}</span>
         </div>
       `
-        })
-        return result
-      },
-    },
+      })
+      return result
+    }),
     xAxis: {
       type: 'category',
       data: chartDataManager.getMonths(),
@@ -677,35 +650,21 @@ function initMonthlyRadarChart() {
         },
       },
     ],
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'none',
-      },
-      backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
-      borderWidth: 0,
-      padding: 8,
-      extraCssText: 'box-shadow: none;',
-      textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
-        fontSize: 12,
-      },
-      formatter(params: any) {
-        const color = params[0].color.slice(0, -2)
-        const date = params[0].axisValue
-        const value = params[0].data.value
-        let result = `<div>${date}</div>`
-        params.forEach(() => {
-          result += `
+    tooltip: createTooltipConfig((params: any) => {
+      const color = params[0].color.slice(0, -2)
+      const date = params[0].axisValue
+      const value = params[0].data.value
+      let result = `<div>${date}</div>`
+      params.forEach(() => {
+        result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:8px; width:10px; height:10px; border-radius:50%; background-color:${color};"></span>
           <span>${value}</span>
         </div>
       `
-        })
-        return result
-      },
-    },
+      })
+      return result
+    }),
     grid: {
       left: 10,
       right: 5,
@@ -883,35 +842,23 @@ function initHighestRevenueChart() {
         chartData.map((item) => [item.legendName, legendSelected[item.legendValue] ?? false]),
       ),
     },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'none' },
-      backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
-      borderWidth: 0,
-      padding: 8,
-      extraCssText: 'box-shadow: none;',
-      textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
-        fontSize: 12,
-      },
-      formatter(params: any) {
-        const color = params[0].color
-        const date = params[0].axisValue
-        const value = params[0].value.toLocaleString()
+    tooltip: createTooltipConfig((params: any) => {
+      const color = params[0].color
+      const date = params[0].axisValue
+      const value = params[0].value.toLocaleString()
 
-        const chartItem = chartData.find((item) => item.legendName === params[0].seriesName)
-        const realName = chartItem ? chartItem.businessName : params[0].seriesName
-        let result = `<div>${date}数据</div>`
-        result += `
+      const chartItem = chartData.find((item) => item.legendName === params[0].seriesName)
+      const realName = chartItem ? chartItem.businessName : params[0].seriesName
+      let result = `<div>${date}数据</div>`
+      result += `
           <div style="display: flex; align-items: center; margin-top: 4px;">
             <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${color};"></span>
             <span style="margin-right: 10px">${realName}</span>
             <span>${value}</span>
           </div>
         `
-        return result
-      },
-    },
+      return result
+    }),
     series: chartData.map((item) => ({
       name: item.legendName,
       type: 'line',
