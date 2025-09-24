@@ -16,6 +16,7 @@ import { mediaQueryInjectionKey } from '@/injection'
 import ThemeModePopover from '@/layout/header/action/ThemeModePopover.vue'
 import router from '@/router'
 import { toRefsPreferencesStore, toRefsUserStore } from '@/stores'
+import twc from '@/utils/tailwindColor'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
@@ -192,6 +193,14 @@ onUnmounted(() => {
                   v-model:value="signInForm.account"
                   placeholder="请输入账号"
                   clearable
+                  :theme-overrides="
+                    isDark
+                      ? {
+                          color: twc.neutral[750],
+                          border: `1px solid ${twc.neutral[700]}`,
+                        }
+                      : undefined
+                  "
                   :input-props="{
                     autocomplete: 'off',
                   }"
@@ -210,6 +219,14 @@ onUnmounted(() => {
                   placeholder="请输入密码"
                   type="password"
                   clearable
+                  :theme-overrides="
+                    isDark
+                      ? {
+                          color: twc.neutral[750],
+                          border: `1px solid ${twc.neutral[700]}`,
+                        }
+                      : undefined
+                  "
                   :input-props="{
                     autocomplete: 'off',
                   }"
@@ -235,6 +252,7 @@ onUnmounted(() => {
                   :disabled="isNavigating"
                   block
                   size="medium"
+                  class="bg-red-400"
                   @click="handleSubmitClick"
                 >
                   登&nbsp;录
