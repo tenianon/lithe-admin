@@ -27,4 +27,3 @@ const { showNavigationButton, breadcrumb, navigationMode } = toRefsPreferencesSt
     </CollapseTransition>
   </nav>
 </template>
-<style></style>

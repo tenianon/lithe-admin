@@ -54,4 +54,3 @@ const handleTriggerClick = () => {
     /></CollapseTransition>
   </div>
 </template>
-<style></style>
