@@ -1,7 +1,6 @@
 export * from './button-animation'
 
-export { default as CollapseTransition } from './collapse-transition/CollapseTransition.vue'
-export * from './collapse-transition/CollapseTransition.vue'
+export * from './collapse-transition'
 
 export { default as EmptyPlaceholder } from './empty-placeholder/EmptyPlaceholder.vue'
 export * from './empty-placeholder/EmptyPlaceholder.vue'

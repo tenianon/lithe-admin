@@ -266,7 +266,7 @@ watch(
                 ghostClass="ghost"
                 group="clone"
                 class="flex h-full flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
-                style="min-height: 300px"
+                style="min-height: 278px"
               >
                 <div
                   v-for="item in cloneTaskList"

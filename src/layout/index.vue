@@ -17,7 +17,13 @@ defineOptions({
   name: 'Layout',
 })
 
-const { preferences, sidebarMenu, navigationMode, showFooter, showTabs } = toRefsPreferencesStore()
+const {
+  preferences,
+  sidebarMenu,
+  navigationMode,
+  showFooter,
+  tabs: tabsOptions,
+} = toRefsPreferencesStore()
 
 const AsyncMobileHeader = defineAsyncComponent(() => import('./mobile/MobileHeader.vue'))
 const AsyncMobileLeftAside = defineAsyncComponent(() => import('./mobile/MobileLeftAside.vue'))
@@ -102,7 +108,7 @@ watch(isMaxSm, (isMaxSm) => {
         >
           <CollapseTransition
             v-if="!isMaxSm"
-            :display="!isEmpty(tabs) && showTabs"
+            :display="!isEmpty(tabs) && tabsOptions.show"
             direction="horizontal"
             :render-content="false"
           >

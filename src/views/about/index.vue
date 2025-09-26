@@ -24,6 +24,7 @@ const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
 const dir = ` 📂 lithe-admin
+├── 📄 LICENSE
 ├── 📄 README.en_US.md
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
@@ -57,6 +58,9 @@ const dir = ` 📂 lithe-admin
 │    └── 📂 collapse-transition/
 │      ├── 📄 CollapseTransition.test.ts
 │      ├── 📄 CollapseTransition.vue
+│      ├── 📄 CollapseTransitionTrigger.vue
+│      ├── 📄 index.ts
+│      ├── 📄 interface.ts
 │    └── 📂 empty-placeholder/
 │      ├── 📄 EmptyPlaceholder.test.ts
 │      ├── 📄 EmptyPlaceholder.vue
@@ -94,7 +98,6 @@ const dir = ` 📂 lithe-admin
 │        ├── 📄 ThemeModePopover.vue
 │        └── 📂 component/
 │          ├── 📄 LayoutThumbnail.vue
-│          ├── 📄 NoiseModal.vue
 │          ├── 📄 WatermarkModal.vue
 │        ├── 📄 index.vue
 │      ├── 📄 index.vue

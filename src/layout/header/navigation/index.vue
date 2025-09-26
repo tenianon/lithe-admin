@@ -12,14 +12,14 @@ const AsyncNavigationButton = defineAsyncComponent(() => import('./NavigationBut
 const AsyncHorizontalMenu = defineAsyncComponent(() => import('./HorizontalMenu.vue'))
 const AsyncBreadcrumb = defineAsyncComponent(() => import('./Breadcrumb.vue'))
 
-const { showNavigationButton, showBreadcrumb, navigationMode } = toRefsPreferencesStore()
+const { showNavigationButton, breadcrumb, navigationMode } = toRefsPreferencesStore()
 </script>
 <template>
   <nav class="flex h-9 flex-1 items-center">
     <CollapseTransition :display="showNavigationButton && navigationMode === 'sidebar'">
       <AsyncNavigationButton />
     </CollapseTransition>
-    <CollapseTransition :display="showBreadcrumb && navigationMode === 'sidebar'">
+    <CollapseTransition :display="breadcrumb.show && navigationMode === 'sidebar'">
       <AsyncBreadcrumb />
     </CollapseTransition>
     <CollapseTransition :display="navigationMode === 'horizontal'">

@@ -4,10 +4,13 @@ import { NDropdown } from 'naive-ui'
 import { computed, defineComponent, h } from 'vue'
 
 import router from '@/router'
+import { toRefsPreferencesStore } from '@/stores'
 
 import type { DropdownProps } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { RouteRecordNameGeneric, RouteRecordRaw } from 'vue-router'
+
+const { breadcrumb } = toRefsPreferencesStore()
 
 const routeBreadcrumbList = computed(() => {
   return router.currentRoute.value.matched.filter((item) => item.name !== 'layout')
@@ -33,7 +36,9 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
   return name === currentRouteName.value
 }
 
-function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options'] {
+function resolveDropdownOptions(route: RouteRecordRaw[] | undefined): DropdownProps['options'] {
+  if (!route) return []
+
   return route.map((item) => ({
     label: item.meta?.title || item.meta?.label,
     key: (item.name as string) || item.path,
@@ -45,7 +50,8 @@ function resolveDropdownOptions(route: RouteRecordRaw[]): DropdownProps['options
   }))
 }
 
-const BreadcrumbItem = defineComponent({
+const BreadcrumbNode = defineComponent({
+  name: 'BreadcrumbNode',
   props: {
     meta: {
       type: Object as PropType<RouteRecordRaw['meta']>,
@@ -61,9 +67,52 @@ const BreadcrumbItem = defineComponent({
     )
   },
 })
+
+const BreadcrumbItem = defineComponent({
+  name: 'BreadcrumbItem',
+  props: {
+    meta: {
+      type: Object as PropType<RouteRecordRaw['meta']>,
+    },
+    children: {
+      type: Array as PropType<RouteRecordRaw['children']>,
+    },
+    name: {
+      type: String as PropType<RouteRecordRaw['name']>,
+    },
+  },
+  setup(props) {
+    const { children, meta, name } = props
+
+    return () => (
+      <div class='flex min-w-0 items-center'>
+        {isEmpty(children) ? (
+          <BreadcrumbNode meta={meta} />
+        ) : (
+          <NDropdown
+            options={resolveDropdownOptions(children)}
+            disabled={isEmpty(children)}
+            value={currentRouteName.value}
+            renderIcon={renderIcon}
+            onSelect={onDropdownSelected}
+          >
+            <BreadcrumbNode
+              meta={meta}
+              class='cursor-pointer transition-[background-color,color] not-hover:text-naive-text3 hover:bg-naive-button2-hover'
+            />
+          </NDropdown>
+        )}
+        {!isCurrentRoute(name) && (
+          <span class='iconify-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3' />
+        )}
+      </div>
+    )
+  },
+})
 </script>
 <template>
   <TransitionGroup
+    v-if="breadcrumb.enableTransition"
     :duration="300"
     tag="ul"
     class="flex"
@@ -76,33 +125,29 @@ const BreadcrumbItem = defineComponent({
     leave-from-class="grid-cols-[1fr]"
   >
     <li
-      v-for="{ children, meta, name, path } in routeBreadcrumbList"
+      v-for="{ path, ...rest } in routeBreadcrumbList"
       :key="path"
       class="grid overflow-hidden"
     >
-      <div class="flex min-w-0 items-center">
-        <BreadcrumbItem
-          v-if="isEmpty(children)"
-          :meta="meta"
-        />
-        <NDropdown
-          v-else
-          :options="resolveDropdownOptions(children)"
-          :disabled="isEmpty(children)"
-          :value="currentRouteName"
-          :render-icon="renderIcon"
-          @select="onDropdownSelected"
-        >
-          <BreadcrumbItem
-            :meta="meta"
-            class="cursor-pointer transition-[background-color,color] not-hover:text-naive-text3 hover:bg-naive-button2-hover"
-          />
-        </NDropdown>
-        <span
-          class="iconify-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3"
-          v-if="!isCurrentRoute(name)"
-        />
-      </div>
+      <BreadcrumbItem
+        v-bind="rest"
+        class="min-w-0"
+      />
     </li>
   </TransitionGroup>
+  <ul
+    v-else
+    class="flex"
+  >
+    <li
+      v-for="{ path, ...rest } in routeBreadcrumbList"
+      :key="path"
+      class="grid overflow-hidden"
+    >
+      <BreadcrumbItem
+        v-bind="rest"
+        class="min-w-0"
+      />
+    </li>
+  </ul>
 </template>

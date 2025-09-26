@@ -11,25 +11,36 @@ type NavigationMode = 'sidebar' | 'horizontal'
 
 export interface PreferencesOptions {
   navigationMode: NavigationMode
-  sidebarMenu: Partial<{
+  sidebarMenu: {
     collapsed: boolean
     minWidth: number
     width: number
     maxWidth: number
-  }>
+    mobileWidth: number
+  }
   showFooter: boolean
   showLogo: boolean
-  showTabs: boolean
-  showTabClose: boolean
+  tabs: {
+    show: boolean
+    showTabClose: boolean
+    tabBorderPosition: 'top' | 'bottom'
+  }
   showNavigationButton: boolean
-  showBreadcrumb: boolean
-  showWatermark: boolean
-  showNoise: boolean
+  breadcrumb: {
+    show: boolean
+    enableTransition: boolean
+  }
   showTopLoadingBar: boolean
   enableNavigationTransition: boolean
   enableTextSelect: boolean
-  watermarkOptions: Partial<WatermarkProps>
-  noiseOpacity: number
+  watermark: {
+    show: boolean
+  } & Partial<WatermarkProps>
+
+  noise: {
+    show: boolean
+    opacity: number
+  }
 }
 
 export const DEFAULT_PREFERENCES_OPTIONS = {
@@ -39,19 +50,25 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
     minWidth: 64,
     width: 256,
     maxWidth: 456,
+    mobileWidth: 256,
   },
   showFooter: true,
-  showTabs: true,
-  showTabClose: true,
+  tabs: {
+    show: true,
+    showTabClose: true,
+    tabBorderPosition: 'top',
+  },
   showLogo: true,
-  showNoise: true,
-  showWatermark: false,
   showNavigationButton: true,
-  showBreadcrumb: true,
+  breadcrumb: {
+    show: true,
+    enableTransition: true,
+  },
   showTopLoadingBar: true,
   enableNavigationTransition: true,
   enableTextSelect: true,
-  watermarkOptions: {
+  watermark: {
+    show: false,
     content: import.meta.env.VITE_WATERMARK_CONTENT || '',
     fontColor: '#D81E1E96',
     fontSize: 16,
@@ -73,7 +90,10 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
     imageWidth: 64,
     imageOpacity: 0.5,
   },
-  noiseOpacity: 0.02,
+  noise: {
+    show: true,
+    opacity: 20,
+  },
 } as const
 
 const DEFAULT_THEME_COLOR = '#8e51ff'

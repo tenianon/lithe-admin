@@ -20,7 +20,7 @@ import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
 import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
-import { useTabsStore, toRefsPreferencesStore, toRefsTabsStore } from '@/stores'
+import { useTabsStore, usePreferencesStore, toRefsTabsStore } from '@/stores'
 
 import type { Tab, Key } from '@/stores'
 import type { DropdownOption } from 'naive-ui'
@@ -59,7 +59,7 @@ const {
 
 const { tabs, tabActivePath } = toRefsTabsStore()
 
-const { showTabClose } = toRefsPreferencesStore()
+const preferences = usePreferencesStore()
 
 const tabPinnedList = computed({
   get: () => tabs.value.filter((tab) => tab.pinned),
@@ -328,7 +328,7 @@ const TabList = defineComponent({
                 'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
                 {
                   'tab-active': tab.path === pendingActivePath.value,
-                  group: !tab.locked && !showTabClose.value,
+                  group: !tab.locked && !preferences.tabs.showTabClose,
                 },
               ]}
               onClick={() => handleTabClick(tab.path)}
@@ -345,7 +345,14 @@ const TabList = defineComponent({
                 }}
               >
                 {tab.path === pendingActivePath.value && (
-                  <div class='absolute inset-0 size-full border-t-[1.5px] border-primary bg-primary/6' />
+                  <div
+                    class={[
+                      'absolute inset-0 size-full border-primary bg-primary/6',
+                      preferences.tabs.tabBorderPosition === 'top'
+                        ? 'border-t-[1.5px]'
+                        : 'border-b-[1.5px]',
+                    ]}
+                  />
                 )}
               </Transition>
               <div
@@ -355,9 +362,10 @@ const TabList = defineComponent({
                   class={[
                     'flex flex-1 items-center overflow-hidden transition-[translate]',
                     {
-                      'translate-x-2.5': !tab.pinned && (tab.locked || !showTabClose.value),
+                      'translate-x-2.5':
+                        !tab.pinned && (tab.locked || !preferences.tabs.showTabClose),
                       'group-hover:translate-x-0':
-                        !tab.pinned && !tab.locked && !showTabClose.value,
+                        !tab.pinned && !tab.locked && !preferences.tabs.showTabClose,
                     },
                   ]}
                 >
@@ -379,9 +387,9 @@ const TabList = defineComponent({
                     class={[
                       'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button2-hover',
                       {
-                        'scale-0 opacity-0': tab.locked || !showTabClose.value,
+                        'scale-0 opacity-0': tab.locked || !preferences.tabs.showTabClose,
                         'group-hover:scale-100 group-hover:opacity-100':
-                          !tab.locked && !showTabClose.value,
+                          !tab.locked && !preferences.tabs.showTabClose,
                       },
                     ]}
                     onClick={(e) => {

@@ -21,7 +21,7 @@ const handleUserPanelClick = () => {
     class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
     :class="
       sidebarMenu.collapsed
-        ? 'mx-2 rounded-naive'
+        ? 'mx-2 rounded-naive px-2 py-1.5'
         : 'mx-4 rounded-xl bg-neutral-150 py-3.5 pr-2.5 pl-3.5 dark:bg-neutral-800'
     "
     @click="handleUserPanelClick"
@@ -31,8 +31,10 @@ const handleUserPanelClick = () => {
       :disabled="!sidebarMenu.collapsed"
     >
       <div
-        class="grid place-items-center overflow-hidden rounded-full transition-[margin,padding]"
-        :class="sidebarMenu.collapsed ? 'mr-0 px-2 py-1.5' : 'mr-2'"
+        class="grid place-items-center overflow-hidden rounded-full transition-[margin]"
+        :class="{
+          'mr-2': !sidebarMenu.collapsed,
+        }"
       >
         <div
           class="flex items-center justify-center overflow-hidden transition-[height,width]"

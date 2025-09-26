@@ -1,17 +1,5 @@
 <script setup lang="ts">
-import type { CSSProperties, TransitionProps } from 'vue'
-
-export interface CollapseTransitionProps extends TransitionProps {
-  displayDirective?: 'if' | 'show'
-  display?: boolean
-  direction?: 'vertical' | 'horizontal'
-  containerClass?: string
-  containerStyle?: CSSProperties
-  renderContent?: boolean
-  contentTag?: string
-  contentClass?: string
-  contentStyle?: CSSProperties
-}
+import type { CollapseTransitionProps } from './interface'
 
 defineOptions({
   inheritAttrs: false,

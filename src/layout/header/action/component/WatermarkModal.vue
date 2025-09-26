@@ -16,19 +16,19 @@ import { HintHelp } from '@/components'
 import { useComponentThemeOverrides } from '@/composables'
 import { toRefsPreferencesStore } from '@/stores'
 
-const { watermarkOptions } = toRefsPreferencesStore()
+const { watermark } = toRefsPreferencesStore()
 
-const { inModal } = useComponentThemeOverrides()
+const { overlayThemeOverrides } = useComponentThemeOverrides()
 </script>
 <template>
-  <NConfigProvider :theme-overrides="inModal">
+  <NConfigProvider :theme-overrides="overlayThemeOverrides">
     <NScrollbar
       style="max-height: 400px"
       contentClass="pr-3 py-6"
     >
       <NForm
         :label-width="80"
-        :model="watermarkOptions"
+        :model="watermark"
         :show-feedback="false"
         class="space-y-4"
       >
@@ -38,7 +38,7 @@ const { inModal } = useComponentThemeOverrides()
         >
           <NInput
             type="textarea"
-            v-model:value="watermarkOptions.content"
+            v-model:value="watermark.content"
             clearable
           />
         </NFormItem>
@@ -50,7 +50,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.fontSize"
+              v-model:value="watermark.fontSize"
               :min="8"
               :max="32"
             />
@@ -60,7 +60,7 @@ const { inModal } = useComponentThemeOverrides()
             path="fontColor"
             class="w-full"
           >
-            <NColorPicker v-model:value="watermarkOptions.fontColor" />
+            <NColorPicker v-model:value="watermark.fontColor" />
           </NFormItem>
           <NFormItem
             label="字体风格"
@@ -68,7 +68,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NSelect
-              v-model:value="watermarkOptions.fontStyle"
+              v-model:value="watermark.fontStyle"
               :options="[
                 { label: '正常', value: 'normal' },
                 { label: '斜体', value: 'italic' },
@@ -97,7 +97,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.lineHeight"
+              v-model:value="watermark.lineHeight"
               :min="1"
             />
           </NFormItem>
@@ -107,7 +107,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.fontWeight"
+              v-model:value="watermark.fontWeight"
               :min="100"
               :max="900"
               :step="100"
@@ -120,7 +120,7 @@ const { inModal } = useComponentThemeOverrides()
             path="width"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.width"
+              v-model:value="watermark.width"
               class="w-full"
               :min="1"
             />
@@ -130,7 +130,7 @@ const { inModal } = useComponentThemeOverrides()
             path="height"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.height"
+              v-model:value="watermark.height"
               class="w-full"
               :min="1"
             />
@@ -143,7 +143,7 @@ const { inModal } = useComponentThemeOverrides()
             path="xGap"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.xGap"
+              v-model:value="watermark.xGap"
               class="w-full"
             />
           </NFormItem>
@@ -152,7 +152,7 @@ const { inModal } = useComponentThemeOverrides()
             path="yGap"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.yGap"
+              v-model:value="watermark.yGap"
               class="w-full"
             />
           </NFormItem>
@@ -163,7 +163,7 @@ const { inModal } = useComponentThemeOverrides()
             path="xoffset"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.xOffset"
+              v-model:value="watermark.xOffset"
               class="w-full"
             />
           </NFormItem>
@@ -172,7 +172,7 @@ const { inModal } = useComponentThemeOverrides()
             path="yGap"
           >
             <NInputNumber
-              v-model:value="watermarkOptions.yOffset"
+              v-model:value="watermark.yOffset"
               class="w-full"
             />
           </NFormItem>
@@ -184,7 +184,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NSlider
-              v-model:value="watermarkOptions.rotate"
+              v-model:value="watermark.rotate"
               :min="-90"
               :max="90"
             />
@@ -195,7 +195,7 @@ const { inModal } = useComponentThemeOverrides()
             class="w-full"
           >
             <NSlider
-              v-model:value="watermarkOptions.globalRotate"
+              v-model:value="watermark.globalRotate"
               :min="-180"
               :max="180"
             />
@@ -205,7 +205,7 @@ const { inModal } = useComponentThemeOverrides()
             path="cross"
             class="w-full"
           >
-            <NSwitch v-model:value="watermarkOptions.cross" />
+            <NSwitch v-model:value="watermark.cross" />
           </NFormItem>
         </div>
         <NFormItem
@@ -214,7 +214,7 @@ const { inModal } = useComponentThemeOverrides()
         >
           <NInput
             type="textarea"
-            v-model:value="watermarkOptions.image"
+            v-model:value="watermark.image"
             clearable
           />
         </NFormItem>
@@ -231,7 +231,7 @@ const { inModal } = useComponentThemeOverrides()
                 content="修改后需重新打开水印"
                 class="pb-1.5"
               />
-              <NInputNumber v-model:value="watermarkOptions.imageWidth" />
+              <NInputNumber v-model:value="watermark.imageWidth" />
             </div>
           </NFormItem>
           <NFormItem
@@ -245,7 +245,7 @@ const { inModal } = useComponentThemeOverrides()
                 content="修改后需重新打开水印"
                 class="pb-1.5"
               />
-              <NInputNumber v-model:value="watermarkOptions.imageHeight" />
+              <NInputNumber v-model:value="watermark.imageHeight" />
             </div>
           </NFormItem>
 
@@ -261,7 +261,7 @@ const { inModal } = useComponentThemeOverrides()
                 class="pb-1.5"
               />
               <NSlider
-                v-model:value="watermarkOptions.imageOpacity"
+                v-model:value="watermark.imageOpacity"
                 :min="0"
                 :max="1"
                 :step="0.01"

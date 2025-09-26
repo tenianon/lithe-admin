@@ -1,40 +1,35 @@
 <script setup lang="ts">
-import { NColorPicker, NDivider, NDrawer, NDrawerContent, NSwitch, useModal } from 'naive-ui'
+import {
+  NColorPicker,
+  NDivider,
+  NDrawer,
+  NDrawerContent,
+  NSwitch,
+  useModal,
+  NSelect,
+  NConfigProvider,
+  NSlider,
+  NInputNumber,
+} from 'naive-ui'
 import { h, ref } from 'vue'
 
-import { ButtonAnimation, ButtonAnimationProvider } from '@/components'
-import { useInjection } from '@/composables'
+import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } from '@/components'
+import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, useSystemStore, toRefsPreferencesStore } from '@/stores'
 import { ccAPCA } from '@/utils/chromaHelper'
-import twColors from '@/utils/tailwindColor'
 import twc from '@/utils/tailwindColor'
 
 import LayoutThumbnail from './component/LayoutThumbnail.vue'
-import NoiseModal from './component/NoiseModal.vue'
 import WatermarkModal from './component/WatermarkModal.vue'
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
+const { overlayThemeOverrides } = useComponentThemeOverrides()
+
 const { reset } = usePreferencesStore()
 
-const {
-  preferences,
-  themeColor,
-  enableNavigationTransition,
-  enableTextSelect,
-  navigationMode,
-  showTopLoadingBar,
-  showLogo,
-  showNavigationButton,
-  showBreadcrumb,
-  showTabs,
-  showTabClose,
-  showFooter,
-  showWatermark,
-  showNoise,
-  sidebarMenu,
-} = toRefsPreferencesStore()
+const { preferences, themeColor, sidebarMenu } = toRefsPreferencesStore()
 
 const systemStore = useSystemStore()
 
@@ -43,22 +38,22 @@ const modal = useModal()
 const showPreferencesDrawer = ref(false)
 
 const colorSwatches = [
-  twColors.red[500],
-  twColors.orange[500],
-  twColors.amber[500],
-  twColors.yellow[500],
-  twColors.lime[500],
-  twColors.green[500],
-  twColors.emerald[500],
-  twColors.teal[500],
-  twColors.cyan[500],
-  twColors.sky[500],
-  twColors.blue[500],
-  twColors.indigo[500],
-  twColors.violet[500],
-  twColors.purple[500],
-  twColors.fuchsia[500],
-  twColors.pink[500],
+  twc.red[500],
+  twc.orange[500],
+  twc.amber[500],
+  twc.yellow[500],
+  twc.lime[500],
+  twc.green[500],
+  twc.emerald[500],
+  twc.teal[500],
+  twc.cyan[500],
+  twc.sky[500],
+  twc.blue[500],
+  twc.indigo[500],
+  twc.violet[500],
+  twc.purple[500],
+  twc.fuchsia[500],
+  twc.pink[500],
 ]
 
 const showWatermarkModal = () => {
@@ -67,19 +62,6 @@ const showWatermarkModal = () => {
     title: '修改水印信息',
     preset: 'dialog',
     content: () => h(WatermarkModal),
-    closable: true,
-    draggable: true,
-    showIcon: false,
-    zIndex: 99999,
-  })
-}
-
-const showNoiseModal = () => {
-  modal.create({
-    autoFocus: false,
-    title: '修改磨砂细腻度',
-    preset: 'dialog',
-    content: () => h(NoiseModal),
     closable: true,
     draggable: true,
     showIcon: false,
@@ -96,183 +78,280 @@ const showNoiseModal = () => {
       <span class="iconify ph--gear" />
     </ButtonAnimation>
     <ButtonAnimationProvider>
-      <NDrawer
-        v-model:show="showPreferencesDrawer"
-        :auto-focus="false"
-        :width="320"
-        :theme-overrides="{
-          footerPadding: '14px 16px',
-        }"
-      >
-        <NDrawerContent :native-scrollbar="false">
-          <template #header>
-            <div class="flex items-center gap-x-1">
-              <span>系统设定</span>
-              <ButtonAnimation
-                animation="rotate"
-                @click="reset"
+      <NConfigProvider :theme-overrides="overlayThemeOverrides">
+        <NDrawer
+          v-model:show="showPreferencesDrawer"
+          :auto-focus="false"
+          :width="320"
+          :theme-overrides="{
+            footerPadding: '14px 16px',
+          }"
+          :style="{
+            '--primary-color': themeColor,
+          }"
+        >
+          <NDrawerContent :native-scrollbar="false">
+            <template #header>
+              <div class="flex items-center gap-x-1">
+                <span>系统设定</span>
+                <ButtonAnimation
+                  animation="rotate"
+                  @click="reset"
+                >
+                  <span class="iconify ph--arrow-clockwise" />
+                </ButtonAnimation>
+              </div>
+            </template>
+            <div>
+              <NDivider>主题颜色</NDivider>
+              <NColorPicker
+                v-bind="$attrs"
+                v-model:value="themeColor"
+                :swatches="colorSwatches"
               >
-                <span class="iconify ph--arrow-clockwise" />
-              </ButtonAnimation>
+                <template #label="currentColor">
+                  <span
+                    :style="
+                      currentColor && {
+                        color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950], '#fff'),
+                      }
+                    "
+                    >{{ currentColor }}</span
+                  >
+                </template>
+              </NColorPicker>
             </div>
-          </template>
-          <div>
-            <NDivider>主题颜色</NDivider>
-            <NColorPicker
-              v-bind="$attrs"
-              :value="themeColor"
-              :swatches="colorSwatches"
-              @update-value="(color) => (themeColor = color)"
-            >
-              <template #label="currentColor">
-                <span
-                  :style="
-                    currentColor && {
-                      color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950], '#fff'),
-                    }
-                  "
-                  >{{ currentColor }}</span
-                >
-              </template>
-            </NColorPicker>
-          </div>
-          <div>
-            <NDivider>导航模式</NDivider>
-            <LayoutThumbnail />
-          </div>
-          <div>
-            <NDivider>布局相关</NDivider>
-            <div class="flex flex-col gap-y-1.5">
-              <div class="flex items-center justify-between">
-                <span>展开侧边菜单</span>
-                <NSwitch
-                  :value="sidebarMenu.collapsed"
-                  :checked-value="false"
-                  :unchecked-value="true"
-                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="(value) => (preferences.sidebarMenu.collapsed = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示顶部加载条</span>
-                <NSwitch
-                  :value="showTopLoadingBar"
-                  @update-value="(value) => (preferences.showTopLoadingBar = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示Logo</span>
-                <NSwitch
-                  :value="showLogo"
-                  @update-value="(value) => (preferences.showLogo = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示导航按钮</span>
-                <NSwitch
-                  :value="showNavigationButton"
-                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="(value) => (preferences.showNavigationButton = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示面包屑</span>
-                <NSwitch
-                  :value="showBreadcrumb"
-                  :disabled="isMaxSm || navigationMode !== 'sidebar'"
-                  @update-value="(value) => (preferences.showBreadcrumb = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示标签页</span>
-                <NSwitch
-                  :value="showTabs"
-                  :disabled="isMaxSm"
-                  @update-value="(value) => (preferences.showTabs = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>常显标签关闭按钮</span>
-                <NSwitch
-                  :value="showTabClose"
-                  :disabled="isMaxSm"
-                  @update-value="(value) => (preferences.showTabClose = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>显示底部</span>
-                <NSwitch
-                  :value="showFooter"
-                  :disabled="isMaxSm"
-                  @update-value="(value) => (preferences.showFooter = value)"
-                />
+            <div>
+              <NDivider>导航模式</NDivider>
+              <LayoutThumbnail />
+            </div>
+            <div>
+              <NDivider>布局相关</NDivider>
+              <div class="flex flex-col gap-y-1.5">
+                <CollapseTransitionTrigger>
+                  <template #trigger="{ collapsed }">
+                    <div class="flex items-center">
+                      <div
+                        class="flex flex-1 items-center gap-x-1 transition-[color] hover:text-primary"
+                      >
+                        <span>展开侧边菜单</span>
+                        <span
+                          class="iconify transition-[rotate] ph--caret-right"
+                          :class="{ 'rotate-90': collapsed }"
+                        />
+                      </div>
+                      <NSwitch
+                        v-model:value="sidebarMenu.collapsed"
+                        :checked-value="false"
+                        :unchecked-value="true"
+                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                        @click.stop
+                      />
+                    </div>
+                  </template>
+                  <div class="flex flex-col gap-y-1 pt-1.5 pl-4">
+                    <div class="flex items-center justify-between">
+                      <span>侧边菜单宽度</span>
+                      <NInputNumber
+                        v-model:value="sidebarMenu.width"
+                        size="small"
+                        :min="sidebarMenu.minWidth"
+                        :max="sidebarMenu.maxWidth"
+                        :step="1"
+                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                        :format="(value) => value!.toFixed(0)"
+                        style="width: 100px"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span>侧边菜单最大宽度</span>
+                      <NInputNumber
+                        v-model:value="sidebarMenu.maxWidth"
+                        size="small"
+                        :min="sidebarMenu.minWidth"
+                        :step="1"
+                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                        style="width: 100px"
+                      />
+                    </div>
+                  </div>
+                </CollapseTransitionTrigger>
+                <CollapseTransitionTrigger>
+                  <template #trigger="{ collapsed }">
+                    <div class="flex items-center">
+                      <div
+                        class="flex flex-1 items-center gap-x-1 transition-[color] hover:text-primary"
+                      >
+                        <span>显示标签页</span>
+                        <span
+                          class="iconify transition-[rotate] ph--caret-right"
+                          :class="{ 'rotate-90': collapsed }"
+                        />
+                      </div>
+                      <NSwitch
+                        v-model:value="preferences.tabs.show"
+                        :disabled="isMaxSm"
+                        @click.stop
+                      />
+                    </div>
+                  </template>
+                  <div class="flex flex-col gap-y-1 pt-1.5 pl-4">
+                    <div class="flex items-center justify-between">
+                      <span>常显标签关闭按钮</span>
+                      <NSwitch
+                        v-model:value="preferences.tabs.showTabClose"
+                        :disabled="!preferences.tabs.show || isMaxSm"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span>激活标签边框位置</span>
+                      <NSelect
+                        v-model:value="preferences.tabs.tabBorderPosition"
+                        :options="[
+                          {
+                            label: '顶部',
+                            value: 'top',
+                          },
+                          {
+                            label: '底部',
+                            value: 'bottom',
+                          },
+                        ]"
+                        :disabled="!preferences.tabs.show || isMaxSm"
+                        size="small"
+                        style="width: 80px"
+                      />
+                    </div>
+                  </div>
+                </CollapseTransitionTrigger>
+                <CollapseTransitionTrigger>
+                  <template #trigger="{ collapsed }">
+                    <div class="flex items-center">
+                      <div
+                        class="flex flex-1 items-center gap-x-1 transition-[color] hover:text-primary"
+                      >
+                        <span>显示面包屑</span>
+                        <span
+                          class="iconify transition-[rotate] ph--caret-right"
+                          :class="{ 'rotate-90': collapsed }"
+                        />
+                      </div>
+                      <NSwitch
+                        v-model:value="preferences.breadcrumb.show"
+                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                        @click.stop
+                      />
+                    </div>
+                  </template>
+
+                  <div class="flex flex-col gap-y-1 pt-1.5 pl-4">
+                    <div class="flex items-center justify-between">
+                      <span>启用切换过渡效果</span>
+                      <NSwitch
+                        v-model:value="preferences.breadcrumb.enableTransition"
+                        :disabled="
+                          !preferences.breadcrumb.show ||
+                          isMaxSm ||
+                          preferences.navigationMode !== 'sidebar'
+                        "
+                      />
+                    </div>
+                  </div>
+                </CollapseTransitionTrigger>
+
+                <div class="flex items-center justify-between">
+                  <span>显示顶部加载条</span>
+                  <NSwitch v-model:value="preferences.showTopLoadingBar" />
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>显示Logo</span>
+                  <NSwitch v-model:value="preferences.showLogo" />
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>显示导航按钮</span>
+                  <NSwitch
+                    v-model:value="preferences.showNavigationButton"
+                    :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                  />
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span>显示底部</span>
+                  <NSwitch
+                    v-model:value="preferences.showFooter"
+                    :disabled="isMaxSm"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <NDivider>页面相关</NDivider>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-x-1">
-                <span>显示水印</span>
-                <ButtonAnimation
-                  size="small"
-                  @click="showWatermarkModal"
-                  label="修改"
-                >
-                  <span class="iconify size-4 ph--pencil-simple-line" />
-                </ButtonAnimation>
+            <div>
+              <NDivider>页面相关</NDivider>
+              <div class="flex flex-col gap-y-1.5">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-x-1">
+                    <span>显示水印</span>
+                    <ButtonAnimation
+                      size="small"
+                      @click="showWatermarkModal"
+                      label="修改"
+                      :theme-overrides="{
+                        heightSmall: '24px',
+                      }"
+                    >
+                      <span class="iconify size-4 ph--pencil-simple-line" />
+                    </ButtonAnimation>
+                  </div>
+                  <NSwitch v-model:value="preferences.watermark.show" />
+                </div>
+                <CollapseTransitionTrigger>
+                  <template #trigger="{ collapsed }">
+                    <div class="flex items-center">
+                      <div
+                        class="flex flex-1 items-center gap-x-1 transition-[color] hover:text-primary"
+                      >
+                        <span>显示磨砂效果</span>
+                        <span
+                          class="iconify transition-[rotate] ph--caret-right"
+                          :class="{ 'rotate-90': collapsed }"
+                        />
+                      </div>
+                      <NSwitch
+                        v-model:value="preferences.noise.show"
+                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
+                        @click.stop
+                      />
+                    </div>
+                  </template>
+                  <div class="flex flex-col gap-y-1 pt-1.5 pl-4">
+                    <div class="flex items-center justify-between">
+                      <span class="mr-4 shrink-0">透明度</span>
+                      <NSlider
+                        v-model:value="preferences.noise.opacity"
+                        :min="0"
+                        :max="100"
+                        :step="1"
+                      />
+                    </div>
+                  </div>
+                </CollapseTransitionTrigger>
+                <div class="flex items-center justify-between">
+                  <span>文字可选中</span>
+                  <NSwitch v-model:value="preferences.enableTextSelect" />
+                </div>
               </div>
-              <NSwitch
-                :value="showWatermark"
-                @update-value="(value) => (preferences.showWatermark = value)"
-              />
             </div>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-x-1">
-                <span>显示磨砂效果</span>
-                <ButtonAnimation
-                  size="small"
-                  :duration="3000"
-                  @click="showNoiseModal"
-                  label="修改"
-                >
-                  <span class="iconify size-4 ph--pencil-simple-line" />
-                </ButtonAnimation>
+            <template #footer>
+              <div class="flex w-full items-center justify-between">
+                <div class="flex items-center gap-x-1">
+                  <span class="iconify size-5 ph--gear-fine" />
+                  <span class="leading-4">当前版本</span>
+                </div>
+                <span class="leading-4">{{ systemStore.version }}</span>
               </div>
-              <NSwitch
-                :value="showNoise"
-                @update-value="(value) => (preferences.showNoise = value)"
-              />
-            </div>
-            <div class="flex flex-col gap-y-1.5">
-              <div class="flex items-center justify-between">
-                <span>启用导航过渡效果</span>
-                <NSwitch
-                  :value="enableNavigationTransition"
-                  :disabled="isMaxSm"
-                  @update-value="(value) => (preferences.enableNavigationTransition = value)"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <span>文字可选中</span>
-                <NSwitch
-                  :value="enableTextSelect"
-                  @update-value="(value) => (preferences.enableTextSelect = value)"
-                />
-              </div>
-            </div>
-          </div>
-          <template #footer>
-            <div class="flex w-full items-center justify-between">
-              <div class="flex items-center gap-x-1">
-                <span class="iconify size-5 ph--gear-fine" />
-                <span class="leading-4">当前版本</span>
-              </div>
-              <span class="leading-4">{{ systemStore.version }}</span>
-            </div>
-          </template>
-        </NDrawerContent>
-      </NDrawer>
+            </template>
+          </NDrawerContent>
+        </NDrawer>
+      </NConfigProvider>
     </ButtonAnimationProvider>
   </div>
 </template>

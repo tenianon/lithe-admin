@@ -22,7 +22,8 @@ import { layoutInjectionKey, mediaQueryInjectionKey } from './injection'
 
 import type { LayoutSlideDirection } from './injection'
 
-const { showWatermark, showNoise, watermarkOptions } = storeToRefs(usePreferencesStore())
+const { watermark, noise } = storeToRefs(usePreferencesStore())
+
 const configProviderProps = getConfigProviderProps()
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
@@ -65,11 +66,11 @@ provide(layoutInjectionKey, {
             <NDialogProvider>
               <RouterView />
               <NWatermark
-                v-if="showWatermark"
+                v-if="watermark.show"
                 fullscreen
-                v-bind="watermarkOptions"
+                v-bind="watermark"
               />
-              <Noise v-if="showNoise" />
+              <Noise v-if="noise.show" />
             </NDialogProvider>
           </NMessageProvider>
         </NNotificationProvider>

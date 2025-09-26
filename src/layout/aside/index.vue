@@ -71,6 +71,17 @@ watch(sidebarLineX, (newSidebarLineX) => {
     preferences.value.sidebarMenu.collapsed = false
   }
 })
+
+watch(
+  () => sidebarMenu.value.width,
+  (newWidth) => {
+    if (newWidth <= sidebarMenu.value.minWidth) {
+      preferences.value.sidebarMenu.collapsed = true
+    } else {
+      preferences.value.sidebarMenu.collapsed = false
+    }
+  },
+)
 </script>
 <template>
   <div class="flex h-full">

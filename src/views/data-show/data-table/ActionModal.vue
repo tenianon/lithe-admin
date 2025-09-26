@@ -27,7 +27,7 @@ const emits = defineEmits<{
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
-const { inModal } = useComponentThemeOverrides()
+const { overlayThemeOverrides } = useComponentThemeOverrides()
 
 const [form, setUserForm, reset, updateInitialState] = useResettableReactive<Partial<UserInfo>>({
   fullName: '',
@@ -77,7 +77,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <NConfigProvider :theme-overrides="inModal">
+  <NConfigProvider :theme-overrides="overlayThemeOverrides">
     <div class="p-2">
       <NForm
         :model="form"

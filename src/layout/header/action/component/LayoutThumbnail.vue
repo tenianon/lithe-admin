@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { toRefsPreferencesStore } from '@/stores'
+import { usePreferencesStore } from '@/stores'
 
-const { preferences, themeColor, navigationMode } = toRefsPreferencesStore()
+const { preferences } = usePreferencesStore()
 </script>
 <template>
-  <div
-    class="flex justify-center gap-6"
-    :style="{
-      '--primary-color': themeColor,
-    }"
-  >
+  <div class="flex justify-center gap-6">
     <div
       class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
-        navigationMode === 'sidebar'
+        preferences.navigationMode === 'sidebar'
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "
@@ -54,7 +49,7 @@ const { preferences, themeColor, navigationMode } = toRefsPreferencesStore()
     <div
       class="flex h-16 w-20 cursor-pointer flex-col rounded border border-neutral-350 outline-offset-4 transition-[outline] duration-300 max-sm:pointer-events-none max-sm:opacity-50 dark:border-neutral-650"
       :class="
-        navigationMode === 'horizontal'
+        preferences.navigationMode === 'horizontal'
           ? 'outline-2 outline-primary/50'
           : 'outline-2 outline-transparent hover:outline-primary/30'
       "

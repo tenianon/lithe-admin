@@ -20,7 +20,7 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
-const { enableNavigationTransition, showTabs } = toRefsPreferencesStore()
+const { enableNavigationTransition, tabs: tabsOptions } = toRefsPreferencesStore()
 
 const { createTab, setTabActivePath } = useTabsStore()
 
@@ -87,7 +87,7 @@ watch(
 
     if (!enableNavigationTransition.value) return
 
-    if (!showTabs.value) {
+    if (!tabsOptions.value.show) {
       navigationTransitionName.value = 'scale'
       return
     }

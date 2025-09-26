@@ -1,4 +1,3 @@
-//import { useDark } from '@vueuse/core'
 import chroma from 'chroma-js'
 import { ref } from 'vue'
 
@@ -11,7 +10,7 @@ export function ccAPCA(
   color1 = '#ffffff',
   color2 = '#000000',
   bodyColor?: string,
-): string {
+) {
   if (!bodyColor) {
     bodyColor = isDark.value ? twc.neutral[950] : twc.neutral[25]
   }

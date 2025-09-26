@@ -20,7 +20,7 @@ export function useComponentThemeOverrides() {
         },
   )
 
-  const inModal = computed<GlobalThemeOverrides>(() => {
+  const overlayThemeOverrides = computed<GlobalThemeOverrides>(() => {
     const DARK = {
       input: {
         color: twc.neutral[750],
@@ -64,6 +64,6 @@ export function useComponentThemeOverrides() {
 
   return {
     scrollbarInMainLayout,
-    inModal,
+    overlayThemeOverrides,
   }
 }

@@ -16,7 +16,7 @@ const { minWidth: defaultMinWidth, width: defaultWidth } = DEFAULT_PREFERENCES_O
 
 const { isSidebarColResizing } = useInjection(layoutInjectionKey)
 
-const { navigationMode, sidebarMenu, showLogo } = toRefsPreferencesStore()
+const { navigationMode, sidebarMenu: sidebarMenu, showLogo } = toRefsPreferencesStore()
 
 const logoWrapperRef = useTemplateRef<HTMLElement>('logoWrapper')
 
