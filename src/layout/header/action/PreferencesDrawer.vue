@@ -317,7 +317,6 @@ const showWatermarkModal = () => {
                       </div>
                       <NSwitch
                         v-model:value="preferences.noise.show"
-                        :disabled="isMaxSm || preferences.navigationMode !== 'sidebar'"
                         @click.stop
                       />
                     </div>
