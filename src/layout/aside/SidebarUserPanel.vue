@@ -58,28 +58,26 @@ const handleUserPanelClick = () => {
       leave-from-class="grid-cols-[1fr]"
     >
       <div
-        class="grid flex-1 overflow-hidden"
+        class="flex flex-1 items-center justify-between overflow-hidden"
         v-show="!sidebarMenu.collapsed"
       >
-        <div class="flex min-w-0 items-center overflow-hidden">
-          <div class="flex flex-1 flex-col gap-y-px">
-            <span class="truncate text-sm">
-              {{ user.name }}
-            </span>
-            <span class="truncate text-xs text-neutral-450 dark:text-neutral-500">
-              这里应该写点什么
-            </span>
-          </div>
-
-          <UserDropdown placement="top">
-            <ButtonAnimation
-              animation="rotate"
-              title="设置"
-            >
-              <span class="iconify text-neutral-500 ph--gear dark:text-neutral-450" />
-            </ButtonAnimation>
-          </UserDropdown>
+        <div class="flex flex-col gap-y-px overflow-hidden">
+          <span class="truncate text-sm">
+            {{ user.name }}
+          </span>
+          <span class="truncate text-xs text-neutral-450 dark:text-neutral-500">
+            这里应该写点什么
+          </span>
         </div>
+
+        <UserDropdown placement="top">
+          <ButtonAnimation
+            animation="rotate"
+            title="设置"
+          >
+            <span class="iconify text-neutral-500 ph--gear dark:text-neutral-450" />
+          </ButtonAnimation>
+        </UserDropdown>
       </div>
     </Transition>
   </div>
