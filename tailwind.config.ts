@@ -1,10 +1,25 @@
-import twc from './src/utils/tailwindColor'
+import { tailwindColorOklch } from './src/utils/tailwindColor'
 
 import type { Config } from 'tailwindcss'
 
-const targetShades = ['25', '150', '250', '350', '450', '550', '650', '750', '850'] as const
+const targetShades = [
+  '25',
+  '75',
+  '150',
+  '250',
+  '350',
+  '450',
+  '550',
+  '650',
+  '750',
+  '825',
+  '850',
+  '925',
+] as const
 
-function extractShades(colorObject: Record<string, Record<string, string>>) {
+export function extractShades(
+  colorObject: Record<keyof typeof tailwindColorOklch, Record<string, string>>,
+) {
   const result: Record<string, Partial<Record<string, string>>> = {}
 
   for (const [colorName, shades] of Object.entries(colorObject)) {
@@ -27,7 +42,7 @@ function extractShades(colorObject: Record<string, Record<string, string>>) {
 export default <Config>{
   theme: {
     extend: {
-      colors: extractShades(twc),
+      colors: extractShades(tailwindColorOklch),
     },
   },
 }

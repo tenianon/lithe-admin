@@ -49,7 +49,7 @@ const textureMaskParams = reactive({
 
 const textureStyle = computed(() => {
   return {
-    filter: isDark.value ? 'invert(0.18)' : 'invert(0.86)',
+    filter: isDark.value ? 'invert(0.18)' : 'invert(0.9)',
     maskImage: `radial-gradient(circle 200px at ${textureMaskParams.x}px ${textureMaskParams.y}px, #f0f 0%, transparent 100%)`,
     WebkitMaskImage: `radial-gradient(circle 200px at ${textureMaskParams.x}px ${textureMaskParams.y}px, #f0f 0%, transparent 100%)`,
   }
@@ -122,7 +122,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class="relative flex h-svh items-center justify-center overflow-hidden bg-neutral-50 p-6 transition-[background-color] dark:bg-neutral-900"
+    class="relative flex h-svh items-center justify-center overflow-hidden bg-neutral-25 p-6 transition-[background-color] dark:bg-neutral-900"
   >
     <div
       class="absolute top-0 left-0 size-full bg-neutral-200/45 transition-[background-color] dark:bg-neutral-800/50"
@@ -148,7 +148,7 @@ onUnmounted(() => {
     <div class="relative z-50 flex h-[480px] w-[800px] justify-center rounded shadow-lg">
       <div
         v-if="!isMaxSm"
-        class="flex-1 bg-neutral-50 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-850"
+        class="flex-1 bg-neutral-25 py-6 pl-6 text-primary transition-[background-color] dark:bg-neutral-825"
       >
         <NCarousel
           draggable

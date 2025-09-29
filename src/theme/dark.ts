@@ -64,7 +64,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
 
       textColor3: DARK.textColor3,
 
-      bodyColor: twc.neutral[950],
+      bodyColor: twc.neutral[925],
 
       borderColor: DARK.borderColor,
 
@@ -127,7 +127,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     DataTable: {
       borderColor: DARK.borderColor,
       tdColor: twc.neutral[900],
-      tdColorHover: cbh(twc.neutral[850], 0.06),
+      tdColorHover: twc.neutral[825],
       thColor: twc.neutral[850],
     },
     DatePicker: {

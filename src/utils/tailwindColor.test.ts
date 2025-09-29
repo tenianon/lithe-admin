@@ -1,7 +1,9 @@
 import chroma from 'chroma-js'
 import { isObject } from 'lodash-es'
 import twColors from 'tailwindcss/colors'
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
+import { extractShades } from '../../tailwind.config'
 
 type TailwindColorKey = Omit<
   typeof twColors,
@@ -10,6 +12,8 @@ type TailwindColorKey = Omit<
 
 type ColorShade =
   | '25'
+  | '50'
+  | '75'
   | '100'
   | '150'
   | '200'
@@ -18,7 +22,6 @@ type ColorShade =
   | '350'
   | '400'
   | '450'
-  | '50'
   | '500'
   | '550'
   | '600'
@@ -26,96 +29,90 @@ type ColorShade =
   | '700'
   | '750'
   | '800'
+  | '825'
   | '850'
   | '900'
+  | '925'
   | '950'
 
-type ColorObject = { [key in ColorShade]: string }
-type TailwindColor = { [K in keyof TailwindColorKey]: ColorObject }
+type TailwindColor = Record<keyof TailwindColorKey, Record<ColorShade, string>>
 
-function generateTailwindColor() {
-  const hexCache = new Map<string, string>()
+const extraSteps = [25, 75, 150, 250, 350, 450, 550, 650, 750, 825, 850, 925]
 
-  const toHex = (value: string): string => {
-    if (!hexCache.has(value)) {
-      hexCache.set(value, chroma(value).hex())
-    }
-    return hexCache.get(value) || ''
-  }
+type MixMode = Parameters<typeof chroma.mix>[3]
+type CssMode = Parameters<ReturnType<typeof chroma.mix>['css']>[0]
 
-  const mixHex = (a: string, b: string, ratio = 0.5): string => chroma.mix(a, b, ratio).hex()
-
+function extendTailwindCssColors(toHex: boolean, mixMode: MixMode): TailwindColor
+function extendTailwindCssColors(mixMode: MixMode, cssMode: CssMode): TailwindColor
+function extendTailwindCssColors(param1: boolean | MixMode, param2: MixMode | CssMode) {
   const result = {} as TailwindColor
 
-  for (const [colorName, colorValue] of Object.entries(twColors)) {
-    if (!isObject(colorValue)) continue
+  for (const [name, palette] of Object.entries(twColors)) {
+    if (!isObject(palette)) continue
 
-    const entries = Object.entries(colorValue).filter(([shade]) => /^\d{2,3}$/.test(shade))
-    const sortedShades = entries.sort((a, b) => Number(a[0]) - Number(b[0]))
+    const keys = Object.keys(palette)
+      .map((k) => Number(k))
+      .filter((k) => !Number.isNaN(k))
+      .sort((a, b) => a - b)
 
-    const colorObj: ColorObject = {} as ColorObject
+    const newPalette: Record<string, string> = { ...palette }
 
-    if (sortedShades.some(([shade]) => shade === '50')) {
-      const hex50 = toHex(colorValue['50'])
-      colorObj['25'] = mixHex('#ffffff', hex50)
-    }
-
-    for (let i = 0; i < sortedShades.length; i++) {
-      const entry = sortedShades[i]
-      if (!entry) continue
-      const [shade, raw] = entry
-      const shadeKey = shade as ColorShade
-      colorObj[shadeKey] = toHex(raw)
-
-      if (Number(shade) % 100 === 0 && i + 1 < sortedShades.length) {
-        const nextEntry = sortedShades[i + 1]
-        if (nextEntry) {
-          const nextShade = nextEntry[0]
-          const nextRaw = nextEntry[1]
-          if (Number(nextShade) === Number(shade) + 100) {
-            const midShade = `${Number(shade) + 50}` as ColorShade
-            colorObj[midShade] = mixHex(toHex(raw), toHex(nextRaw))
-          }
+    if (typeof param1 === 'boolean' && param1) {
+      for (const key in newPalette) {
+        if (newPalette[key]) {
+          newPalette[key] = chroma(newPalette[key]).hex()
         }
       }
     }
 
-    result[colorName as keyof TailwindColorKey] = colorObj
-  }
-
-  return result
-}
-
-const targetShades = ['25', '150', '250', '350', '450', '550', '650', '750', '850'] as const
-
-function extractShades(colorObj: Record<string, Record<string, string>>) {
-  const result: Record<string, Partial<Record<string, string>>> = {}
-
-  for (const [colorName, shades] of Object.entries(colorObj)) {
-    const extracted: Partial<Record<string, string>> = {}
-
-    targetShades.forEach((shade) => {
-      if (shades[shade]) {
-        extracted[shade] = shades[shade]
+    for (const step of extraSteps) {
+      if (step === 25) {
+        const fiftyColor = palette[50 as unknown as keyof typeof palette]
+        if (fiftyColor) {
+          const ratio = 0.5
+          if (typeof param1 === 'boolean') {
+            const mixed = chroma.mix('#ffffff', fiftyColor, ratio, param2 as MixMode)
+            newPalette[step] = param1 ? mixed.hex() : mixed.css('oklch')
+          } else {
+            const mixed = chroma.mix('#ffffff', fiftyColor, ratio, param1)
+            newPalette[step] = mixed.css(param2 as CssMode)
+          }
+        }
+        continue
       }
-    })
 
-    if (Object.keys(extracted).length > 0) {
-      result[colorName] = extracted
+      const lower = [...keys].reverse().find((k) => k <= step)
+      const upper = keys.find((k) => k >= step)
+
+      if (lower == null || upper == null || lower === upper) continue
+
+      const lowerColor = palette[lower as unknown as keyof typeof palette]
+      const upperColor = palette[upper as unknown as keyof typeof palette]
+      const ratio = (step - lower) / (upper - lower)
+
+      if (typeof param1 === 'boolean') {
+        const mixed = chroma.mix(lowerColor, upperColor, ratio, param2 as MixMode)
+        newPalette[step] = param1 ? mixed.hex() : mixed.css('oklch')
+      } else {
+        const mixed = chroma.mix(lowerColor, upperColor, ratio, param1)
+        newPalette[step] = mixed.css(param2 as CssMode)
+      }
     }
-  }
 
+    result[name as keyof TailwindColor] = newPalette
+  }
   return result
 }
 
 describe('tailwindColor', () => {
-  const twc = generateTailwindColor()
-
+  const twc = extendTailwindCssColors('lch', 'oklch')
   it('should be defined', () => {
+    console.log(twc)
     expect(twc.blue[150]).not.toBeUndefined()
   })
 
   it('should have 25 shade', () => {
+    console.log(twc.blue)
     expect(twc.blue['25']).not.toBeUndefined()
   })
 

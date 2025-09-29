@@ -1069,7 +1069,7 @@ watch([isDark, themeColor], () => {
           iconClass,
         } in cardList"
         :key="title"
-        class="flex items-center justify-between gap-x-4 overflow-hidden rounded bg-naive-card p-6 shadow-xs transition-[background-color]"
+        class="flex items-center justify-between gap-x-4 overflow-hidden rounded border border-naive-border bg-naive-card p-6 transition-[background-color,border-color]"
       >
         <div class="flex-1">
           <span class="text-sm font-medium text-neutral-450">{{ title }}</span>
@@ -1114,7 +1114,7 @@ watch([isDark, themeColor], () => {
     <div class="grid grid-cols-1 gap-4 overflow-hidden max-sm:gap-2 lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-8">
         <div
-          class="rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color]"
+          class="rounded border border-naive-border bg-naive-card px-5 pt-5 pb-4.5 transition-[background-color,border-color]"
           style="height: 400px"
         >
           <div
@@ -1125,7 +1125,7 @@ watch([isDark, themeColor], () => {
       </div>
       <div class="col-span-1 lg:col-span-4">
         <div
-          class="flex flex-col rounded bg-naive-card px-5 pt-5 pb-4.5 shadow-xs transition-[background-color]"
+          class="flex flex-col rounded border border-naive-border bg-naive-card px-5 pt-5 pb-4.5 transition-[background-color,border-color]"
           style="height: 400px"
         >
           <div
@@ -1142,7 +1142,7 @@ watch([isDark, themeColor], () => {
     <div class="grid grid-cols-1 gap-4 overflow-hidden max-sm:gap-2 lg:grid-cols-12">
       <div class="col-span-1 lg:col-span-5">
         <div
-          class="rounded bg-naive-card px-5 pt-5 pb-3 shadow-xs transition-[background-color]"
+          class="rounded border border-naive-border bg-naive-card px-5 pt-5 pb-3 transition-[background-color,border-color]"
           style="height: 340px"
         >
           <div
@@ -1153,7 +1153,7 @@ watch([isDark, themeColor], () => {
       </div>
       <div class="col-span-1 lg:col-span-7">
         <div
-          class="rounded bg-naive-card p-5 shadow-xs transition-[background-color]"
+          class="rounded border border-naive-border bg-naive-card p-5 transition-[background-color,border-color]"
           style="height: 340px; position: relative"
         >
           <div

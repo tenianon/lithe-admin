@@ -73,8 +73,8 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
 
       popoverColor: twc.neutral[25],
 
-      scrollbarColor: twc.neutral[200],
-      scrollbarColorHover: twc.neutral[250],
+      scrollbarColor: twc.neutral[150],
+      scrollbarColorHover: twc.neutral[200],
 
       closeIconColor: cbh(twc.neutral[500], 0.2),
       closeColorHover: cah(twc.neutral[500], 0.1),
@@ -125,8 +125,8 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
     DataTable: {
       borderColor: LIGHT.borderColor,
       tdColor: twc.neutral[25],
-      tdColorHover: cdh(twc.neutral[100], 0.06),
-      thColor: twc.neutral[100],
+      tdColorHover: twc.neutral[100],
+      thColor: twc.neutral[75],
     },
     Divider: {
       color: twc.neutral[150],
