@@ -24,7 +24,6 @@ const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
 const dir = ` 📂 lithe-admin
-├── 📄 LICENSE
 ├── 📄 README.en_US.md
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
@@ -64,13 +63,16 @@ const dir = ` 📂 lithe-admin
 │    └── 📂 empty-placeholder/
 │      ├── 📄 EmptyPlaceholder.test.ts
 │      ├── 📄 EmptyPlaceholder.vue
+│      ├── 📄 index.ts
 │    └── 📂 hint-help/
 │      ├── 📄 HintHelp.test.ts
 │      ├── 📄 HintHelp.vue
+│      ├── 📄 index.ts
 │    ├── 📄 index.ts
 │    └── 📂 scroll-container/
 │      ├── 📄 ScrollContainer.test.ts
 │      ├── 📄 ScrollContainer.vue
+│      ├── 📄 index.ts
 │  └── 📂 composables/
 │    ├── 📄 index.ts
 │    ├── 📄 useComponentModifier.ts
