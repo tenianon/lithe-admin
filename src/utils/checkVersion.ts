@@ -9,8 +9,7 @@ export function checkVersion() {
     localStorage.clear()
     sessionStorage.clear()
 
+    localStorage.setItem(storageKey, currentVersion)
     window.location.reload()
   }
-
-  localStorage.setItem(storageKey, currentVersion)
 }
