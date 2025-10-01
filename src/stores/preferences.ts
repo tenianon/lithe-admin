@@ -31,7 +31,10 @@ export interface PreferencesOptions {
     enableTransition: boolean
   }
   showTopLoadingBar: boolean
-  enableNavigationTransition: boolean
+  navigationTransition: {
+    enable: boolean
+    effect: 'slider' | 'scale' | 'fade' | 'fade-left' | 'fade-right'
+  }
   enableTextSelect: boolean
   watermark: {
     show: boolean
@@ -65,7 +68,10 @@ export const DEFAULT_PREFERENCES_OPTIONS = {
     enableTransition: true,
   },
   showTopLoadingBar: true,
-  enableNavigationTransition: true,
+  navigationTransition: {
+    enable: true,
+    effect: 'slider',
+  },
   enableTextSelect: true,
   watermark: {
     show: false,
@@ -119,7 +125,7 @@ export const usePreferencesStore = defineStore('preferencesStore', () => {
   ) as { [K in keyof PreferencesOptions]: ComputedRef<PreferencesOptions[K]> }
 
   const reset = () => {
-    preferences.value = structuredClone(DEFAULT_PREFERENCES_OPTIONS)
+    Object.assign(preferences.value, structuredClone(DEFAULT_PREFERENCES_OPTIONS))
     themeColor.value = DEFAULT_THEME_COLOR
     themeMode.value = 'auto'
   }

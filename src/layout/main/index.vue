@@ -20,7 +20,7 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 const { shouldRefreshRoute, layoutSlideDirection, setLayoutSlideDirection } =
   useInjection(layoutInjectionKey)
 
-const { enableNavigationTransition, tabs: tabsOptions } = toRefsPreferencesStore()
+const { navigationTransition } = toRefsPreferencesStore()
 
 const { createTab, setTabActivePath } = useTabsStore()
 
@@ -80,32 +80,28 @@ watch(
       }
     }
 
-    if (isMaxSm.value) {
-      navigationTransitionName.value = ''
+    if (!navigationTransition.value.enable || isMaxSm.value) return
+
+    if (navigationTransition.value.effect === 'slider') {
+      const oldActiveIndex = oldTabs.findIndex((item) => item.path === oldTabActivePath)
+      const newActiveIndex = newTabs.findIndex((item) => item.path === newTabActivePath)
+
+      if (oldTabs.length < newTabs.length || oldActiveIndex === -1 || newActiveIndex === -1) {
+        navigationTransitionName.value = 'scale'
+      } else if (oldTabs.length > newTabs.length) {
+        navigationTransitionName.value =
+          oldActiveIndex > newActiveIndex ? 'scale-slider-left' : 'scale-slider-right'
+      } else if (oldTabActivePath !== newTabActivePath) {
+        navigationTransitionName.value =
+          oldActiveIndex > newActiveIndex ? 'slider-left' : 'slider-right'
+      }
+
+      oldTabs = [...newTabs]
+
       return
     }
 
-    if (!enableNavigationTransition.value) return
-
-    if (!tabsOptions.value.show) {
-      navigationTransitionName.value = 'scale'
-      return
-    }
-
-    const oldActiveIndex = oldTabs.findIndex((item) => item.path === oldTabActivePath)
-    const newActiveIndex = newTabs.findIndex((item) => item.path === newTabActivePath)
-
-    if (oldTabs.length < newTabs.length || oldActiveIndex === -1 || newActiveIndex === -1) {
-      navigationTransitionName.value = 'scale'
-    } else if (oldTabs.length > newTabs.length) {
-      navigationTransitionName.value =
-        oldActiveIndex > newActiveIndex ? 'scale-slider-left' : 'scale-slider-right'
-    } else if (oldTabActivePath !== newTabActivePath) {
-      navigationTransitionName.value =
-        oldActiveIndex > newActiveIndex ? 'slider-left' : 'slider-right'
-    }
-
-    oldTabs = [...newTabs]
+    navigationTransitionName.value = navigationTransition.value.effect
   },
 )
 
@@ -155,7 +151,7 @@ onMounted(() => {
 </script>
 <template>
   <RouterView
-    v-if="enableNavigationTransition"
+    v-if="navigationTransition.enable"
     v-slot="{ Component, route }"
   >
     <Transition
@@ -242,6 +238,67 @@ onMounted(() => {
 .scale-leave-to {
   scale: 0.5;
   opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  position: absolute;
+  width: 100%;
+  transition: opacity 300ms var(--cubic-bezier-ease-in-out) 75ms;
+  will-change: opacity;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-left-enter-active,
+.fade-left-leave-active,
+.fade-right-enter-active,
+.fade-right-leave-active {
+  position: absolute;
+  width: 100%;
+  will-change: opacity, translate;
+}
+
+.fade-left-enter-active,
+.fade-right-enter-active {
+  transition:
+    opacity 300ms var(--cubic-bezier-ease-in-out) 300ms,
+    translate 300ms var(--cubic-bezier-ease-in-out) 300ms;
+}
+
+.fade-left-leave-active,
+.fade-right-leave-active {
+  transition:
+    opacity 250ms var(--cubic-bezier-ease-in-out) 50ms,
+    translate 250ms var(--cubic-bezier-ease-in-out) 50ms;
+}
+
+.fade-left-enter-from,
+.fade-left-leave-to {
+  opacity: 0;
+  translate: -10%;
+}
+
+.fade-left-enter-to,
+.fade-left-leave-from,
+.fade-right-enter-to,
+.fade-right-leave-from {
+  opacity: 1;
+  translate: 0;
+}
+
+.fade-right-enter-from,
+.fade-right-leave-to {
+  opacity: 0;
+  translate: 10%;
 }
 
 .shake-enter-active {
