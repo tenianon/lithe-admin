@@ -13,10 +13,11 @@ import {
 } from 'naive-ui'
 import { h, ref } from 'vue'
 
+import packageJson from '@/../package.json'
 import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } from '@/components'
 import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore, useSystemStore, toRefsPreferencesStore } from '@/stores'
+import { usePreferencesStore, toRefsPreferencesStore } from '@/stores'
 import { ccAPCA } from '@/utils/chromaHelper'
 import twc from '@/utils/tailwindColor'
 
@@ -30,8 +31,6 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
 const { reset } = usePreferencesStore()
 
 const { preferences, themeColor, sidebarMenu } = toRefsPreferencesStore()
-
-const systemStore = useSystemStore()
 
 const modal = useModal()
 
@@ -398,7 +397,7 @@ const showWatermarkModal = () => {
                   <span class="iconify size-5 ph--gear-fine" />
                   <span class="leading-4">当前版本</span>
                 </div>
-                <span class="leading-4">{{ systemStore.version }}</span>
+                <span class="leading-4">{{ packageJson.version }}</span>
               </div>
             </template>
           </NDrawerContent>

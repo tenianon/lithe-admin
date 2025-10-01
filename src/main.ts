@@ -3,20 +3,21 @@ import './assets/main.css'
 import { createApp } from 'vue'
 
 import { setupRouterGuard } from '@/router/guard'
-import { useSystemStore, pinia } from '@/stores'
+import { pinia } from '@/stores'
+import { checkVersion } from '@/utils/checkVersion'
 
 import App from './App.vue'
 import router from './router'
 
 async function setupApp() {
+  checkVersion()
+
   const app = createApp(App)
 
   app.use(pinia)
 
   app.use(router)
   setupRouterGuard(router)
-
-  useSystemStore(pinia)
 
   await router.isReady()
 
