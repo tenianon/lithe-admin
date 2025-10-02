@@ -177,7 +177,6 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   transition: translate 500ms var(--cubic-bezier-ease-in-out) 75ms;
-  will-change: translate;
 }
 
 .slider-left-enter-from,
@@ -207,7 +206,6 @@ onMounted(() => {
     scale 500ms var(--cubic-bezier-ease-in-out) 75ms,
     translate 500ms var(--cubic-bezier-ease-in-out) 75ms,
     opacity 300ms var(--cubic-bezier-ease-in-out) 75ms;
-  will-change: scale, translate, opacity;
 }
 
 .scale-slider-left-leave-to,
@@ -231,7 +229,6 @@ onMounted(() => {
   transition:
     scale 300ms var(--cubic-bezier-ease-in-out) 75ms,
     opacity 300ms var(--cubic-bezier-ease-in-out) 75ms;
-  will-change: scale, opacity;
 }
 
 .scale-enter-from,
@@ -245,7 +242,6 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   transition: opacity 300ms var(--cubic-bezier-ease-in-out) 75ms;
-  will-change: opacity;
 }
 
 .fade-enter-from,
@@ -264,7 +260,6 @@ onMounted(() => {
 .fade-right-leave-active {
   position: absolute;
   width: 100%;
-  will-change: opacity, translate;
 }
 
 .fade-left-enter-active,
