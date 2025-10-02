@@ -336,8 +336,8 @@ const TabList = defineComponent({
             >
               <Transition
                 type='transition'
-                leaveActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
-                enterActiveClass='transition-[opacity,scale,translate] will-change-[opacity,transform,scale]'
+                leaveActiveClass='transition-[opacity,scale,translate]'
+                enterActiveClass='transition-[opacity,scale,translate]'
                 leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
                 enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
                 onAfterEnter={() => {
