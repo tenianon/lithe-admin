@@ -39,8 +39,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
       const id = Date.now()
       tabs.value.push({
         ...tab,
-        id,
-        title: isFunction(tab.title) ? tab.title()?.toString() : tab.title,
+        id
       })
 
       if (tab.pinned) {
