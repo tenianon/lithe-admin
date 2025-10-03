@@ -1,5 +1,5 @@
 import { useStorage } from '@vueuse/core'
-import { isEmpty, isFunction } from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 
 import { pinia } from '.'
@@ -39,7 +39,7 @@ export const useTabsStore = defineStore('tabsStore', () => {
       const id = Date.now()
       tabs.value.push({
         ...tab,
-        id
+        id,
       })
 
       if (tab.pinned) {
