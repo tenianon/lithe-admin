@@ -41,7 +41,7 @@ let oldTabs: Tab[] = []
 function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
   const {
     icon = 'iconify ph--browser',
-    title: label = '未命名标签',
+    title = '未命名标签',
     renderTabTitle,
     componentName,
     pinned,
@@ -49,12 +49,12 @@ function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
 
   const { fullPath, name, params } = route
 
-  const title = renderTabTitle ? renderTabTitle(params) : label
+  const renderTitle = renderTabTitle ? renderTabTitle(params) : title
 
   createTab({
     path: fullPath,
     icon,
-    title,
+    title: renderTitle,
     name,
     componentName,
     pinned,

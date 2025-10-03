@@ -1,14 +1,15 @@
+import type { VNodeChild } from 'vue'
 import type { RouteParamsGeneric } from 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    title?: string
-    icon?: string
+    title?: string | (() => VNodeChild)
+    icon?: string | (() => VNodeChild)
     componentName?: string
     pinned?: boolean
     showTab?: boolean
     enableMultiTab?: boolean
-    withKeepAlive?: boolean
+    keepAlive?: boolean
     renderTabTitle?: (params: RouteParamsGeneric) => string
   }
 }

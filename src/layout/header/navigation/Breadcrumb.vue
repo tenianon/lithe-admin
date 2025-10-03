@@ -61,8 +61,16 @@ const BreadcrumbNode = defineComponent({
   setup(props) {
     return () => (
       <div class='flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1'>
-        {props.meta?.icon && <span class={`${props.meta?.icon} size-5`} />}
-        {props.meta?.title}
+        {props.meta?.icon && isFunction(props.meta?.icon) ? (
+          props.meta.icon()
+        ) : (
+          <span class={`${props.meta?.icon} size-5`} />
+        )}
+        {props.meta?.title && isFunction(props.meta?.title) ? (
+          props.meta.title()
+        ) : (
+          <span>{props.meta?.title}</span>
+        )}
       </div>
     )
   },

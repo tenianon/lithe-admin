@@ -1,5 +1,5 @@
-import { isEmpty, isString, pickBy, omit } from 'lodash-es'
-import { h } from 'vue'
+import { isEmpty, isString, pickBy, omit, isFunction } from 'lodash-es'
+import { h, type VNodeChild } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import type {
@@ -11,7 +11,7 @@ import type {
 import type { RouteRecordRaw } from 'vue-router'
 
 type NoIndex<T> = {
-  [K in keyof T as string extends K ? never : K]: T[K]
+  [K in keyof T as string extends K ? never : number extends K ? never : K]: T[K]
 }
 
 type ReplaceKeys<T, R extends Partial<Record<keyof T, unknown>>> = T extends unknown
@@ -32,10 +32,11 @@ type RouteOption = Omit<CustomRouteRecordRaw, 'children'> & {
 }
 
 type MenuOption = ReplaceKeys<
-  MenuOptionRaw,
+  NoIndex<MenuOptionRaw>,
   {
-    icon: string
+    icon?: string | (() => VNodeChild)
     children?: MenuMixedOptions[]
+    label?: string | (() => VNodeChild)
   }
 > &
   RouteOption
@@ -59,11 +60,15 @@ export function resolveMenu(options: MenuMixedOptions[], parentDisabled = false)
   options.forEach((item) => {
     if (!item.type || item.type === 'group') {
       const { children, name, path, label, icon, key, disabled, extra, props, show, type } =
-        item as MenuOption & { label: string }
+        item as MenuOption
 
       const mergedDisabled = parentDisabled || disabled
 
-      const renderIcon = icon ? () => h('span', { class: `${icon}` }) : null
+      const renderIcon = icon
+        ? isFunction(icon)
+          ? icon
+          : () => h('span', { class: `${icon}` })
+        : null
 
       const menu = pickBy(
         {
@@ -83,9 +88,10 @@ export function resolveMenu(options: MenuMixedOptions[], parentDisabled = false)
       if (Array.isArray(children) && !isEmpty(children)) {
         menu.children = resolveMenu(children, mergedDisabled)
       } else {
-        menu.label = mergedDisabled
-          ? label
-          : () => h(RouterLink, { to: { name } }, { default: () => label })
+        menu.label =
+          mergedDisabled || isFunction(label)
+            ? label
+            : () => h(RouterLink, { to: { name } }, { default: () => label })
       }
 
       menuOptions.push(menu)
@@ -117,25 +123,23 @@ export function resolveRoute(options: MenuMixedOptions[]) {
   }
 
   flattenOptions(options).forEach((item) => {
-    const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption & {
-      label: string
-    }
+    const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption
 
     if (!disabled) {
-      let compModule: (() => Promise<unknown>) | null = null
+      let componentModule: (() => Promise<unknown>) | null = null
 
       if (!isEmpty(component) && isString(component)) {
         const extractName = component.replace(/^\/|\.vue$/g, '')
         const modulePath = `/src/views/${extractName}.vue`
         if (modules[modulePath]) {
-          compModule = modules[modulePath]
+          componentModule = modules[modulePath]
         }
       }
 
       const route = omit(
         {
           ...rest,
-          ...(compModule ? { component: compModule } : {}),
+          ...(componentModule ? { component: componentModule } : {}),
           meta: {
             ...meta,
             title: meta?.title || label,

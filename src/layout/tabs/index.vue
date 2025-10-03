@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import { isEmpty } from 'lodash-es'
+import { isEmpty, isFunction } from 'lodash-es'
 import { NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
 import {
   computed,
@@ -370,17 +370,23 @@ const TabList = defineComponent({
                   ]}
                 >
                   <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
-                    <span
-                      class={[
-                        'size-4.5',
-                        tab.icon,
-                        {
-                          'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
-                        },
-                      ]}
-                    />
+                    {tab.icon && isFunction(tab.icon) ? (
+                      tab.icon()
+                    ) : (
+                      <span
+                        class={[
+                          'size-4.5',
+                          tab.icon,
+                          {
+                            'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
+                          },
+                        ]}
+                      />
+                    )}
                   </div>
-                  <NEllipsis tooltip={showTabTooltip.value}>{tab.title}</NEllipsis>
+                  <NEllipsis tooltip={showTabTooltip.value}>
+                    {tab.title && isFunction(tab.title) ? tab.title() : <span>{tab.title}</span>}
+                  </NEllipsis>
                 </div>
                 {!tab.pinned && (
                   <div
