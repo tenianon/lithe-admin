@@ -68,6 +68,11 @@ const dir = ` 📂 lithe-admin
 │      ├── 📄 HintHelp.test.ts
 │      ├── 📄 HintHelp.vue
 │      ├── 📄 index.ts
+│    └── 📂 icon-picker/
+│      ├── 📄 default-icons.ts
+│      ├── 📄 IconPicker.test.ts
+│      ├── 📄 IconPicker.vue
+│      ├── 📄 index.ts
 │    ├── 📄 index.ts
 │    └── 📂 scroll-container/
 │      ├── 📄 ScrollContainer.test.ts
@@ -163,6 +168,8 @@ const dir = ` 📂 lithe-admin
 │      ├── 📄 index.vue
 │    └── 📂 feedback/
 │      ├── 📄 discreteApi.ts
+│      ├── 📄 index.vue
+│    └── 📂 icon/
 │      ├── 📄 index.vue
 │    └── 📂 multi-level-menu/
 │      ├── 📄 index.vue

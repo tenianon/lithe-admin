@@ -213,6 +213,16 @@ export const routeRecordRaw: MenuMixedOptions[] = [
     component: 'error-page/404',
   },
   {
+    path: 'icon',
+    name: 'icon',
+    icon: 'iconify-[ph--clover]',
+    label: '图标库',
+    meta: {
+      showTab: true,
+    },
+    component: 'icon/index',
+  },
+  {
     path: '/about',
     key: 'about',
     name: 'about',
