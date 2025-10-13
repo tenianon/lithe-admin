@@ -30,7 +30,7 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
 
 const { reset } = usePreferencesStore()
 
-const { preferences, themeColor, sidebarMenu } = toRefsPreferencesStore()
+const { preferences, themeColor, sidebarMenu, isDark } = toRefsPreferencesStore()
 
 const modal = useModal()
 
@@ -112,7 +112,13 @@ const showWatermarkModal = () => {
                   <span
                     :style="
                       currentColor && {
-                        color: ccAPCA(currentColor, twc.neutral[150], twc.neutral[950], '#fff'),
+                        color: ccAPCA(
+                          currentColor,
+                          twc.neutral[150],
+                          twc.neutral[950],
+                          '#fff',
+                          isDark,
+                        ),
                       }
                     "
                     >{{ currentColor }}</span

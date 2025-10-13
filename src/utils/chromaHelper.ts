@@ -1,18 +1,16 @@
 import chroma from 'chroma-js'
-import { ref } from 'vue'
 
 import twc from '@/utils/tailwindColor'
-
-const isDark = ref(false)
 
 export function ccAPCA(
   backgroundColor: string,
   color1 = '#ffffff',
   color2 = '#000000',
   bodyColor?: string,
+  isDark?: boolean,
 ) {
   if (!bodyColor) {
-    bodyColor = isDark.value ? twc.neutral[950] : twc.neutral[25]
+    bodyColor = isDark ? twc.neutral[950] : twc.neutral[25]
   }
 
   const cBackgroundColor = chroma(backgroundColor)
