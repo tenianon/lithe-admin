@@ -22,7 +22,6 @@
   "dependencies": {
     "@vueuse/core": "^13.9.0",
     "chroma-js": "^3.1.2",
-    "echarts": "^5.6.0",
     "lodash-es": "^4.17.21",
     "pinia": "^3.0.3",
     "vue": "^3.5.22",

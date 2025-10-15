@@ -43,7 +43,6 @@ export function setupRouterGuard(router: Router) {
           name: 'layout',
           component: Layout,
           // if you need to have a redirect when accessing / routing
-          redirect: '/dashboard',
           children: routeList.value,
         })
 
