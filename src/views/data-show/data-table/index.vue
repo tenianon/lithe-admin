@@ -199,7 +199,6 @@ const columns: DataTableColumns<UserInfo> = [
   {
     key: 'number',
     title: '编号',
-    width: 100,
   },
   {
     key: 'fullName',
@@ -549,6 +548,7 @@ getDataList()
           :columns="columns"
           :data="dataList"
           :row-key="(row) => row.id"
+          children-key="children"
           :loading="isRequestLoading"
           :striped="enableStriped"
           :row-props="rowProps"
