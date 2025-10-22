@@ -2,11 +2,11 @@
 
 # Lithe Admin
 
-![Vue](https://img.shields.io/badge/Vue-3.5.21-42B883?style=for-the-badge&logo=vue.js)
+![Vue](https://img.shields.io/badge/Vue-3.5.22-42B883?style=for-the-badge&logo=vue.js)
 ![Naive UI](https://img.shields.io/badge/Naive_UI-2.43.1-75B93F?style=for-the-badge&logo=naiveui)
-![Vite](https://img.shields.io/badge/Vite-7.1.11-646cff?style=for-the-badge&logo=vite)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.13-4ABAFB?style=for-the-badge&logo=tailwindcss)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-4377C1?style=for-the-badge&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-7.1.17-646cff?style=for-the-badge&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.14-4ABAFB?style=for-the-badge&logo=tailwindcss)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-4377C1?style=for-the-badge&logo=typescript)
 
 [Preview](https://lithe-admin.vercel.app)
 
