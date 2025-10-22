@@ -1,14 +1,14 @@
 @import 'tailwindcss' source(none);
 
-@source not "../../src/**/*.test.ts";
-@source not "../../src/**/*.d.ts";
-@source not inline("{filter,transition}");
+@source not '../../src/**/*.test.ts';
+@source not '../../src/**/*.d.ts';
+@source not inline('{filter,transition}');
 
-@source "../../src/**/*.vue";
-@source "../../src/**/*.ts";
-@source "../../src/**/*.tsx";
+@source '../../src/**/*.vue';
+@source '../../src/**/*.ts';
+@source '../../src/**/*.tsx';
 
-@plugin "@iconify/tailwind4" {
+@plugin '@iconify/tailwind4' {
   prefixes: ph;
   prefix: 'iconify';
   scale: 1.2;
@@ -16,7 +16,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@config "../../tailwind.config.ts";
+@config '../../tailwind.config.ts';
 
 @theme {
   --default-transition-duration: 300ms;
