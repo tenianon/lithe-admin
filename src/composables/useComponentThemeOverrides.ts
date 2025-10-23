@@ -21,8 +21,8 @@ export function useComponentThemeOverrides() {
   )
 
   const overlayThemeOverrides = computed<GlobalThemeOverrides>(() => {
-    const DARK = {
-      input: {
+    const DARK: GlobalThemeOverrides = {
+      Input: {
         color: twc.neutral[750],
         border: `1px solid ${twc.neutral[700]}`,
       },
@@ -30,7 +30,7 @@ export function useComponentThemeOverrides() {
 
     return isDark.value
       ? {
-          Input: DARK.input,
+          Input: DARK.Input,
           Scrollbar: {
             color: twc.neutral[750],
             colorHover: twc.neutral[700],
@@ -38,7 +38,7 @@ export function useComponentThemeOverrides() {
           Select: {
             peers: {
               InternalSelection: {
-                ...DARK.input,
+                ...DARK.Input,
               },
               InternalSelectMenu: {
                 color: twc.neutral[700],

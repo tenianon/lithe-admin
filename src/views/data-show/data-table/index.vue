@@ -548,7 +548,6 @@ getDataList()
           :columns="columns"
           :data="dataList"
           :row-key="(row) => row.id"
-          children-key="children"
           :loading="isRequestLoading"
           :striped="enableStriped"
           :row-props="rowProps"
