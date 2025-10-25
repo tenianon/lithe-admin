@@ -107,12 +107,10 @@ function extendTailwindCssColors(param1: boolean | MixMode, param2: MixMode | Cs
 describe('tailwindColor', () => {
   const twc = extendTailwindCssColors('lch', 'oklch')
   it('should be defined', () => {
-    console.log(twc)
     expect(twc.blue[150]).not.toBeUndefined()
   })
 
   it('should have 25 shade', () => {
-    console.log(twc.blue)
     expect(twc.blue['25']).not.toBeUndefined()
   })
 
