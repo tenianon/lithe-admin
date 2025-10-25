@@ -420,7 +420,7 @@ const createDialogApi = (type: ModalProps['type'] = 'success') => {
     <NModal
       v-bind="
         getModalModifier({
-          type: 'info',
+          type: 'warning',
         })
       "
       v-model:show="showModal.modal2"
