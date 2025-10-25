@@ -4,8 +4,8 @@
 
 ![Vue](https://img.shields.io/badge/Vue-3.5.22-42B883?style=for-the-badge&logo=vue.js)
 ![Naive UI](https://img.shields.io/badge/Naive_UI-2.43.1-75B93F?style=for-the-badge&logo=naiveui)
-![Vite](https://img.shields.io/badge/Vite-7.1.17-646cff?style=for-the-badge&logo=vite)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.14-4ABAFB?style=for-the-badge&logo=tailwindcss)
+![Vite](https://img.shields.io/badge/Vite-7.1.19-646cff?style=for-the-badge&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.16-4ABAFB?style=for-the-badge&logo=tailwindcss)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-4377C1?style=for-the-badge&logo=typescript)
 
 [预览地址(国内)](https://lithe-admin.havenovelgod.com) | [预览地址](https://lithe-admin.vercel.app)
@@ -88,6 +88,9 @@ pnpm preview
 ### 代码检查
 
 ```bash
+# 检查类型
+pnpm type-check
+
 # 检查代码质量
 pnpm lint:check
 
