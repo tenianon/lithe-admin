@@ -147,9 +147,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       key: 'keepalive',
       icon: () => (
         <span
-          class={
-            keepAlive ? 'iconify-[hugeicons--database-02]' : 'iconify-[hugeicons--database-locked]'
-          }
+          class={keepAlive ? 'icon-[hugeicons--database-02]' : 'icon-[hugeicons--database-locked]'}
         />
       ),
       label: keepAlive ? '取消缓存' : '缓存标签页',
@@ -403,7 +401,7 @@ const TabList = defineComponent({
                       handleTabCloseClick(tab.id)
                     }}
                   >
-                    <span class='iconify-[line-md--close] size-3.5' />
+                    <span class='icon-[line-md--close] size-3.5' />
                   </div>
                 )}
               </div>

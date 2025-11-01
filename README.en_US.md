@@ -115,7 +115,7 @@ This project uses [Iconify](https://iconify.design). Usage examples:
 <span class="iconify ph--x"></span>
 
 <!-- Direct usage -->
-<span class="iconify-[fluent--data-area-32-regular]"></span>
+<span class="icon-[fluent--data-area-32-regular]"></span>
 ```
 
 The `ph` prefix needs to be configured in `src/assets/base.css`. Refer to the official docs: [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
@@ -123,7 +123,6 @@ The `ph` prefix needs to be configured in `src/assets/base.css`. Refer to the of
 ```css
 @plugin "@iconify/tailwind4" {
   prefixes: ph;
-  prefix: 'iconify';
   scale: 1.2;
 }
 ```

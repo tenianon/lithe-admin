@@ -113,7 +113,7 @@ pnpm format:fix
 <span class="iconify ph--x"></span>
 
 <!-- 直接使用 -->
-<span class="iconify-[fluent--data-area-32-regular]"></span>
+<span class="icon-[fluent--data-area-32-regular]"></span>
 ```
 
 上面的 `ph` 前缀需要在 `src/assets/base.css` 中进行配置，详细文档请参考 [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
@@ -121,7 +121,6 @@ pnpm format:fix
 ```css
 @plugin "@iconify/tailwind4" {
   prefixes: ph;
-  prefix: 'iconify';
   scale: 1.2;
 }
 ```

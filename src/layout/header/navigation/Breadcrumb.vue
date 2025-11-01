@@ -111,7 +111,7 @@ const BreadcrumbItem = defineComponent({
           </NDropdown>
         )}
         {!isCurrentRoute(name) && (
-          <span class='iconify-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3' />
+          <span class='icon-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3' />
         )}
       </div>
     )

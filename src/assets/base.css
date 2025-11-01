@@ -10,7 +10,6 @@
 
 @plugin '@iconify/tailwind4' {
   prefixes: ph;
-  prefix: 'iconify';
   scale: 1.2;
 }
 
