@@ -37,7 +37,7 @@ export interface UserInfo {
   number: number
   id: number | string
   phone: string
-  registerDate: null | null
+  registerDate: null
   sex: string | null
   children: UserInfo[]
 }

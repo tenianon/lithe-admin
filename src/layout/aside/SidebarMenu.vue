@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { NMenu, NScrollbar } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { ref, useTemplateRef, watch } from 'vue'
