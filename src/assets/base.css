@@ -28,5 +28,5 @@
   --color-naive-text3: var(--text-color-3);
   --color-naive-button2-hover: var(--button-color-2-hover);
   --radius-naive: var(--border-radius);
-  --radius-naive-sm: calc(var(--border-radius-small));
+  --radius-naive-sm: var(--border-radius-small);
 }
