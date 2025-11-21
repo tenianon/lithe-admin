@@ -4,7 +4,6 @@ import { ref } from 'vue'
 
 import router from '@/router'
 import { resolveMenu, resolveRoute } from '@/router/helper'
-import { routeRecordRaw } from '@/router/record'
 
 import { pinia } from '.'
 
@@ -37,15 +36,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   async function resolveMenuList() {
     const res = await new Promise<MenuMixedOptions[]>((resolve) => {
-      if (token.value?.includes('admin')) {
-        resolve(routeRecordRaw)
-      } else {
-        const allowedRoutes = ['dashboard', 'dataShow', 'notfoundPage', 'about']
-        const filteredRoutes = routeRecordRaw.filter((route) => {
-          return !route.type && route.name && allowedRoutes.includes(route.name as string)
-        })
-        resolve(filteredRoutes)
-      }
+      resolve([])
     })
 
     menuList.value = resolveMenu(res) || []

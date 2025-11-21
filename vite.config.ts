@@ -16,7 +16,7 @@ export default defineConfig((env) => {
       },
     },
     server: {
-      port: 5799,
+      port: 5899,
       host: true,
     },
     build: {
@@ -24,10 +24,6 @@ export default defineConfig((env) => {
         output: {
           advancedChunks: {
             groups: [
-              {
-                name: 'echarts',
-                test: /\/echarts/,
-              },
               {
                 name: 'chroma-js',
                 test: /\/chroma-js/,

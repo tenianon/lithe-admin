@@ -85,11 +85,7 @@ const handleSubmitClick = () => {
     if (!errors) {
       loading.value = true
       setTimeout(() => {
-        if (signInForm.account.includes('admin')) {
-          token.value = 'admin'
-        } else {
-          token.value = 'user'
-        }
+        token.value = 'token'
         loading.value = false
         toLayout()
       }, 1000)

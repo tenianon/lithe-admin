@@ -14,9 +14,6 @@ importers:
       chroma-js:
         specifier: ^3.1.2
         version: 3.1.2
-      echarts:
-        specifier: ^6.0.0
-        version: 6.0.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1599,9 +1596,6 @@ packages:
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
-
-  echarts@6.0.0:
-    resolution: {integrity: sha512-Tte/grDQRiETQP4xz3iZWSvoHrkCQtwqd6hs+mifXcjrCuo2iKWbajFObuLJVBlDIJlOzgQPd1hsaKt/3+OMkQ==}
 
   editorconfig@1.0.4:
     resolution: {integrity: sha512-L9Qe08KWTlqYMVvMcTIvMAdl1cDUubzRNYL+WfA4bLDMHe4nemKkpmYzkznE1FwLKu0EEmy6obgQKzMJrg4x9Q==}
@@ -4643,11 +4637,6 @@ snapshots:
       gopd: 1.2.0
 
   eastasianwidth@0.2.0: {}
-
-  echarts@6.0.0:
-    dependencies:
-      tslib: 2.3.0
-      zrender: 6.0.0
 
   editorconfig@1.0.4:
     dependencies:
