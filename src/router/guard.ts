@@ -1,22 +1,18 @@
-import { useDiscreteApi } from '@/composables'
-import { useUserStore, toRefsPreferencesStore, toRefsUserStore } from '@/stores'
+import { useEventBus } from '@/event-bus'
+import { useUserStore, toRefsUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 
 const Layout = () => import('@/layout/index.vue')
 
-const { loadingBar } = useDiscreteApi()
-
-const { showTopLoadingBar } = toRefsPreferencesStore()
-const { resolveMenuList, cleanup } = useUserStore()
-
-const { token, routeList } = toRefsUserStore()
-
 export function setupRouterGuard(router: Router) {
+  const { resolveMenuList, cleanup } = useUserStore()
+
+  const { token, routeList } = toRefsUserStore()
+  const { routerEventBus } = useEventBus()
+
   router.beforeEach(async (to, from, next) => {
-    if (showTopLoadingBar.value) {
-      loadingBar.start()
-    }
+    routerEventBus.emit('beforeEach')
 
     if (to.name === 'signIn') {
       if (!token.value) {
@@ -66,8 +62,6 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.afterEach(() => {
-    if (showTopLoadingBar.value) {
-      loadingBar.finish()
-    }
+    routerEventBus.emit('afterEach')
   })
 }

@@ -2,6 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 
+import { setupEventBus } from '@/event-bus'
 import { setupRouterGuard } from '@/router/guard'
 import { pinia } from '@/stores'
 import { checkVersion } from '@/utils/checkVersion'
@@ -17,7 +18,10 @@ async function setupApp() {
   app.use(pinia)
 
   app.use(router)
+
   setupRouterGuard(router)
+
+  setupEventBus()
 
   await router.isReady()
 
