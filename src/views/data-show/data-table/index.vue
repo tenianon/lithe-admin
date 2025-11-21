@@ -353,7 +353,7 @@ const dropdownOptions = reactive<DropdownProps>({
       key: 'edit',
     },
     {
-      label: () => <span class='text-red-500'>删除</span>,
+      label: () => <span class='text-rose-500'>删除</span>,
       key: 'delete',
     },
   ],

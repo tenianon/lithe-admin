@@ -20,7 +20,7 @@ const closeIconColor = (primaryColor: string) => {
     closeIconColorSuccess: twc.lime[500],
     closeIconColorInfo: twc.sky[500],
     closeIconColorWarning: twc.amber[500],
-    closeIconColorError: twc.pink[500],
+    closeIconColorError: twc.rose[500],
     closeIconColorLoading: primaryColor,
 
     closeColorHoverSuccess: cah(twc.lime[400], 0.14),
@@ -38,10 +38,10 @@ const closeIconColor = (primaryColor: string) => {
     closeColorPressedWarning: cah(twc.amber[400], 0.2),
     closeIconColorPressedWarning: cdh(twc.amber[500], 0.6),
 
-    closeColorHoverError: cah(twc.pink[400], 0.14),
-    closeIconColorHoverError: cdh(twc.pink[500], 0.2),
-    closeColorPressedError: cah(twc.pink[400], 0.2),
-    closeIconColorPressedError: cdh(twc.pink[500], 0.6),
+    closeColorHoverError: cah(twc.rose[400], 0.14),
+    closeIconColorHoverError: cdh(twc.rose[500], 0.2),
+    closeColorPressedError: cah(twc.rose[400], 0.2),
+    closeIconColorPressedError: cdh(twc.rose[500], 0.6),
 
     closeColorHoverLoading: cah(primaryColor, 0.14),
     closeIconColorHoverLoading: cdh(primaryColor, 0.2),
@@ -96,10 +96,10 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       warningColorPressed: cdh(twc.amber[500], 0.2),
       warningColorSuppl: twc.amber[500],
 
-      errorColor: twc.pink[500],
-      errorColorHover: cdh(twc.pink[500], 0.1),
-      errorColorPressed: cdh(twc.pink[500], 0.2),
-      errorColorSuppl: twc.pink[500],
+      errorColor: twc.rose[500],
+      errorColorHover: cdh(twc.rose[500], 0.1),
+      errorColorPressed: cdh(twc.rose[500], 0.2),
+      errorColorSuppl: twc.rose[500],
     },
     Alert: {
       ...closeIconColor(primaryColor),
@@ -111,7 +111,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
 
       textColorWarning: twc.amber[25],
 
-      textColorError: twc.pink[25],
+      textColorError: twc.rose[25],
     },
     Card: {
       borderColor: LIGHT.borderColor,
@@ -148,13 +148,13 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       textColorSuccess: twc.lime[500],
       textColorInfo: twc.sky[500],
       textColorWarning: twc.amber[500],
-      textColorError: twc.pink[500],
+      textColorError: twc.rose[500],
       textColorLoading: primaryColor,
 
       colorSuccess: cbh(twc.lime[25], 0.3),
       colorInfo: cbh(twc.sky[25], 0.3),
       colorWarning: cbh(twc.amber[25], 0.3),
-      colorError: cbh(twc.pink[25], 0.3),
+      colorError: cbh(twc.rose[25], 0.3),
       colorLoading: cmh(twc.neutral[25], primaryColor, 0.01),
 
       ...closeIconColor(primaryColor),

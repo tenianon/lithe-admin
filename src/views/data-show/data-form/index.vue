@@ -245,7 +245,7 @@ watch(
               :label-width="78"
               :disabled="formDisabled"
             >
-              <div class="flex gap-x-8 max-lg:flex-col">
+              <div class="flex gap-x-8 p-1 max-lg:flex-col">
                 <div class="flex-1">
                   <NFormItem
                     label="姓名"
