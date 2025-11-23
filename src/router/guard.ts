@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash-es'
+
 import { useEventBus } from '@/event-bus'
 import { useUserStore, toRefsUserStore } from '@/stores'
 
@@ -6,9 +8,9 @@ import type { Router } from 'vue-router'
 const Layout = () => import('@/layout/index.vue')
 
 export function setupRouterGuard(router: Router) {
-  const { resolveMenuList, cleanup } = useUserStore()
+  const { resolveMenuRoute, cleanup } = useUserStore()
 
-  const { token, routeList } = toRefsUserStore()
+  const { token } = toRefsUserStore()
   const { routerEventBus } = useEventBus()
 
   router.beforeEach(async (to, from, next) => {
@@ -32,7 +34,13 @@ export function setupRouterGuard(router: Router) {
 
     if (token.value && !router.hasRoute('layout')) {
       try {
-        await resolveMenuList()
+        const { routeList } = await resolveMenuRoute()
+
+        if (isEmpty(routeList)) {
+          cleanup()
+          next()
+          return false
+        }
 
         router.addRoute({
           path: '/',
@@ -40,7 +48,7 @@ export function setupRouterGuard(router: Router) {
           component: Layout,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
-          children: routeList.value,
+          children: routeList,
         })
 
         next(to.fullPath)

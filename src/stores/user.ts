@@ -35,7 +35,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   const routeList = ref<RouteRecordRaw[]>([])
 
-  async function resolveMenuList() {
+  async function resolveMenuRoute() {
     const res = await new Promise<MenuMixedOptions[]>((resolve) => {
       if (token.value?.includes('admin')) {
         resolve(routeRecordRaw)
@@ -48,8 +48,16 @@ export const useUserStore = defineStore('userStore', () => {
       }
     })
 
-    menuList.value = resolveMenu(res) || []
-    routeList.value = resolveRoute(res) || []
+    const resolvedMenu = resolveMenu(res) || []
+    const resolvedRoute = resolveRoute(res) || []
+
+    menuList.value = resolvedMenu
+    routeList.value = resolvedRoute
+
+    return {
+      menuList: resolvedMenu,
+      routeList: resolvedRoute,
+    }
   }
 
   function cleanup(redirectPath?: string) {
@@ -74,7 +82,7 @@ export const useUserStore = defineStore('userStore', () => {
     token,
     menuList,
     routeList,
-    resolveMenuList,
+    resolveMenuRoute,
     cleanup,
   }
 })
