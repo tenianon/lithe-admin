@@ -81,6 +81,9 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 useInjection.ts
 │    ├── 📄 useResettable.ts
 │    ├── 📄 useTheme.ts
+│  └── 📂 event-bus/
+│    ├── 📄 index.ts
+│    ├── 📄 interface.ts
 │  └── 📂 injection/
 │    ├── 📄 index.ts
 │    ├── 📄 interface.ts
@@ -128,7 +131,6 @@ const dir = ` 📂 lithe-admin
 │  └── 📂 stores/
 │    ├── 📄 index.ts
 │    ├── 📄 preferences.ts
-│    ├── 📄 system.ts
 │    ├── 📄 tabs.ts
 │    ├── 📄 user.ts
 │  └── 📂 theme/
@@ -140,6 +142,7 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 vue-router.d.ts
 │    ├── 📄 window.d.ts
 │  └── 📂 utils/
+│    ├── 📄 checkVersion.ts
 │    ├── 📄 chromaHelper.ts
 │    ├── 📄 tailwindColor.test.ts
 │    ├── 📄 tailwindColor.ts
