@@ -119,8 +119,14 @@ pnpm format:fix
 上面的 `ph` 前缀需要在 `src/assets/base.css` 中进行配置，详细文档请参考 [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
 
 ```css
-@plugin "@iconify/tailwind4" {
+@plugin '@iconify/tailwind4' {
   prefixes: ph;
   scale: 1.2;
 }
 ```
+
+## 🗺️ 交流群
+
+添加好友后，邀请加入交流群
+
+<img src="https://i.postimg.cc/ZqJzxp5x/mmqrcode1764759869585.png" width="200"/>
