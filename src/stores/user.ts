@@ -8,7 +8,7 @@ import { routeRecordRaw } from '@/router/record'
 
 import { pinia } from '.'
 
-import type { MenuMixedOptions } from '@/router/helper'
+import type { MenuMixedOptions } from '@/router/interface'
 import type { MenuOption } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
 

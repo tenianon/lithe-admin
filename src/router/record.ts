@@ -1,4 +1,4 @@
-import type { MenuMixedOptions } from './helper'
+import type { MenuMixedOptions } from './interface'
 
 export const routeRecordRaw: MenuMixedOptions[] = [
   {
