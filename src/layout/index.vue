@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'es-toolkit/compat'
 import { computed, defineAsyncComponent, h, watch } from 'vue'
 
 import texturePng from '@/assets/texture.png'

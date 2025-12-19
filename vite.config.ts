@@ -33,8 +33,8 @@ export default defineConfig((env) => {
                 test: /\/chroma-js/,
               },
               {
-                name: 'lodash-es',
-                test: /\/lodash-es/,
+                name: 'es-toolkit',
+                test: /\/es-toolkit/,
               },
               {
                 name: 'naive-ui',

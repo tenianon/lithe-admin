@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'es-toolkit/compat'
 
 import { useEventBus } from '@/event-bus'
 import { useUserStore, toRefsUserStore } from '@/stores'

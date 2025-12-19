@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useElementSize, watchThrottled, useTemplateRefsList } from '@vueuse/core'
-import { isFunction, isEmpty } from 'lodash-es'
+import { isFunction } from 'es-toolkit'
+import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { h, computed, ref, watch, onBeforeUnmount, reactive, useTemplateRef, onMounted } from 'vue'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'es-toolkit/compat'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 

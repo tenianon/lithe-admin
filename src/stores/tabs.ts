@@ -1,5 +1,5 @@
 import { useStorage } from '@vueuse/core'
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'es-toolkit/compat'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 
 import { pinia } from '.'

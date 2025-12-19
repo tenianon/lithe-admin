@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isFunction } from 'lodash-es'
+import { isFunction } from 'es-toolkit'
 import { NButton, NPopover } from 'naive-ui'
 import { isVNode } from 'vue'
 

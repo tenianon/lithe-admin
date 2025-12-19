@@ -1,4 +1,5 @@
-import { isEmpty, isString, pickBy, omit, isFunction } from 'lodash-es'
+import { isFunction, omit, isString, pickBy } from 'es-toolkit'
+import { isEmpty } from 'es-toolkit/compat'
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
 

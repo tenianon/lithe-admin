@@ -1,4 +1,4 @@
-import { merge } from 'lodash-es'
+import { merge } from 'es-toolkit'
 import { darkTheme, lightTheme } from 'naive-ui'
 import { computed } from 'vue'
 

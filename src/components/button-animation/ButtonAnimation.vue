@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mergeWith } from 'lodash-es'
+import { mergeWith } from 'es-toolkit'
 import { NButton } from 'naive-ui'
 import { ref, inject, computed, useAttrs } from 'vue'
 
@@ -14,8 +14,14 @@ const buttonAnimationInjection = inject(buttonAnimationInjectionKey, null)
 const isAnimating = ref(false)
 
 const buttonAnimationProps = computed<ButtonAnimationProps>(() => {
-  return mergeWith({}, buttonAnimationInjection, useAttrs())
+  return mergeWith(
+    mergeWith({}, buttonAnimationInjection ?? {}, (target, source) => source ?? target),
+    useAttrs(),
+    (target, source) => source ?? target,
+  )
 })
+
+console.log(buttonAnimationProps.value)
 
 const handleButtonClick = () => {
   if (isAnimating.value) return

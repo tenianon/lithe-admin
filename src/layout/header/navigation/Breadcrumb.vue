@@ -1,5 +1,6 @@
 <script setup lang="tsx">
-import { isEmpty, isFunction } from 'lodash-es'
+import { isFunction } from 'es-toolkit'
+import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
 import { computed, defineComponent, h } from 'vue'
 

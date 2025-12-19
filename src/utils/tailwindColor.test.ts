@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { isObject } from 'lodash-es'
+import { isObject } from 'es-toolkit/compat'
 import twColors from 'tailwindcss/colors'
 import { describe, expect, it } from 'vitest'
 
