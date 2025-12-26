@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
 // import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig((env) => {
+export default defineConfig(() => {
   return {
     plugins: [vue(), vueJsx(), tailwindcss()],
     resolve: {
@@ -70,11 +70,15 @@ export default defineConfig((env) => {
             }
             return 'assets/[name]-[hash][extname]'
           },
+
+          minify: {
+            compress: {
+              dropConsole: true,
+              dropDebugger: true,
+            },
+          },
         },
       },
-    },
-    esbuild: {
-      drop: env.mode === 'production' ? ['console', 'debugger'] : [],
     },
   }
 })
