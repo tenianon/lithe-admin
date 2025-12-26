@@ -33,12 +33,12 @@
 ### 环境要求
 
 - **Node.js**: `^20.19.0` 或 `>=22.12.0`
-- **包管理器**: `pnpm` (推荐) 或 `npm` 或 `yarn`
+- **包管理器**: `pnpm` 或 `npm` 或 `yarn` 或 `bun`
 
 ### 创建项目
 
 ```bash
-# 使用 pnpm 创建项目(推荐)
+# 使用 pnpm 创建项目
 pnpm create lithe@latest
 
 # 或使用 npm 创建项目
@@ -46,19 +46,25 @@ npm create lithe@latest
 
 # 或使用 yarn 创建项目
 yarn create lithe@latest
+
+# 或使用 bun 创建项目
+bun create lithe@latest
 ```
 
 ### 安装依赖
 
 ```bash
-# 使用 pnpm (推荐)
-pnpm install
-
 # 或使用 npm
 npm install
 
+# 使用 pnpm
+pnpm install
+
 # 或使用 yarn
 yarn install
+
+# 或使用 bun
+bun install
 ```
 
 ### 开发模式

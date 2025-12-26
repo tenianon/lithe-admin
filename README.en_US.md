@@ -33,27 +33,28 @@ English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/READM
 ### Requirements
 
 - **Node.js**: `^20.19.0` or `>=22.12.0`
-- **Package Manager**: `pnpm` (recommended), or `npm`, or `yarn`
+- **Package Manager**: `pnpm`, or `npm`, or `yarn`, or `bun`
 
 ### Create project
 
 ```bash
-# Using pnpm (recommended)
+# Using pnpm
 pnpm create lithe@latest
-```
-```bash
+
 # Or npm
 npm create lithe@latest
-```
-```bash
+
 # Or yarn
 yarn create lithe@latest
+
+# Or bun
+bun create lithe@latest
 ```
 
 ### Install Dependencies
 
 ```bash
-# Using pnpm (recommended)
+# Using pnpm
 pnpm install
 
 # Or npm
@@ -61,6 +62,9 @@ npm install
 
 # Or yarn
 yarn install
+
+# Or bun
+bun install
 ```
 
 ### Development
