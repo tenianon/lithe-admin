@@ -37,15 +37,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   async function resolveMenuRoute() {
     const res = await new Promise<MenuMixedOptions[]>((resolve) => {
-      if (token.value?.includes('admin')) {
-        resolve(routeRecordRaw)
-      } else {
-        const allowedRoutes = ['dashboard', 'dataShow', 'notfoundPage', 'about']
-        const filteredRoutes = routeRecordRaw.filter((route) => {
-          return !route.type && route.name && allowedRoutes.includes(route.name as string)
-        })
-        resolve(filteredRoutes)
-      }
+      resolve(routeRecordRaw)
     })
 
     const resolvedMenu = resolveMenu(res) || []

@@ -37,9 +37,9 @@ export function setupRouterGuard(router: Router) {
         const { routeList } = await resolveMenuRoute()
 
         if (isEmpty(routeList)) {
-          cleanup()
-          next()
-          return false
+          // cleanup()
+          // next()
+          // return false
         }
 
         router.addRoute({
@@ -47,7 +47,7 @@ export function setupRouterGuard(router: Router) {
           name: 'layout',
           component: Layout,
           // if you need to have a redirect when accessing / routing
-          redirect: '/dashboard',
+          // redirect: '/',
           children: routeList,
         })
 
