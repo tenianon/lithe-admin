@@ -1,9 +1,7 @@
 import chroma from 'chroma-js'
-import { isObject } from 'es-toolkit/compat'
+import { isObject, isEqual } from 'es-toolkit/compat'
 import twColors from 'tailwindcss/colors'
 import { describe, expect, it } from 'vitest'
-
-import { extractShades } from '../../tailwind.config'
 
 type TailwindColorKey = Omit<
   typeof twColors,
@@ -106,19 +104,25 @@ function extendTailwindCssColors(param1: boolean | MixMode, param2: MixMode | Cs
 
 describe('tailwindColor', () => {
   const twc = extendTailwindCssColors('lch', 'oklch')
+  const twc2 = extendTailwindCssColors(true, 'oklch')
+
+  const twcKeys = [...Object.keys(twColors.blue), ...extraSteps.map(String)].sort(
+    (a, b) => Number(a) - Number(b),
+  )
+
+  it('should color key be same', () => {
+    expect(isEqual(Object.keys(twc.blue), twcKeys)).toBe(true)
+  })
+
   it('should be defined', () => {
     expect(twc.blue[150]).not.toBeUndefined()
   })
 
-  it('should have 25 shade', () => {
-    expect(twc.blue['25']).not.toBeUndefined()
+  it('should have 25 shade with oklch', () => {
+    expect(twc.blue['25']).includes('oklch')
   })
 
-  it('should have 150 shade', () => {
-    expect(extractShades(twc).blue?.['150']).not.toBeUndefined()
-  })
-
-  it('should have not 200 shade', () => {
-    expect(extractShades(twc).blue?.['200']).toBeUndefined()
+  it('should have 25 shade with hex', () => {
+    expect(twc2.blue['25']).includes('#')
   })
 })

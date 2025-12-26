@@ -15,10 +15,11 @@ const targetShades = [
   '825',
   '850',
   '925',
-] as const
+]
 
 export function extractShades(
   colorObject: Record<keyof typeof tailwindColorOklch, Record<string, string>>,
+  targetShades: string[] = [],
 ) {
   const result: Record<string, Partial<Record<string, string>>> = {}
 
@@ -42,7 +43,7 @@ export function extractShades(
 export default <Config>{
   theme: {
     extend: {
-      colors: extractShades(tailwindColorOklch),
+      colors: extractShades(tailwindColorOklch, targetShades),
     },
   },
 }
