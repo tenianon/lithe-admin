@@ -21,8 +21,6 @@ const buttonAnimationProps = computed<ButtonAnimationProps>(() => {
   )
 })
 
-console.log(buttonAnimationProps.value)
-
 const handleButtonClick = () => {
   if (isAnimating.value) return
 
