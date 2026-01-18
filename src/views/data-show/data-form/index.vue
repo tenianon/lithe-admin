@@ -332,6 +332,7 @@ watch(
                     <NButton
                       type="warning"
                       secondary
+                      :disabled="formDisabled"
                       @click="removePhoneField(index)"
                     >
                       删除
