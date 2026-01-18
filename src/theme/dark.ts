@@ -1,54 +1,18 @@
-import { cbh, cdh, cah, cmh } from '@/utils/chromaHelper'
-import twc from '@/utils/tailwindColor'
+import { twColor, colorAlpha } from '@/utils/colorHelper'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
 const DARK = {
-  baseColor: twc.neutral[250],
-  textColorBase: twc.neutral[250],
-  textColor1: twc.neutral[350],
-  textColor2: twc.neutral[350],
-  textColor3: twc.neutral[450],
-  borderColor: twc.neutral[800],
+  baseColor: twColor('neutral', 275),
+  textColorBase: twColor('neutral', 275),
+  textColor1: twColor('neutral', 375),
+  textColor2: twColor('neutral', 375),
+  textColor3: twColor('neutral', 450),
+  borderColor: twColor('neutral', 800),
   input: {
-    color: twc.neutral[800],
-    border: `1px solid ${twc.neutral[750]}`,
+    color: twColor('neutral', 800),
+    border: `1px solid ${twColor('neutral', 750)}`,
   },
-}
-
-const closeIconColor = (primaryColor: string) => {
-  return {
-    closeIconColorSuccess: twc.lime[600],
-    closeIconColorInfo: twc.sky[600],
-    closeIconColorWarning: twc.amber[600],
-    closeIconColorError: twc.rose[600],
-    closeIconColorLoading: primaryColor,
-
-    closeColorHoverSuccess: cah(twc.lime[500], 0.1),
-    closeIconColorHoverSuccess: cdh(twc.lime[500], 0.2),
-    closeColorPressedSuccess: cah(twc.lime[500], 0.16),
-    closeIconColorPressedSuccess: cdh(twc.lime[500], 0.6),
-
-    closeColorHoverInfo: cah(twc.sky[500], 0.1),
-    closeIconColorHoverInfo: cdh(twc.sky[500], 0.2),
-    closeColorPressedInfo: cah(twc.sky[500], 0.16),
-    closeIconColorPressedInfo: cdh(twc.sky[500], 0.6),
-
-    closeColorHoverWarning: cah(twc.amber[500], 0.1),
-    closeIconColorHoverWarning: cdh(twc.amber[500], 0.2),
-    closeColorPressedWarning: cah(twc.amber[500], 0.16),
-    closeIconColorPressedWarning: cdh(twc.amber[500], 0.6),
-
-    closeColorHoverError: cah(twc.rose[500], 0.14),
-    closeIconColorHoverError: cdh(twc.rose[500], 0.2),
-    closeColorPressedError: cah(twc.rose[500], 0.16),
-    closeIconColorPressedError: cdh(twc.rose[500], 0.6),
-
-    closeColorHoverLoading: cah(primaryColor, 0.14),
-    closeIconColorHoverLoading: cdh(primaryColor, 0.2),
-    closeColorPressedLoading: cah(primaryColor, 0.2),
-    closeIconColorPressedLoading: cdh(primaryColor, 0.6),
-  }
 }
 
 export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
@@ -57,155 +21,172 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       baseColor: DARK.baseColor,
 
       textColorBase: DARK.textColorBase,
-
       textColor1: DARK.textColor1,
-
       textColor2: DARK.textColor2,
-
       textColor3: DARK.textColor3,
 
-      bodyColor: twc.neutral[925],
+      bodyColor: twColor('neutral', 925),
 
       borderColor: DARK.borderColor,
 
-      cardColor: twc.neutral[900],
+      cardColor: twColor('neutral', 900),
 
-      hoverColor: twc.neutral[650],
+      hoverColor: twColor('neutral', 650),
 
-      modalColor: twc.neutral[800],
+      modalColor: twColor('neutral', 800),
 
-      popoverColor: twc.neutral[750],
+      popoverColor: twColor('neutral', 775),
 
-      scrollbarColor: twc.neutral[800],
-      scrollbarColorHover: twc.neutral[750],
+      closeIconColor: twColor('neutral', 450),
+      closeColorHover: twColor('neutral', 700),
+      closeIconColorPressed: twColor('neutral', 400),
+      closeColorPressed: twColor('neutral', 650),
 
-      closeIconColor: cbh(twc.neutral[400], 0.2),
-      closeColorHover: cah(twc.neutral[400], 0.1),
-      closeIconColorPressed: twc.neutral[400],
-      closeColorPressed: cah(twc.neutral[400], 0.14),
+      scrollbarColor: twColor('neutral', 800),
+      scrollbarColorHover: twColor('neutral', 750),
 
-      infoColor: twc.sky[650],
-      infoColorHover: cdh(twc.sky[650], 0.1),
-      infoColorPressed: cdh(twc.sky[650], 0.2),
-      infoColorSuppl: twc.sky[650],
+      infoColor: twColor('sky', 600),
+      infoColorHover: twColor('sky', 600),
+      infoColorPressed: twColor('sky', 600),
+      infoColorSuppl: twColor('sky', 600),
 
-      successColor: twc.lime[650],
-      successColorHover: cdh(twc.lime[650], 0.1),
-      successColorPressed: cdh(twc.lime[650], 0.2),
-      successColorSuppl: twc.lime[650],
+      successColor: twColor('lime', 600),
+      successColorHover: twColor('lime', 600),
+      successColorPressed: twColor('lime', 600),
+      successColorSuppl: twColor('lime', 600),
 
-      warningColor: twc.amber[650],
-      warningColorHover: cdh(twc.amber[650], 0.1),
-      warningColorPressed: cdh(twc.amber[650], 0.2),
-      warningColorSuppl: twc.amber[650],
+      warningColor: twColor('amber', 600),
+      warningColorHover: twColor('amber', 600),
+      warningColorPressed: twColor('amber', 600),
+      warningColorSuppl: twColor('amber', 600),
 
-      errorColor: twc.rose[650],
-      errorColorHover: cdh(twc.rose[650], 0.1),
-      errorColorPressed: cdh(twc.rose[650], 0.2),
-      errorColorSuppl: twc.rose[650],
+      errorColor: twColor('rose', 600),
+      errorColorHover: twColor('rose', 600),
+      errorColorPressed: twColor('rose', 600),
+      errorColorSuppl: twColor('rose', 600),
     },
     Alert: {
+      titleTextColorSuccess: twColor('lime', 525),
+      titleTextColorInfo: twColor('sky', 525),
+      titleTextColorWarning: twColor('amber', 525),
+      titleTextColorError: twColor('rose', 525),
+      titleTextColor: twColor('neutral', 350),
+
+      color: twColor('neutral', 825),
+
+      contentTextColorSuccess: twColor('neutral', 350),
+      contentTextColorInfo: twColor('neutral', 350),
+      contentTextColorWarning: twColor('neutral', 350),
+      contentTextColorError: twColor('neutral', 350),
+      contentTextColor: twColor('neutral', 400),
+
       ...closeIconColor(primaryColor),
     },
     Button: {
-      textColorSuccess: twc.lime[50],
+      textColorSuccess: twColor('lime', 100),
 
-      textColorInfo: twc.sky[50],
+      textColorInfo: twColor('sky', 100),
 
-      textColorWarning: twc.amber[50],
+      textColorWarning: twColor('amber', 100),
 
-      textColorError: twc.rose[50],
+      textColorError: twColor('rose', 100),
     },
     Card: {
       borderColor: DARK.borderColor,
     },
     Checkbox: {
       common: {
-        borderColor: twc.neutral[700],
+        borderColor: twColor('neutral', 700),
       },
     },
     DataTable: {
       borderColor: DARK.borderColor,
-      tdColor: twc.neutral[900],
-      tdColorHover: twc.neutral[825],
-      thColor: twc.neutral[850],
+      tdColor: twColor('neutral', 900),
+      tdColorHover: twColor('neutral', 825),
+      thColor: twColor('neutral', 850),
     },
     DatePicker: {
       peers: {
         Button: {
-          border: `1px solid ${twc.neutral[650]}`,
+          border: `1px solid ${twColor('neutral', 650)}`,
         },
         TimePicker: {
-          panelColor: twc.neutral[700],
+          panelColor: twColor('neutral', 700),
           peers: {
             Button: {
-              border: `1px solid ${twc.neutral[550]}`,
+              border: `1px solid ${twColor('neutral', 550)}`,
             },
             Input: {
-              color: twc.neutral[700],
-              border: `1px solid ${twc.neutral[650]}`,
+              color: twColor('neutral', 700),
+              border: `1px solid ${twColor('neutral', 650)}`,
             },
             Scrollbar: {
-              color: twc.neutral[600],
-              colorHover: twc.neutral[550],
+              color: twColor('neutral', 600),
+              colorHover: twColor('neutral', 550),
             },
           },
         },
       },
     },
+    Dialog: {
+      closeIconColor: twColor('neutral', 450),
+      closeColorHover: twColor('neutral', 725),
+      closeIconColorPressed: twColor('neutral', 400),
+      closeColorPressed: twColor('neutral', 700),
+    },
     Divider: {
-      color: cdh(twc.neutral[750], 0.24),
+      color: twColor('neutral', 750),
     },
     Drawer: {
-      footerBorderTop: `1px solid ${twc.neutral[750]}`,
-      headerBorderBottom: `1px solid ${twc.neutral[750]}`,
+      footerBorderTop: `1px solid ${twColor('neutral', 750)}`,
+      headerBorderBottom: `1px solid ${twColor('neutral', 750)}`,
       peers: {
         Scrollbar: {
-          color: twc.neutral[750],
-          colorHover: twc.neutral[700],
+          color: twColor('neutral', 750),
+          colorHover: twColor('neutral', 700),
         },
       },
-    },
-    Menu: {
-      itemColorHover: twc.neutral[800],
     },
     Input: {
       ...DARK.input,
     },
+    Menu: {
+      itemColorHover: twColor('neutral', 800),
+    },
     Message: {
-      textColorSuccess: twc.lime[500],
-      textColorInfo: twc.sky[500],
-      textColorWarning: twc.amber[500],
-      textColorError: twc.rose[500],
+      textColorSuccess: twColor('lime', 525),
+      textColorInfo: twColor('sky', 525),
+      textColorWarning: twColor('amber', 525),
+      textColorError: twColor('rose', 525),
       textColorLoading: primaryColor,
 
-      colorSuccess: cmh(twc.neutral[750], twc.lime[950], 0.06),
-      colorInfo: cmh(twc.neutral[750], twc.sky[950], 0.06),
-      colorWarning: cmh(twc.neutral[750], twc.amber[950], 0.06),
-      colorError: cmh(twc.neutral[750], twc.rose[950], 0.06),
-      colorLoading: cmh(twc.neutral[750], primaryColor, 0.01),
+      colorSuccess: twColor('neutral', 750),
+      colorInfo: twColor('neutral', 750),
+      colorWarning: twColor('neutral', 750),
+      colorError: twColor('neutral', 750),
+      colorLoading: twColor('neutral', 750),
 
       ...closeIconColor(primaryColor),
     },
     Modal: {
       peers: {
         Scrollbar: {
-          color: twc.neutral[800],
-          colorHover: twc.neutral[750],
+          color: twColor('neutral', 800),
+          colorHover: twColor('neutral', 750),
         },
       },
     },
     Notification: {
       peers: {
         Scrollbar: {
-          color: twc.neutral[750],
-          colorHover: twc.neutral[700],
+          color: twColor('neutral', 750),
+          colorHover: twColor('neutral', 700),
         },
       },
     },
     Radio: {
       common: {
-        borderColor: twc.neutral[700],
+        borderColor: twColor('neutral', 700),
       },
     },
     Select: {
@@ -216,15 +197,49 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
         InternalSelectMenu: {
           peers: {
             Scrollbar: {
-              color: twc.neutral[700],
-              colorHover: twc.neutral[650],
+              color: twColor('neutral', 700),
+              colorHover: twColor('neutral', 650),
             },
           },
         },
       },
     },
     Upload: {
-      draggerColor: twc.neutral[850],
+      draggerColor: twColor('neutral', 850),
     },
+  }
+}
+
+const closeIconColor = (primaryColor: string): GlobalThemeOverrides['Message'] => {
+  return {
+    closeIconColorSuccess: twColor('lime', 600),
+    closeIconColorHoverSuccess: twColor('lime', 550),
+    closeIconColorPressedSuccess: twColor('lime', 525),
+    closeColorHoverSuccess: colorAlpha(twColor('lime', 600), 0.2),
+    closeColorPressedSuccess: colorAlpha(twColor('lime', 600), 0.3),
+
+    closeIconColorInfo: twColor('sky', 600),
+    closeIconColorHoverInfo: twColor('sky', 550),
+    closeIconColorPressedInfo: twColor('sky', 525),
+    closeColorHoverInfo: colorAlpha(twColor('sky', 600), 0.2),
+    closeColorPressedInfo: colorAlpha(twColor('sky', 600), 0.3),
+
+    closeIconColorWarning: twColor('amber', 600),
+    closeIconColorHoverWarning: twColor('amber', 550),
+    closeIconColorPressedWarning: twColor('amber', 525),
+    closeColorHoverWarning: colorAlpha(twColor('amber', 600), 0.2),
+    closeColorPressedWarning: colorAlpha(twColor('amber', 600), 0.3),
+
+    closeIconColorError: twColor('rose', 600),
+    closeIconColorHoverError: twColor('rose', 550),
+    closeIconColorPressedError: twColor('rose', 525),
+    closeColorHoverError: colorAlpha(twColor('rose', 600), 0.2),
+    closeColorPressedError: colorAlpha(twColor('rose', 600), 0.3),
+
+    closeIconColorLoading: primaryColor,
+    closeIconColorHoverLoading: primaryColor,
+    closeIconColorPressedLoading: primaryColor,
+    closeColorHoverLoading: colorAlpha(primaryColor, 0.2),
+    closeColorPressedLoading: colorAlpha(primaryColor, 0.3),
   }
 }

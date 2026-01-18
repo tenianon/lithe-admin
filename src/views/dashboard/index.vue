@@ -7,7 +7,7 @@ import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
 
 import { ScrollContainer } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
-import twc from '@/utils/tailwindColor'
+import { twColor } from '@/utils/colorHelper'
 
 import type { ECharts } from 'echarts'
 
@@ -53,22 +53,22 @@ const getBusinessLinesConfig = () =>
     },
     {
       name: '核心业务',
-      color: twc.cyan[500],
+      color: twColor('cyan', 500),
       dataRange: { min: 25000, max: 75000 },
     },
     {
       name: '辅助收入',
-      color: twc.lime[500],
+      color: twColor('lime', 500),
       dataRange: { min: 15000, max: 50000 },
     },
     {
       name: '订阅收入',
-      color: twc.orange[500],
+      color: twColor('orange', 500),
       dataRange: { min: 10000, max: 35000 },
     },
     {
       name: '广告收入',
-      color: twc.pink[500],
+      color: twColor('pink', 500),
       dataRange: { min: 8000, max: 25000 },
     },
   ] as const
@@ -171,13 +171,13 @@ const businessLinesWithData = computed(() =>
 
 const createTooltipConfig = (formatter?: any) => ({
   trigger: 'axis',
-  backgroundColor: isDark.value ? twc.neutral[750] : '#fff',
+  backgroundColor: isDark.value ? twColor('neutral', 750) : '#fff',
   borderWidth: 1,
-  borderColor: isDark.value ? twc.neutral[700] : twc.neutral[150],
+  borderColor: isDark.value ? twColor('neutral', 700) : twColor('neutral', 150),
   padding: 8,
   extraCssText: 'box-shadow: none;',
   textStyle: {
-    color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+    color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
     fontSize: 12,
   },
   axisPointer: {
@@ -241,7 +241,7 @@ function initRevenueChart() {
         top: 0,
         textStyle: {
           fontSize: 18,
-          color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+          color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
           fontWeight: 'normal',
         },
       },
@@ -251,7 +251,7 @@ function initRevenueChart() {
         top: 28,
         textStyle: {
           fontSize: 14,
-          color: isDark.value ? twc.neutral[500] : twc.neutral[450],
+          color: isDark.value ? twColor('neutral', 500) : twColor('neutral', 450),
           fontWeight: 'normal',
         },
       },
@@ -279,7 +279,7 @@ function initRevenueChart() {
       itemWidth: 12,
       itemHeight: 12,
       textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 14,
       },
       data: chartDataManager.getAllNames(),
@@ -299,7 +299,7 @@ function initRevenueChart() {
       axisLine: { show: false },
       axisTick: { show: false },
       axisLabel: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 12,
       },
       splitLine: { show: false },
@@ -312,7 +312,7 @@ function initRevenueChart() {
       axisLine: { show: false },
       axisTick: { show: false },
       axisLabel: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 11,
         formatter(value: number) {
           if (value === 0) return '0'
@@ -410,10 +410,10 @@ function initRevenueBarChart() {
       itemWidth: 10,
       itemHeight: 10,
       itemGap: 16,
-      inactiveColor: isDark.value ? twc.neutral[400] : twc.neutral[350],
-      inactiveBorderColor: isDark.value ? twc.neutral[400] : twc.neutral[350],
+      inactiveColor: isDark.value ? twColor('neutral', 400) : twColor('neutral', 350),
+      inactiveBorderColor: isDark.value ? twColor('neutral', 400) : twColor('neutral', 350),
       textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 13,
       },
       selectedMode: 'single',
@@ -443,7 +443,7 @@ function initRevenueBarChart() {
         width: 2,
       },
       itemStyle: {
-        borderColor: isDark.value ? twc.neutral[800] : twc.neutral[50],
+        borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
         borderWidth: 2,
       },
       emphasis: {
@@ -635,7 +635,7 @@ function initMonthlyRadarChart() {
         top: 0,
         textStyle: {
           fontSize: 15,
-          color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+          color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
           fontWeight: 'normal',
         },
       },
@@ -645,7 +645,7 @@ function initMonthlyRadarChart() {
         top: 28,
         textStyle: {
           fontSize: 14,
-          color: isDark.value ? twc.neutral[500] : twc.neutral[450],
+          color: isDark.value ? twColor('neutral', 500) : twColor('neutral', 450),
           fontWeight: 'normal',
         },
       },
@@ -692,7 +692,7 @@ function initMonthlyRadarChart() {
         },
       },
       axisLabel: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 12,
         formatter(value: number) {
           if (value >= 1000) {
@@ -717,7 +717,7 @@ function initMonthlyRadarChart() {
           show: true,
           position: 'top',
           distance: 10,
-          color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+          color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
           fontSize: 12,
           formatter(params: any) {
             const index = params.dataIndex
@@ -774,7 +774,7 @@ function initHighestRevenueChart() {
         top: 0,
         textStyle: {
           fontSize: 15,
-          color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+          color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
           fontWeight: 'normal',
         },
       },
@@ -824,10 +824,10 @@ function initHighestRevenueChart() {
       itemWidth: 12,
       itemHeight: 12,
       inactiveBorderWidth: 0,
-      inactiveColor: isDark.value ? twc.neutral[400] : twc.neutral[350],
-      inactiveBorderColor: isDark.value ? twc.neutral[400] : twc.neutral[350],
+      inactiveColor: isDark.value ? twColor('neutral', 400) : twColor('neutral', 350),
+      inactiveBorderColor: isDark.value ? twColor('neutral', 400) : twColor('neutral', 350),
       textStyle: {
-        color: isDark.value ? twc.neutral[400] : twc.neutral[600],
+        color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 14,
       },
       data: chartData.map((item) => ({
@@ -874,7 +874,7 @@ function initHighestRevenueChart() {
       },
       itemStyle: {
         color: item.color,
-        borderColor: isDark.value ? twc.neutral[800] : twc.neutral[50],
+        borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
         borderWidth: 2,
       },
       areaStyle: {

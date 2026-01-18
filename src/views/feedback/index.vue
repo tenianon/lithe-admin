@@ -102,6 +102,12 @@ const createDialogApi = (type: ModalProps['type'] = 'success') => {
     >
       {{ APP_NAME }} 修饰了一些反馈组件的默认设计，这似乎还不错
     </NAlert>
+    <NAlert closable>
+      {{ APP_NAME }} 修饰了一些反馈组件的默认设计，这似乎还不错
+      <template #icon>
+        <span class="iconify ph--robot"></span>
+      </template>
+    </NAlert>
     <NCard title="Message 消息">
       <div class="flex flex-wrap gap-4">
         <NButton

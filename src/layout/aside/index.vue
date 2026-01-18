@@ -97,12 +97,10 @@ watch(
       <SidebarMenu />
       <SidebarUserPanel />
     </aside>
-    <div
-      class="relative flex h-full justify-center border-r border-naive-border transition-[border-color]"
-    >
+    <div class="relative flex h-full justify-center">
       <div
         ref="sidebarLine"
-        class="absolute left-0 z-10 h-full w-1 cursor-col-resize"
+        class="absolute left-0 z-10 h-full w-1 cursor-col-resize border-l border-naive-border transition-[background-color,border-color] hover:bg-primary/25"
         @mousedown="onSidelineMouseDown"
       />
       <div

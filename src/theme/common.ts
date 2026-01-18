@@ -1,5 +1,5 @@
-import { ccAPCA, cdh } from '@/utils/chromaHelper'
-import twc from '@/utils/tailwindColor'
+import { colorAPCA, colorAlpha } from '@/utils/colorHelper'
+import { twColor } from '@/utils/colorHelper'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
@@ -11,28 +11,46 @@ export function commonThemeOverrides(primaryColor = ''): GlobalThemeOverrides {
   return {
     common: {
       actionColor: '',
-
       borderRadius: '4px',
-
       primaryColor,
-      primaryColorHover: cdh(primaryColor, 0.1),
-      primaryColorPressed: cdh(primaryColor, 0.2),
+      primaryColorHover: colorAlpha(primaryColor, 0.9),
+      primaryColorPressed: colorAlpha(primaryColor, 0.86),
       primaryColorSuppl: primaryColor,
 
       scrollbarBorderRadius: '0',
     },
+    Alert: {
+      titleFontWeight: BASE.fontWeight,
+    },
     Button: {
-      textColorPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
-      textColorHoverPrimary: cdh(ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]), 0.1),
-      textColorPressedPrimary: cdh(ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]), 0.2),
-      textColorSupplPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
-      textColorFocusPrimary: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[950]),
+      textColorPrimary: colorAPCA(primaryColor, twColor('neutral', 150), twColor('neutral', 850)),
+      textColorHoverPrimary: colorAPCA(
+        primaryColor,
+        twColor('neutral', 150),
+        twColor('neutral', 850),
+      ),
+      textColorPressedPrimary: colorAPCA(
+        primaryColor,
+        twColor('neutral', 150),
+        twColor('neutral', 850),
+      ),
+
+      textColorSupplPrimary: colorAPCA(
+        primaryColor,
+        twColor('neutral', 150),
+        twColor('neutral', 850),
+      ),
+      textColorFocusPrimary: colorAPCA(
+        primaryColor,
+        twColor('neutral', 150),
+        twColor('neutral', 850),
+      ),
     },
     Card: {
       titleFontWeight: BASE.fontWeight,
     },
     Checkbox: {
-      checkMarkColor: ccAPCA(primaryColor, twc.neutral[150], twc.neutral[800]),
+      checkMarkColor: colorAPCA(primaryColor, twColor('neutral', 150), twColor('neutral', 800)),
     },
     Dialog: {
       iconSize: '24px',

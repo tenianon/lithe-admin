@@ -3,27 +3,27 @@ import { NPopover } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
-import twColors from '@/utils/tailwindColor'
+import { twColor } from '@/utils/colorHelper'
 
 const { themeColor } = toRefsPreferencesStore()
 
 const colorSwatches = [
-  twColors.red[500],
-  twColors.orange[500],
-  twColors.amber[500],
-  twColors.yellow[500],
-  twColors.lime[500],
-  twColors.green[500],
-  twColors.emerald[500],
-  twColors.teal[500],
-  twColors.cyan[500],
-  twColors.sky[500],
-  twColors.blue[500],
-  twColors.indigo[500],
-  twColors.violet[500],
-  twColors.purple[500],
-  twColors.fuchsia[500],
-  twColors.pink[500],
+  twColor('red', 500),
+  twColor('orange', 500),
+  twColor('amber', 500),
+  twColor('yellow', 500),
+  twColor('lime', 500),
+  twColor('green', 500),
+  twColor('emerald', 500),
+  twColor('teal', 500),
+  twColor('cyan', 500),
+  twColor('sky', 500),
+  twColor('blue', 500),
+  twColor('indigo', 500),
+  twColor('violet', 500),
+  twColor('purple', 500),
+  twColor('fuchsia', 500),
+  twColor('pink', 500),
 ]
 </script>
 <template>

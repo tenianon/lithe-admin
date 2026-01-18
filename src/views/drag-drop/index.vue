@@ -3,6 +3,7 @@ import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
+import shikiDarkTheme from '@/assets/shimmer-theme-dark-neutral-block.json'
 import { ScrollContainer, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
@@ -82,7 +83,7 @@ watch(
     codeToHtml(JSON.stringify(baseList, null, 2), {
       lang: 'json',
       themes: {
-        dark: 'dark-plus',
+        dark: shikiDarkTheme,
         light: 'min-light',
       },
     })
@@ -92,7 +93,7 @@ watch(
     codeToHtml(JSON.stringify(gridList, null, 2), {
       lang: 'json',
       themes: {
-        dark: 'dark-plus',
+        dark: shikiDarkTheme,
         light: 'min-light',
       },
     })
@@ -102,7 +103,7 @@ watch(
     codeToHtml(JSON.stringify(cloneList2, null, 2), {
       lang: 'json',
       themes: {
-        dark: 'dark-plus',
+        dark: shikiDarkTheme,
         light: 'min-light',
       },
     })
@@ -303,3 +304,22 @@ watch(
     </NCard>
   </ScrollContainer>
 </template>
+<style>
+@layer shiki {
+  html.dark .shiki,
+  html.dark .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+    transition: background-color var(--default-transition-duration)
+      var(--default-transition-timing-function);
+  }
+  pre.shiki {
+    transition: background-color var(--default-transition-duration)
+      var(--default-transition-timing-function);
+  }
+}
+</style>

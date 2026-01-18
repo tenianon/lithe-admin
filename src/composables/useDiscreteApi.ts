@@ -17,7 +17,7 @@ export function getConfigProviderProps() {
       info: () => h('span', { class: 'iconify ph--info size-full' }),
       success: () => h('span', { class: 'iconify ph--seal-check size-full' }),
       warning: () => h('span', { class: 'iconify ph--warning size-full' }),
-      error: () => h('span', { class: 'iconify ph--x-square size-full' }),
+      error: () => h('span', { class: 'iconify ph--smiley-x-eyes size-full' }),
     },
   }))
 

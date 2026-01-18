@@ -3,10 +3,10 @@ import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
+import shikiDarkTheme from '@/assets/shimmer-theme-dark-neutral-block.json'
 import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-
 defineOptions({
   name: 'About',
 })
@@ -195,7 +195,7 @@ onMounted(async () => {
     lang: 'markdown',
     themes: {
       light: 'min-light',
-      dark: 'dark-plus',
+      dark: shikiDarkTheme,
     },
   })
     .then((result: string) => (directoryStructureHighlight.value = result))
@@ -205,7 +205,7 @@ onMounted(async () => {
     lang: 'json',
     themes: {
       light: 'min-light',
-      dark: 'dark-plus',
+      dark: shikiDarkTheme,
     },
   })
     .then((result: string) => (dependenciesCodeHighlight.value = result))
@@ -215,7 +215,7 @@ onMounted(async () => {
     lang: 'json',
     themes: {
       light: 'min-light',
-      dark: 'dark-plus',
+      dark: shikiDarkTheme,
     },
   })
     .then((result: string) => (devDependenciesCodeHighlight.value = result))
@@ -350,3 +350,22 @@ onMounted(async () => {
     </div>
   </ScrollContainer>
 </template>
+<style>
+@layer shiki {
+  html.dark .shiki,
+  html.dark .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+    transition: background-color var(--default-transition-duration)
+      var(--default-transition-timing-function);
+  }
+  pre.shiki {
+    transition: background-color var(--default-transition-duration)
+      var(--default-transition-timing-function);
+  }
+}
+</style>

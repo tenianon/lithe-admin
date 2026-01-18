@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 
 import { toRefsPreferencesStore } from '@/stores/preferences'
-import twc from '@/utils/tailwindColor'
+import { twColor } from '@/utils/colorHelper'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 
@@ -11,20 +11,20 @@ export function useComponentThemeOverrides() {
   const scrollbarInMainLayout = computed<GlobalThemeOverrides['Scrollbar']>(() =>
     isDark.value
       ? {
-          color: twc.neutral[800],
-          colorHover: twc.neutral[750],
+          color: twColor('neutral', 800),
+          colorHover: twColor('neutral', 750),
         }
       : {
-          color: twc.neutral[350],
-          colorHover: twc.neutral[400],
+          color: twColor('neutral', 350),
+          colorHover: twColor('neutral', 400),
         },
   )
 
   const overlayThemeOverrides = computed<GlobalThemeOverrides>(() => {
     const DARK: GlobalThemeOverrides = {
       Input: {
-        color: twc.neutral[750],
-        border: `1px solid ${twc.neutral[700]}`,
+        color: twColor('neutral', 750),
+        border: `1px solid ${twColor('neutral', 700)}`,
       },
     }
 
@@ -32,8 +32,8 @@ export function useComponentThemeOverrides() {
       ? {
           Input: DARK.Input,
           Scrollbar: {
-            color: twc.neutral[750],
-            colorHover: twc.neutral[700],
+            color: twColor('neutral', 750),
+            colorHover: twColor('neutral', 700),
           },
           Select: {
             peers: {
@@ -41,13 +41,13 @@ export function useComponentThemeOverrides() {
                 ...DARK.Input,
               },
               InternalSelectMenu: {
-                color: twc.neutral[700],
-                optionColorActivePending: twc.neutral[600],
-                optionColorPending: twc.neutral[600],
+                color: twColor('neutral', 700),
+                optionColorActivePending: twColor('neutral', 600),
+                optionColorPending: twColor('neutral', 600),
                 peers: {
                   Scrollbar: {
-                    color: twc.neutral[600],
-                    colorHover: twc.neutral[550],
+                    color: twColor('neutral', 600),
+                    colorHover: twColor('neutral', 550),
                   },
                 },
               },
@@ -56,8 +56,8 @@ export function useComponentThemeOverrides() {
         }
       : {
           Scrollbar: {
-            color: twc.neutral[200],
-            colorHover: twc.neutral[250],
+            color: twColor('neutral', 200),
+            colorHover: twColor('neutral', 250),
           },
         }
   })

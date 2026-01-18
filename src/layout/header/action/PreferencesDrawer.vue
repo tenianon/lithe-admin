@@ -18,8 +18,8 @@ import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } f
 import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, toRefsPreferencesStore } from '@/stores'
-import { ccAPCA } from '@/utils/chromaHelper'
-import twc from '@/utils/tailwindColor'
+import { colorAPCA } from '@/utils/colorHelper'
+import { twColor } from '@/utils/colorHelper'
 
 import LayoutThumbnail from './component/LayoutThumbnail.vue'
 import WatermarkModal from './component/WatermarkModal.vue'
@@ -30,29 +30,29 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
 
 const { reset } = usePreferencesStore()
 
-const { preferences, themeColor, sidebarMenu, isDark } = toRefsPreferencesStore()
+const { preferences, themeColor, sidebarMenu } = toRefsPreferencesStore()
 
 const modal = useModal()
 
 const showPreferencesDrawer = ref(false)
 
 const colorSwatches = [
-  twc.red[500],
-  twc.orange[500],
-  twc.amber[500],
-  twc.yellow[500],
-  twc.lime[500],
-  twc.green[500],
-  twc.emerald[500],
-  twc.teal[500],
-  twc.cyan[500],
-  twc.sky[500],
-  twc.blue[500],
-  twc.indigo[500],
-  twc.violet[500],
-  twc.purple[500],
-  twc.fuchsia[500],
-  twc.pink[500],
+  twColor('red', 500),
+  twColor('orange', 500),
+  twColor('amber', 500),
+  twColor('yellow', 500),
+  twColor('lime', 500),
+  twColor('green', 500),
+  twColor('emerald', 500),
+  twColor('teal', 500),
+  twColor('cyan', 500),
+  twColor('sky', 500),
+  twColor('blue', 500),
+  twColor('indigo', 500),
+  twColor('violet', 500),
+  twColor('purple', 500),
+  twColor('fuchsia', 500),
+  twColor('pink', 500),
 ]
 
 const showWatermarkModal = () => {
@@ -112,12 +112,10 @@ const showWatermarkModal = () => {
                   <span
                     :style="
                       currentColor && {
-                        color: ccAPCA(
+                        color: colorAPCA(
                           currentColor,
-                          twc.neutral[150],
-                          twc.neutral[950],
-                          '#fff',
-                          isDark,
+                          twColor('neutral', 150),
+                          twColor('neutral', 950),
                         ),
                       }
                     "
@@ -381,7 +379,7 @@ const showWatermarkModal = () => {
                   </template>
                   <div class="flex flex-col gap-y-1 pt-1.5 pl-4">
                     <div class="flex items-center justify-between">
-                      <span class="mr-4 shrink-0">透明度</span>
+                      <span class="mr-4 shrink-0">细腻度</span>
                       <NSlider
                         v-model:value="preferences.noise.opacity"
                         :min="0"

@@ -16,7 +16,7 @@ export function useComponentModifier() {
     const themeOverrides: ModalProps['themeOverrides'] = {
       peers: {
         Dialog: {
-          iconSize: '26px',
+          iconSize: '24px',
           titleFontSize: '16px',
         },
       },

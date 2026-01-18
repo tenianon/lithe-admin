@@ -18,7 +18,7 @@ const handleUserPanelClick = () => {
 </script>
 <template>
   <div
-    class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-200/90 dark:hover:bg-neutral-750/65"
+    class="flex cursor-pointer items-center transition-[background-color,border-radius,margin,padding] hover:bg-neutral-185 dark:hover:bg-neutral-775"
     :class="
       sidebarMenu.collapsed
         ? 'mx-2 rounded-naive px-2 py-1.5'

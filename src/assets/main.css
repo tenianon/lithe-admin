@@ -1,4 +1,35 @@
-@import './base.css';
+@import 'tailwindcss' source(none);
+
+@source not '../../src/**/*.test.ts';
+@source not '../../src/**/*.d.ts';
+@source not inline('{filter,transition}');
+
+@source '../../src/**/*.vue';
+@source '../../src/**/*.ts';
+@source '../../src/**/*.tsx';
+
+@plugin '@iconify/tailwind4' {
+  prefixes: ph;
+  scale: 1.2;
+}
+
+@plugin 'tailwindcss-color-scale';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --default-transition-duration: 300ms;
+}
+
+@theme inline {
+  --color-primary: var(--primary-color);
+  --color-naive-border: var(--border-color);
+  --color-naive-card: var(--card-color);
+  --color-naive-text3: var(--text-color-3);
+  --color-naive-button2-hover: var(--button-color-2-hover);
+  --radius-naive: var(--border-radius);
+  --radius-naive-sm: var(--border-radius-small);
+}
 
 @layer base {
   body {
@@ -6,20 +37,20 @@
   }
 }
 
-@layer shiki {
-  html.dark .shiki,
-  html.dark .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-    transition: background-color var(--default-transition-duration)
-      var(--default-transition-timing-function);
+@layer naive-ui {
+  .n-notification-container .n-notification .n-notification__avatar {
+    @apply top-2.5!;
   }
-  pre.shiki {
-    transition: background-color var(--default-transition-duration)
-      var(--default-transition-timing-function);
+
+  .n-notification-container .n-notification .n-notification__avatar .n-base-icon {
+    @apply size-5.5!;
+  }
+  .n-notification-container .n-notification.n-notification--show-avatar .n-notification-main {
+    margin-left: 34px !important;
+    width: calc(100% - 34px) !important;
+  }
+
+  .n-notification-container .n-notification .n-notification-main .n-notification-main-footer {
+    @apply mt-1.5!;
   }
 }

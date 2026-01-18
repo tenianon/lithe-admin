@@ -7,7 +7,7 @@
   "quoteProps": "as-needed",
   "printWidth": 100,
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindStylesheet": "./src/assets/base.css",
+  "tailwindStylesheet": "./src/assets/main.css",
   "tailwindAttributes": [
     "enter-active-class",
     "enter-from-class",
