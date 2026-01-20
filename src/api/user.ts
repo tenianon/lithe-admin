@@ -1,6 +1,17 @@
-import type { MenuMixedOptions } from './interface'
+import { mockRequest } from '@/utils/mock'
 
-export const routeRecordRaw: MenuMixedOptions[] = [
+import type { MenuMixedOptions } from '@/router/interface'
+
+export interface UserInfo {
+  avatar: string
+  id: number
+  name: string
+  role: 'admin' | 'user' | 'guest'
+  token: string | null
+  menu: MenuMixedOptions[]
+}
+
+const menu: MenuMixedOptions[] = [
   {
     path: 'dashboard',
     name: 'dashboard',
@@ -224,3 +235,68 @@ export const routeRecordRaw: MenuMixedOptions[] = [
     },
   },
 ]
+
+export async function signIn(data: { account: string; password: string }) {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  let responseData: ResponseBody | ResponseBody<UserInfo>
+  let shouldFail = false
+
+  if (data.account === 'admin' && data.password === '123456') {
+    responseData = {
+      code: 200,
+      message: '登录成功',
+      data: {
+        avatar: '',
+        id: 2000,
+        name: '管理员',
+        role: 'admin',
+        token: 'admin',
+        menu,
+      },
+    }
+  } else if (data.account === 'user' && data.password === '123456') {
+    const allowedRoutes = ['dashboard', 'dataShow', 'notfoundPage', 'about']
+    const filteredRoutes = menu.filter((route) => {
+      return !route.type && route.name && allowedRoutes.includes(route.name as string)
+    })
+    responseData = {
+      code: 200,
+      message: '登录成功',
+      data: {
+        avatar: '',
+        id: 2001,
+        name: '普通用户',
+        role: 'user',
+        token: 'user',
+        menu: filteredRoutes,
+      },
+    }
+  } else if (data.account === 'guest' && data.password === '123456') {
+    const allowedRoutes = ['dashboard', 'about']
+    const filteredRoutes = menu.filter((route) => {
+      return !route.type && route.name && allowedRoutes.includes(route.name as string)
+    })
+    responseData = {
+      code: 200,
+      message: '登录成功',
+      data: {
+        avatar: '',
+        id: 2002,
+        name: '访客',
+        role: 'guest',
+        token: 'guest',
+        menu: filteredRoutes,
+      },
+    }
+  } else {
+    responseData = {
+      code: 500,
+      message: '用户名或密码错误',
+      data: null,
+    }
+    shouldFail = true
+  }
+
+  return mockRequest(responseData, { delay: 0, shouldFail, errorCode: responseData.code })
+}

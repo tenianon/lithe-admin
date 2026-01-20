@@ -1,23 +1,22 @@
 import { isEmpty } from 'es-toolkit/compat'
 
-import { useEventBus } from '@/event-bus'
-import { useUserStore, toRefsUserStore } from '@/stores'
+import { routerEventBus } from '@/event-bus'
+import { useUserStore } from '@/stores'
 
 import type { Router } from 'vue-router'
 
 const Layout = () => import('@/layout/index.vue')
 
 export function setupRouterGuard(router: Router) {
-  const { resolveMenuRoute, cleanup } = useUserStore()
+  const userStore = useUserStore()
 
-  const { token } = toRefsUserStore()
-  const { routerEventBus } = useEventBus()
+  const { cleanup } = userStore
 
   router.beforeEach(async (to, from, next) => {
-    routerEventBus.emit('beforeEach')
+    routerEventBus.emit({ type: 'beforeEach' })
 
     if (to.name === 'signIn') {
-      if (!token.value) {
+      if (!userStore.token) {
         next()
       } else {
         next(from.fullPath)
@@ -26,17 +25,15 @@ export function setupRouterGuard(router: Router) {
       return false
     }
 
-    if (!token.value) {
-      cleanup()
+    if (!userStore.token) {
+      cleanup(to.fullPath)
       next()
       return false
     }
 
-    if (token.value && !router.hasRoute('layout')) {
+    if (userStore.token && !router.hasRoute('layout')) {
       try {
-        const { routeList } = await resolveMenuRoute()
-
-        if (isEmpty(routeList)) {
+        if (isEmpty(userStore.userRoute)) {
           cleanup()
           next()
           return false
@@ -48,7 +45,7 @@ export function setupRouterGuard(router: Router) {
           component: Layout,
           // if you need to have a redirect when accessing / routing
           redirect: '/dashboard',
-          children: routeList,
+          children: userStore.userRoute,
         })
 
         next(to.fullPath)
@@ -70,6 +67,6 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.afterEach(() => {
-    routerEventBus.emit('afterEach')
+    routerEventBus.emit({ type: 'afterEach' })
   })
 }

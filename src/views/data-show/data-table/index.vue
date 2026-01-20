@@ -1,4 +1,5 @@
 <script setup lang="tsx">
+import { useMutation, useQuery } from '@pinia/colada'
 import {
   NButton,
   NDataTable,
@@ -14,39 +15,29 @@ import {
   NButtonGroup,
   NDropdown,
   NTag,
-  NNumberAnimation,
   NAlert,
 } from 'naive-ui'
-import { defineComponent, reactive, ref, useTemplateRef, nextTick } from 'vue'
+import { defineComponent, reactive, ref, useTemplateRef, nextTick, watch, computed } from 'vue'
 
+import { getDataTable, deleteDataTable, deleteDataTableChildren, updateDataTable } from '@/api'
 import { ScrollContainer } from '@/components'
 import { useInjection, useComponentModifier, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
+import { toRefsUserStore } from '@/stores/user'
 
 import ActionModal from './ActionModal.vue'
 
+import type { DataTable, DataTableQuery } from '@/api'
 import type { DataTableColumns, PaginationProps, FormRules, DropdownProps } from 'naive-ui'
 import type { PropType } from 'vue'
-
-export interface UserInfo {
-  address: string
-  age: number | null
-  company: string
-  email: string
-  fullName: string
-  number: number
-  id: number | string
-  phone: string
-  registerDate: null
-  sex: string | null
-  children: UserInfo[]
-}
 
 defineOptions({
   name: 'DataTable',
 })
 
 const { isMaxMd, isMaxLg } = useInjection(mediaQueryInjectionKey)
+
+const { token } = toRefsUserStore()
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
@@ -58,26 +49,20 @@ const modal = useModal()
 
 const { getPopconfirmModifier } = useComponentModifier()
 
-const [form, , resetForm] = useResettableReactive<Partial<UserInfo>>({
+const [form, , resetForm] = useResettableReactive<DataTableQuery>({
   fullName: '',
   sex: null,
   phone: '',
   company: '',
 })
 
-const rules: FormRules = {
-  sex: {
-    required: true,
-    message: '请选择性别',
-  },
-}
+const rules: FormRules = {}
 
 const sexOptions = [
   { label: '男', value: '男' },
   { label: '女', value: '女' },
 ]
 
-const isRequestLoading = ref(false)
 const enableStriped = ref(false)
 const enableScrollX = ref(true)
 const enableSingleLine = ref(true)
@@ -85,26 +70,41 @@ const enableContextmenu = ref(true)
 const showDropdown = ref(false)
 const contextmenuId = ref<number | string | null>(null)
 
-const dataList = ref<UserInfo[]>([])
+const dataList = ref<DataTable[]>([])
 
 const checkedRowKeys = ref<Array<number | string>>([])
 
-const CellActions = (row: UserInfo) => (
-  <div class='flex gap-2'>
-    <NButton
-      secondary
-      type='primary'
-      size='small'
-      onClick={() => createOrEditData(row)}
-    >
-      编辑
-    </NButton>
+const mergeLoading = computed(() => {
+  return (
+    deleteDataTableLoading.value ||
+    deleteDataTableChildrenLoading.value ||
+    getDataTableLoading.value ||
+    updateDataTableLoading.value
+  )
+})
+
+const CellActions = (row: DataTable) => (
+  <div class='flex justify-end gap-2'>
+    {!row.parentId && (
+      <NButton
+        secondary
+        type='primary'
+        size='small'
+        onClick={() => createOrEditData('update', row.id)}
+      >
+        编辑
+      </NButton>
+    )}
     <NPopconfirm
       {...getPopconfirmModifier()}
       positiveText='确定'
       negativeText='取消'
       onPositiveClick={() => {
-        message.success('点击了删除')
+        if (row.parentId) {
+          mutateDeleteDataTableChildren(row.id)
+        } else {
+          mutateDeleteDataTable(row.id)
+        }
       }}
     >
       {{
@@ -148,11 +148,12 @@ const ShowOrEdit = defineComponent({
 
     function onBlur() {
       if (!inputValue.value.trim()) {
-        message.error('为空就再也编辑不了了')
+        message.error('不能为空')
         inputValue.value = props.value
+      } else if (inputValue.value !== props.value) {
+        props.onUpdateValue?.(inputValue.value)
       }
       isEdit.value = false
-      props.onUpdateValue?.(inputValue.value)
     }
 
     return () => (
@@ -175,26 +176,30 @@ const ShowOrEdit = defineComponent({
   },
 })
 
-const columns: DataTableColumns<UserInfo> = [
+const PaginationPrefix: PaginationProps['prefix'] = (info) => {
+  const { itemCount } = info
+  return (
+    itemCount && (
+      <div>
+        <span>总数&nbsp;</span>
+        {itemCount}
+        <span>&nbsp;条</span>
+      </div>
+    )
+  )
+}
+
+const baseColumns: DataTableColumns<DataTable> = [
   {
     type: 'selection',
-    options: [
-      'all',
-      'none',
-      {
-        label: '选中前 3 行可选数据',
-        key: 'f2',
-        onSelect: (pageData) => {
-          checkedRowKeys.value = pageData
-            .filter((row) => row.number < 500)
-            .map((row) => row.id)
-            .slice(0, 3)
-        },
-      },
-    ],
-    disabled: (row) => {
-      return ['4', '5', '8', '9'].includes(String(row.number)[0] || '')
-    },
+    options: ['all', 'none'],
+  },
+  {
+    key: 'id',
+    title: 'ID',
+    titleAlign: 'center',
+    render: (row) => <span>{row.rowKey || row.id}</span>,
+    width: 140,
   },
   {
     key: 'number',
@@ -211,13 +216,11 @@ const columns: DataTableColumns<UserInfo> = [
         </div>
       )
     },
-    render: (row, index) => (
+    render: (row) => (
       <ShowOrEdit
         value={row.fullName}
         onUpdateValue={(value) => {
-          if (dataList.value[index]) {
-            dataList.value[index].fullName = value
-          }
+          mutateUpdateDataTable({ ...row, fullName: value })
         }}
       />
     ),
@@ -279,30 +282,24 @@ const columns: DataTableColumns<UserInfo> = [
     key: 'registerDate',
     title: '注册日期',
   },
-  {
-    width: 140,
-    key: 'actions',
-    align: 'center',
-    title: '操作',
-    fixed: 'right',
-    render: (row) => <CellActions {...row} />,
-  },
 ]
 
-function rowProps(row: UserInfo) {
-  return {
-    onContextmenu: (e: MouseEvent) => {
-      e.preventDefault()
-      showDropdown.value = false
-      nextTick().then(() => {
-        contextmenuId.value = row.number
-        showDropdown.value = true
-        dropdownOptions.x = e.clientX
-        dropdownOptions.y = e.clientY
-      })
-    },
+const columns = computed<DataTableColumns<DataTable>>(() => {
+  if (token.value === 'admin') {
+    return [
+      ...baseColumns,
+      {
+        width: 140,
+        key: 'actions',
+        align: 'center',
+        title: '操作',
+        fixed: 'right',
+        render: (row) => <CellActions {...row} />,
+      },
+    ]
   }
-}
+  return baseColumns
+})
 
 const pagination = reactive<PaginationProps>({
   page: 1,
@@ -312,37 +309,16 @@ const pagination = reactive<PaginationProps>({
   itemCount: 0,
   showQuickJumper: true,
   showQuickJumpDropdown: true,
-  onUpdatePage: (page: number) => {
+  onUpdatePage: (page) => {
     pagination.page = page
-    getDataList()
+    refetch()
   },
-  onUpdatePageSize: (pageSize: number) => {
+  onUpdatePageSize: (pageSize) => {
     pagination.pageSize = pageSize
     pagination.page = 1
-    getDataList()
+    refetch()
   },
 })
-
-const prevUserListTotal = ref(0)
-
-const paginationPrefix: PaginationProps['prefix'] = (info) => {
-  const { itemCount } = info
-  return (
-    itemCount && (
-      <div>
-        <span>总&nbsp;</span>
-        <NNumberAnimation
-          from={prevUserListTotal.value}
-          to={itemCount}
-          onFinish={() => {
-            prevUserListTotal.value = itemCount
-          }}
-        />
-        <span>&nbsp;条</span>
-      </div>
-    )
-  )
-}
 
 const dropdownOptions = reactive<DropdownProps>({
   x: 0,
@@ -360,36 +336,95 @@ const dropdownOptions = reactive<DropdownProps>({
   onClickoutside: () => {
     showDropdown.value = false
   },
-  onSelect: () => {
-    message.info(`id: ${contextmenuId.value}`)
+  onSelect: (v) => {
+    switch (v) {
+      case 'edit':
+        if (contextmenuId.value) {
+          createOrEditData('update', contextmenuId.value as number)
+        }
+        break
+      case 'delete':
+        if (contextmenuId.value) {
+          mutateDeleteDataTable(contextmenuId.value as number)
+        }
+        break
+    }
+
     showDropdown.value = false
   },
 })
 
-async function request(pageSize: number): Promise<{ data: UserInfo[]; total: number }> {
-  return fetch(`https://lithe-admin-serverless.havenovelgod.com/api/faker?limit=${pageSize}`, {
-    method: 'GET',
-  }).then((res) => res.json())
+const {
+  data,
+  isLoading: getDataTableLoading,
+  refetch,
+} = useQuery({
+  key: () => ['dataTable', pagination.page ?? 1, pagination.pageSize ?? 10, form],
+  query: () =>
+    getDataTable({
+      page: pagination.page ?? 1,
+      pageSize: pagination.pageSize ?? 10,
+      query: form,
+    }),
+  staleTime: 0,
+})
+
+const { isLoading: deleteDataTableLoading, mutate: mutateDeleteDataTable } = useMutation({
+  mutation: deleteDataTable,
+  onSuccess: () => refetch(),
+})
+
+const { isLoading: deleteDataTableChildrenLoading, mutate: mutateDeleteDataTableChildren } =
+  useMutation({
+    mutation: deleteDataTableChildren,
+    onSuccess: () => refetch(),
+  })
+
+const { isLoading: updateDataTableLoading, mutate: mutateUpdateDataTable } = useMutation({
+  mutation: updateDataTable,
+  onSuccess: () => refetch(),
+})
+
+const handleQueryClick = () => {
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      pagination.page = 1
+      refetch()
+    }
+  })
 }
 
-function inputOnlyAllowNumber(value: string) {
-  return !value || /^\d+$/.test(value)
+function rowProps(row: DataTable) {
+  return {
+    onContextmenu: (e: MouseEvent) => {
+      e.preventDefault()
+      showDropdown.value = false
+      nextTick().then(() => {
+        contextmenuId.value = row.id
+        showDropdown.value = true
+        dropdownOptions.x = e.clientX
+        dropdownOptions.y = e.clientY
+      })
+    },
+  }
 }
 
-function createOrEditData(data?: UserInfo) {
-  const title = data ? '编辑数据' : '新增数据'
+function createOrEditData(action: 'create' | 'update', id?: number) {
+  const title = action === 'create' ? '新增数据' : '编辑数据'
 
-  const handleSubmitClick = () => {
-    message.success('点击了提交')
+  function onSubmit() {
+    pagination.page = 1
+    refetch()
     m.destroy()
   }
 
-  function handleUpdateClick() {
-    message.info('点击了更新')
+  function onUpdate() {
+    pagination.page = 1
+    refetch()
     m.destroy()
   }
 
-  function handleCancelClick() {
+  function onCancel() {
     m.destroy()
   }
 
@@ -404,40 +439,31 @@ function createOrEditData(data?: UserInfo) {
     },
     content: () => (
       <ActionModal
-        data={data || {}}
-        onSubmit={handleSubmitClick}
-        onUpdate={handleUpdateClick}
-        onCancel={handleCancelClick}
+        id={id}
+        action={action}
+        onSubmit={onSubmit}
+        onUpdate={onUpdate}
+        onCancel={onCancel}
       />
     ),
   })
 }
 
-const handleQueryClick = () => {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      getDataList()
-    }
-  })
-}
-
-function handleDownloadCsvClick() {
+const handleDownloadCsvClick = () => {
   if (!dataTableRef.value) return
   dataTableRef.value.downloadCsv()
 }
 
-async function getDataList() {
-  isRequestLoading.value = true
-  const pageSize = pagination.pageSize || 10
-  const res = await request(pageSize).finally(() => {
-    isRequestLoading.value = false
-  })
-
-  dataList.value = res.data
-  pagination.itemCount = 300
+function inputOnlyAllowNumber(value: string) {
+  return !value || /^\d+$/.test(value)
 }
 
-getDataList()
+watch(data, (newData) => {
+  if (newData) {
+    dataList.value = newData.data.list
+    pagination.itemCount = newData.data.total
+  }
+})
 </script>
 <template>
   <ScrollContainer
@@ -486,7 +512,7 @@ getDataList()
             />
           </NFormItem>
           <NFormItem
-            label="联系方式"
+            label="电话"
             path="phone"
           >
             <NInput
@@ -508,7 +534,7 @@ getDataList()
         <div class="flex gap-2">
           <NButton
             type="success"
-            @click="createOrEditData()"
+            @click="createOrEditData('create')"
           >
             <template #icon>
               <span class="iconify ph--plus-circle" />
@@ -518,8 +544,8 @@ getDataList()
           <NButton
             type="info"
             @click="handleQueryClick"
-            :loading="isRequestLoading"
-            :disabled="isRequestLoading"
+            :loading="getDataTableLoading"
+            :disabled="getDataTableLoading"
           >
             <template #icon>
               <span class="iconify ph--magnifying-glass" />
@@ -546,9 +572,10 @@ getDataList()
           :flex-height="!isMaxLg"
           :scroll-x="enableScrollX ? 1800 : 0"
           :columns="columns"
+          children-key="children"
           :data="dataList"
-          :row-key="(row) => row.id"
-          :loading="isRequestLoading"
+          :row-key="(row) => row.rowKey || row.id"
+          :loading="mergeLoading"
           :striped="enableStriped"
           :row-props="rowProps"
           :single-line="enableSingleLine"
@@ -602,11 +629,12 @@ getDataList()
           </div>
           <NPagination
             v-bind="pagination"
-            :prefix="paginationPrefix"
+            :prefix="PaginationPrefix"
             :page-slot="isMaxMd ? 5 : undefined"
             :show-quick-jump-dropdown="!isMaxMd"
             :show-quick-jumper="!isMaxMd"
             :show-size-picker="!isMaxMd"
+            :disabled="mergeLoading"
           />
         </div>
       </div>

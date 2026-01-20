@@ -3,7 +3,7 @@ import { NPopover } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
-import { twColor } from '@/utils/colorHelper'
+import { twColor } from '@/utils/colors'
 
 const { themeColor } = toRefsPreferencesStore()
 

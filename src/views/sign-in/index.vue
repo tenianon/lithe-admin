@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useMutation } from '@pinia/colada'
 import { NForm, NFormItem, NInput, NButton, NCheckbox, NCarousel } from 'naive-ui'
 import {
   computed,
@@ -15,8 +16,8 @@ import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import ThemeModePopover from '@/layout/header/action/ThemeModePopover.vue'
 import router from '@/router'
-import { toRefsPreferencesStore, toRefsUserStore } from '@/stores'
-import { twColor } from '@/utils/colorHelper'
+import { toRefsPreferencesStore, useUserStore } from '@/stores'
+import { twColor } from '@/utils/colors'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
 
@@ -29,7 +30,8 @@ defineOptions({
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { isDark } = toRefsPreferencesStore()
-const { token } = toRefsUserStore()
+
+const { userSignIn } = useUserStore()
 
 const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration1.vue')),
@@ -37,9 +39,10 @@ const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration3.vue')),
 ]
 
-const loading = ref(false)
 const isNavigating = ref(false)
 const isRememberMed = ref(false)
+
+const mergedLoading = computed(() => isSignInLoading.value || isNavigating.value)
 
 const textureMaskParams = reactive({
   size: '666px 666px',
@@ -67,6 +70,13 @@ const signInFormRules: Record<string, FormItemRule[]> = {
   password: [{ required: true, message: '请输入密码', trigger: ['input'] }],
 }
 
+const { isLoading: isSignInLoading, mutate: signInMutation } = useMutation({
+  mutation: userSignIn,
+  onSuccess: () => {
+    toLayout()
+  },
+})
+
 function toLayout() {
   const { r } = router.currentRoute.value.query
 
@@ -83,18 +93,25 @@ function toLayout() {
 const handleSubmitClick = () => {
   signInFormRef.value?.validate((errors) => {
     if (!errors) {
-      loading.value = true
-      setTimeout(() => {
-        if (signInForm.account.includes('admin')) {
-          token.value = 'admin'
-        } else {
-          token.value = 'user'
-        }
-        loading.value = false
-        toLayout()
-      }, 1000)
+      signInMutation({ account: signInForm.account, password: signInForm.password })
     }
   })
+}
+
+const handleQuickLogin = (account: 'admin' | 'user' | 'guest') => {
+  switch (account) {
+    case 'admin':
+      signInMutation({ account: 'admin', password: '123456' })
+      break
+    case 'user':
+      signInMutation({ account: 'user', password: '123456' })
+      break
+    case 'guest':
+      signInMutation({ account: 'guest', password: '123456' })
+      break
+    default:
+      break
+  }
 }
 
 function updateTexturePosition(x: number, y: number) {
@@ -247,15 +264,47 @@ onUnmounted(() => {
               <div class="mt-4">
                 <NButton
                   type="primary"
-                  :loading="loading"
-                  attr-type="button"
+                  :loading="mergedLoading"
                   :disabled="isNavigating"
+                  attr-type="button"
                   block
                   size="medium"
                   class="bg-red-400"
                   @click="handleSubmitClick"
                 >
                   登&nbsp;录
+                </NButton>
+              </div>
+              <div class="mt-6 flex items-center justify-center">
+                <NButton
+                  text
+                  :disabled="mergedLoading"
+                  size="tiny"
+                  @click="handleQuickLogin('admin')"
+                >
+                  管理员登录
+                </NButton>
+                <span
+                  class="mx-2 h-3 border-r border-neutral-300 transition-[border-color] dark:border-neutral-650"
+                ></span>
+                <NButton
+                  text
+                  :disabled="mergedLoading"
+                  size="tiny"
+                  @click="handleQuickLogin('user')"
+                >
+                  普通用户登录
+                </NButton>
+                <span
+                  class="mx-2 h-3 border-r border-neutral-300 transition-[border-color] dark:border-neutral-650"
+                ></span>
+                <NButton
+                  text
+                  :disabled="mergedLoading"
+                  size="tiny"
+                  @click="handleQuickLogin('guest')"
+                >
+                  访客登录
                 </NButton>
               </div>
             </NForm>

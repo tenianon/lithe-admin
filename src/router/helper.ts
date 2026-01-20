@@ -7,8 +7,11 @@ import type { MenuMixedOptions, MenuOption } from './interface'
 import type { MenuProps } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
 
-export function resolveMenu(options: MenuMixedOptions[], parentDisabled = false) {
-  const menuOptions: MenuProps['options'] = []
+export function resolveMenu(
+  options: MenuMixedOptions[],
+  parentDisabled = false,
+): NonNullable<MenuProps['options']> {
+  const menuOptions: NonNullable<MenuProps['options']> = []
 
   options.forEach((item) => {
     if (!item.type || item.type === 'group') {

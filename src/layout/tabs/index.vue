@@ -18,7 +18,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
-import { useEventBus } from '@/event-bus'
+import { routerEventBus } from '@/event-bus'
 import { layoutInjectionKey } from '@/injection'
 import { useTabsStore, usePreferencesStore, toRefsTabsStore } from '@/stores'
 
@@ -60,8 +60,6 @@ const {
 const { tabs, tabActivePath } = toRefsTabsStore()
 
 const preferences = usePreferencesStore()
-
-const { routerEventBus } = useEventBus()
 
 const tabPinnedList = computed({
   get: () => tabs.value.filter((tab) => tab.pinned),
@@ -283,7 +281,7 @@ function handleTabRefreshClick() {
 }
 
 routerEventBus.on((event) => {
-  if (event === 'afterEach') {
+  if (event.type === 'afterEach') {
     nextTick(() => {
       pendingActivePath.value = tabActivePath.value
     })

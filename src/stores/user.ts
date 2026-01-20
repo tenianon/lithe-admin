@@ -1,63 +1,34 @@
 import { useStorage } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
+import { signIn } from '@/api'
 import router from '@/router'
 import { resolveMenu, resolveRoute } from '@/router/helper'
-import { routeRecordRaw } from '@/router/record'
 
 import { pinia } from '.'
 
-import type { MenuMixedOptions } from '@/router/interface'
-import type { MenuOption } from 'naive-ui'
-import type { RouteRecordRaw } from 'vue-router'
+import type { UserInfo } from '@/api'
 
-interface User {
-  avatar?: string
-  id?: string
-  name?: string
-  role?: 'admin' | 'user'
-}
-
-const DEFAULT_USER: User = {
+const userInfo: UserInfo = {
   avatar: '',
-  id: '2000',
+  id: 1,
   name: 'Lithe User',
-  role: 'admin',
+  role: 'user',
+  token: null,
+  menu: [],
 }
 
 export const useUserStore = defineStore('userStore', () => {
-  const user = useStorage<User>('user', DEFAULT_USER)
+  const user = useStorage<UserInfo>('user', userInfo)
 
   const token = useStorage<string | null>('token', null)
 
-  const menuList = ref<MenuOption[]>([])
+  async function userSignIn(data: Parameters<typeof signIn>[0]) {
+    const res = await signIn(data)
 
-  const routeList = ref<RouteRecordRaw[]>([])
-
-  async function resolveMenuRoute() {
-    const res = await new Promise<MenuMixedOptions[]>((resolve) => {
-      if (token.value?.includes('admin')) {
-        resolve(routeRecordRaw)
-      } else {
-        const allowedRoutes = ['dashboard', 'dataShow', 'notfoundPage', 'about']
-        const filteredRoutes = routeRecordRaw.filter((route) => {
-          return !route.type && route.name && allowedRoutes.includes(route.name as string)
-        })
-        resolve(filteredRoutes)
-      }
-    })
-
-    const resolvedMenu = resolveMenu(res) || []
-    const resolvedRoute = resolveRoute(res) || []
-
-    menuList.value = resolvedMenu
-    routeList.value = resolvedRoute
-
-    return {
-      menuList: resolvedMenu,
-      routeList: resolvedRoute,
-    }
+    token.value = res.data.token
+    user.value = res.data
   }
 
   function cleanup(redirectPath?: string) {
@@ -67,22 +38,26 @@ export const useUserStore = defineStore('userStore', () => {
     })
 
     token.value = null
+    user.value = userInfo
 
     if (router.hasRoute('layout')) {
       router.removeRoute('layout')
     }
-
-    menuList.value = []
-
-    routeList.value = []
   }
+
+  const userMenu = computed(() => {
+    return resolveMenu(user.value.menu)
+  })
+  const userRoute = computed(() => {
+    return resolveRoute(user.value.menu)
+  })
 
   return {
     user,
     token,
-    menuList,
-    routeList,
-    resolveMenuRoute,
+    userMenu,
+    userRoute,
+    userSignIn,
     cleanup,
   }
 })

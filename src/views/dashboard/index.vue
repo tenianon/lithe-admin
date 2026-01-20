@@ -7,7 +7,7 @@ import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
 
 import { ScrollContainer } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
-import { twColor } from '@/utils/colorHelper'
+import { twColor } from '@/utils/colors'
 
 import type { ECharts } from 'echarts'
 

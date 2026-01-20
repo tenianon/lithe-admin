@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useMutation } from '@pinia/colada'
 import {
   NCard,
   NForm,
@@ -22,24 +23,14 @@ import {
 } from 'naive-ui'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 
+import { getRandomDataForm } from '@/api'
 import shikiDarkTheme from '@/assets/shimmer-theme-dark-neutral-block.json'
 import { ScrollContainer } from '@/components'
 import { useInjection, useResettableReactive } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
+import type { DataForm } from '@/api'
 import type { FormRules } from 'naive-ui'
-
-interface BaseForm {
-  name: string
-  age: number | null
-  sex: string
-  hobby: Array<string | number>
-  phones: Array<{ phone: string }>
-  email: string
-  dateBirth: number | null
-  job: string | null
-  address: string
-}
 
 defineOptions({
   name: 'DataForm',
@@ -53,7 +44,7 @@ const message = useMessage()
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
 
-const [form, setForm, reset] = useResettableReactive<BaseForm>({
+const [form, setForm, reset] = useResettableReactive<DataForm>({
   name: '',
   age: null,
   sex: '',
@@ -74,8 +65,6 @@ const formCodeHighlight = ref()
 const rulesCodeHighlight = ref()
 
 const formDisabled = ref(false)
-
-const isRequestLoading = ref(false)
 
 const rules: FormRules = {
   name: { required: true, message: '请输入用户名' },
@@ -153,20 +142,16 @@ const emailOptions = computed(() => {
   })
 })
 
+const { isLoading: getRandomDataFormLoading, mutate: mutateGetRandomDataForm } = useMutation({
+  mutation: getRandomDataForm,
+  onSuccess: (res) => {
+    setForm(res.data)
+    formRef?.value?.restoreValidation()
+  },
+})
+
 function inputOnlyAllowNumber(value: string) {
   return !value || /^\d+$/.test(value)
-}
-
-function generateRandomForm() {
-  isRequestLoading.value = true
-  fetch('https://lithe-admin-serverless.havenovelgod.com/api/faker')
-    .then((res) => res.json())
-    .then((res) => {
-      setForm(res.data)
-    })
-    .finally(() => {
-      isRequestLoading.value = false
-    })
 }
 
 function handleSubmitClick() {
@@ -498,9 +483,9 @@ watch(
                 </NButton>
                 <NButton
                   type="info"
-                  :disabled="formDisabled || isRequestLoading"
-                  @click="generateRandomForm"
-                  :loading="isRequestLoading"
+                  :disabled="formDisabled || getRandomDataFormLoading"
+                  @click="mutateGetRandomDataForm()"
+                  :loading="getRandomDataFormLoading"
                 >
                   随机填充表单
                 </NButton>

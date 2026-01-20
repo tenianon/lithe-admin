@@ -3,11 +3,13 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 // import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+
   return {
     plugins: [vue(), vueJsx(), tailwindcss()],
     resolve: {
@@ -18,6 +20,12 @@ export default defineConfig(() => {
     server: {
       port: 5799,
       host: true,
+      proxy: {
+        '/api': {
+          target: env.VITE_SITE_BASE_API,
+          changeOrigin: true,
+        },
+      },
     },
     build: {
       rollupOptions: {
@@ -65,7 +73,7 @@ export default defineConfig(() => {
 
           assetFileNames: (info) => {
             const notHash = ['topography.svg', 'texture.png', 'noise.png']
-            if (notHash.includes(info.names[0])) {
+            if (info.name && notHash.includes(info.name)) {
               return 'assets/[name][extname]'
             }
             return 'assets/[name]-[hash][extname]'

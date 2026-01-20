@@ -1,5 +1,5 @@
-import { colorAPCA, colorAlpha } from '@/utils/colorHelper'
-import { twColor } from '@/utils/colorHelper'
+import { colorAPCA, colorAlpha } from '@/utils/colors'
+import { twColor } from '@/utils/colors'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 

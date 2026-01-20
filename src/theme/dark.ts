@@ -1,4 +1,4 @@
-import { twColor, colorAlpha } from '@/utils/colorHelper'
+import { twColor, colorAlpha } from '@/utils/colors'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 

@@ -18,8 +18,8 @@ import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } f
 import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, toRefsPreferencesStore } from '@/stores'
-import { colorAPCA } from '@/utils/colorHelper'
-import { twColor } from '@/utils/colorHelper'
+import { colorAPCA } from '@/utils/colors'
+import { twColor } from '@/utils/colors'
 
 import LayoutThumbnail from './component/LayoutThumbnail.vue'
 import WatermarkModal from './component/WatermarkModal.vue'

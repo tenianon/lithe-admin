@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 
 import { toRefsPreferencesStore } from '@/stores/preferences'
-import { twColor } from '@/utils/colorHelper'
+import { twColor } from '@/utils/colors'
 
 import type { GlobalThemeOverrides } from 'naive-ui'
 

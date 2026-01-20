@@ -3,13 +3,12 @@ import { useElementSize, watchThrottled, useTemplateRefsList } from '@vueuse/cor
 import { isFunction } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
-import { storeToRefs } from 'pinia'
 import { h, computed, ref, watch, onBeforeUnmount, reactive, useTemplateRef, onMounted } from 'vue'
 
 import router from '@/router'
 import { useUserStore } from '@/stores'
 
-import type { DropdownProps, MenuProps } from 'naive-ui'
+import type { DropdownProps } from 'naive-ui'
 
 type Key = string | number | undefined
 
@@ -19,7 +18,7 @@ const MENU = {
   BOUNDARY_OFFSET: 1,
 }
 
-const { menuList } = storeToRefs(useUserStore())
+const userStore = useUserStore()
 
 const navigationContainerRef = ref<HTMLElement | null>(null)
 
@@ -37,7 +36,7 @@ const threshold = ref(Number.POSITIVE_INFINITY)
 const menuRightBoundMap = reactive(new Map<Key, number>())
 
 const moreDropdownOptions = computed<DropdownProps['options']>(() => {
-  return (menuList.value as NonNullable<MenuProps['options']>).filter((item) => {
+  return userStore.userMenu.filter((item) => {
     if (item.type) return false
     const menuRightBound = menuRightBoundMap.get(item.key) ?? 0
     return menuRightBound > threshold.value
@@ -145,7 +144,7 @@ onBeforeUnmount(() => {
     }"
   >
     <template
-      v-for="{ disabled, key, type, label, icon, children } in menuList"
+      v-for="{ disabled, key, type, label, icon, children } in userStore.userMenu"
       :key="key"
     >
       <div
@@ -168,7 +167,7 @@ onBeforeUnmount(() => {
           <NDropdown
             :options="children"
             :value="menuActiveKey"
-            :disabled="disabled"
+            :disabled="!!disabled"
             :render-icon="renderIcon"
           >
             <div class="flex items-center py-2 pr-2 pl-2.5">
