@@ -25,7 +25,9 @@ const { id, action } = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'submit' | 'update' | 'cancel'): void
+  submit: []
+  update: []
+  cancel: []
 }>()
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
