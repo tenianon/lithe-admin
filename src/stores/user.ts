@@ -2,15 +2,12 @@ import { useStorage } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import { signIn } from '@/api'
 import router from '@/router'
 import { resolveMenu, resolveRoute } from '@/router/helper'
 
 import { pinia } from '.'
 
-import type { UserInfo } from '@/api'
-
-const userInfo: UserInfo = {
+const userInfo = {
   avatar: '',
   id: 1,
   name: 'Lithe User',
@@ -20,16 +17,9 @@ const userInfo: UserInfo = {
 }
 
 export const useUserStore = defineStore('userStore', () => {
-  const user = useStorage<UserInfo>('user', userInfo)
+  const user = useStorage<typeof userInfo>('user', userInfo)
 
   const token = useStorage<string | null>('token', null)
-
-  async function userSignIn(data: Parameters<typeof signIn>[0]) {
-    const res = await signIn(data)
-
-    token.value = res.data.token
-    user.value = res.data
-  }
 
   function cleanup(redirectPath?: string) {
     router.replace({
@@ -57,7 +47,6 @@ export const useUserStore = defineStore('userStore', () => {
     token,
     userMenu,
     userRoute,
-    userSignIn,
     cleanup,
   }
 })

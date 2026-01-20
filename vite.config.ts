@@ -3,13 +3,11 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 // import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-
+export default defineConfig(() => {
   return {
     plugins: [vue(), vueJsx(), tailwindcss()],
     resolve: {
@@ -18,24 +16,14 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 5799,
+      port: 6799,
       host: true,
-      proxy: {
-        '/api': {
-          target: env.VITE_SITE_BASE_API,
-          changeOrigin: true,
-        },
-      },
     },
     build: {
       rollupOptions: {
         output: {
           advancedChunks: {
             groups: [
-              {
-                name: 'echarts',
-                test: /\/echarts/,
-              },
               {
                 name: 'chroma-js',
                 test: /\/chroma-js/,

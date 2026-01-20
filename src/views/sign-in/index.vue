@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useMutation } from '@pinia/colada'
 import { NForm, NFormItem, NInput, NButton, NCheckbox, NCarousel } from 'naive-ui'
 import {
   computed,
@@ -16,7 +15,8 @@ import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import ThemeModePopover from '@/layout/header/action/ThemeModePopover.vue'
 import router from '@/router'
-import { toRefsPreferencesStore, useUserStore } from '@/stores'
+import { toRefsPreferencesStore } from '@/stores'
+import { toRefsUserStore } from '@/stores/user'
 import { twColor } from '@/utils/colors'
 
 import ThemeColorPopover from './component/ThemeColorPopover.vue'
@@ -31,7 +31,7 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { isDark } = toRefsPreferencesStore()
 
-const { userSignIn } = useUserStore()
+const { token } = toRefsUserStore()
 
 const illustrations = [
   defineAsyncComponent(() => import('./component/Illustration1.vue')),
@@ -68,14 +68,16 @@ const signInFormRules: Record<string, FormItemRule[]> = {
   password: [{ required: true, message: '请输入密码', trigger: ['input'] }],
 }
 
-const { isLoading: isSignInLoading, mutate: signInMutation } = useMutation({
-  mutation: userSignIn,
-  onSuccess: () => {
-    toLayout()
-  },
-})
-
-const mergedLoading = computed(() => isSignInLoading.value || isNavigating.value)
+const handleSubmitClick = () => {
+  signInFormRef.value?.validate((errors) => {
+    if (!errors) {
+      token.value = 'token'
+      setTimeout(() => {
+        toLayout()
+      }, 1000)
+    }
+  })
+}
 
 function toLayout() {
   const { r } = router.currentRoute.value.query
@@ -88,30 +90,6 @@ function toLayout() {
     .finally(() => {
       isNavigating.value = false
     })
-}
-
-const handleSubmitClick = () => {
-  signInFormRef.value?.validate((errors) => {
-    if (!errors) {
-      signInMutation({ account: signInForm.account, password: signInForm.password })
-    }
-  })
-}
-
-const handleQuickLogin = (account: 'admin' | 'user' | 'guest') => {
-  switch (account) {
-    case 'admin':
-      signInMutation({ account: 'admin', password: '123456' })
-      break
-    case 'user':
-      signInMutation({ account: 'user', password: '123456' })
-      break
-    case 'guest':
-      signInMutation({ account: 'guest', password: '123456' })
-      break
-    default:
-      break
-  }
 }
 
 function updateTexturePosition(x: number, y: number) {
@@ -264,7 +242,6 @@ onUnmounted(() => {
               <div class="mt-4">
                 <NButton
                   type="primary"
-                  :loading="mergedLoading"
                   :disabled="isNavigating"
                   attr-type="button"
                   block
@@ -273,38 +250,6 @@ onUnmounted(() => {
                   @click="handleSubmitClick"
                 >
                   登&nbsp;录
-                </NButton>
-              </div>
-              <div class="mt-6 flex items-center justify-center">
-                <NButton
-                  text
-                  :disabled="mergedLoading"
-                  size="tiny"
-                  @click="handleQuickLogin('admin')"
-                >
-                  管理员登录
-                </NButton>
-                <span
-                  class="mx-2 h-3 border-r border-neutral-300 transition-[border-color] dark:border-neutral-650"
-                ></span>
-                <NButton
-                  text
-                  :disabled="mergedLoading"
-                  size="tiny"
-                  @click="handleQuickLogin('user')"
-                >
-                  普通用户登录
-                </NButton>
-                <span
-                  class="mx-2 h-3 border-r border-neutral-300 transition-[border-color] dark:border-neutral-650"
-                ></span>
-                <NButton
-                  text
-                  :disabled="mergedLoading"
-                  size="tiny"
-                  @click="handleQuickLogin('guest')"
-                >
-                  访客登录
                 </NButton>
               </div>
             </NForm>
