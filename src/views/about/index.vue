@@ -23,23 +23,27 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = ` 📂 lithe-admin
+const dir = `. 📂 lithe-admin
 ├── 📄 README.en_US.md
 ├── 📄 README.md
 ├── 📄 eslint.config.ts
 ├── 📄 index.html
 ├── 📄 package.json
-├── 📄 pnpm-lock.yaml
 └── 📂 public/
 │  └── 📂 assets/
 │    ├── 📄 preloader.css
 │  ├── 📄 favicon.ico
 └── 📂 src/
 │  ├── 📄 App.vue
+│  └── 📂 api/
+│    ├── 📄 dataForm.ts
+│    ├── 📄 dataTable.ts
+│    ├── 📄 index.ts
+│    ├── 📄 user.ts
 │  └── 📂 assets/
-│    ├── 📄 base.css
 │    ├── 📄 main.css
 │    ├── 📄 noise.png
+│    ├── 📄 shimmer-theme-dark-neutral-block.json
 │    ├── 📄 texture.png
 │    ├── 📄 topography.svg
 │  └── 📂 components/
@@ -83,7 +87,8 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 useTheme.ts
 │  └── 📂 event-bus/
 │    ├── 📄 index.ts
-│    ├── 📄 interface.ts
+│    ├── 📄 requestEvent.ts
+│    ├── 📄 routerEvent.ts
 │  └── 📂 injection/
 │    ├── 📄 index.ts
 │    ├── 📄 interface.ts
@@ -127,7 +132,7 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 guard.ts
 │    ├── 📄 helper.ts
 │    ├── 📄 index.ts
-│    ├── 📄 record.ts
+│    ├── 📄 interface.ts
 │  └── 📂 stores/
 │    ├── 📄 index.ts
 │    ├── 📄 preferences.ts
@@ -138,14 +143,15 @@ const dir = ` 📂 lithe-admin
 │    ├── 📄 dark.ts
 │    ├── 📄 light.ts
 │  └── 📂 types/
+│    ├── 📄 api.d.ts
 │    ├── 📄 env.d.ts
 │    ├── 📄 vue-router.d.ts
 │    ├── 📄 window.d.ts
 │  └── 📂 utils/
 │    ├── 📄 checkVersion.ts
-│    ├── 📄 chromaHelper.ts
-│    ├── 📄 tailwindColor.test.ts
-│    ├── 📄 tailwindColor.ts
+│    ├── 📄 colors.ts
+│    ├── 📄 mock.ts
+│    ├── 📄 request.ts
 │  └── 📂 views/
 │    └── 📂 about/
 │      ├── 📄 index.vue
@@ -176,13 +182,13 @@ const dir = ` 📂 lithe-admin
 │        ├── 📄 Illustration3.vue
 │        ├── 📄 ThemeColorPopover.vue
 │      ├── 📄 index.vue
-├── 📄 tailwind.config.ts
 ├── 📄 tsconfig.app.json
 ├── 📄 tsconfig.json
 ├── 📄 tsconfig.node.json
 ├── 📄 tsconfig.vitest.json
 ├── 📄 vite.config.ts
-└── 📄 vitest.config.ts`
+└── 📄 vitest.config.ts
+`
 
 onMounted(async () => {
   if (!codeToHtml) {
