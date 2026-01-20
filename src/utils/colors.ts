@@ -312,10 +312,10 @@ export function twColor(
   }
 
   for (let i = 0; i < SCALES.length - 1; i++) {
-    const lower = SCALES[i]!
-    const upper = SCALES[i + 1]!
+    const lower = SCALES[i]
+    const upper = SCALES[i + 1]
 
-    if (ratio < upper) {
+    if (lower && upper && ratio < upper) {
       const mixRatio = (ratio - lower) / (upper - lower)
       return chroma.mix(colorScale[lower], colorScale[upper], mixRatio, 'oklch').hex()
     }

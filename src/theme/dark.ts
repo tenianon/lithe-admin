@@ -210,7 +210,7 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
   }
 }
 
-const closeIconColor = (primaryColor: string): GlobalThemeOverrides['Message'] => {
+function closeIconColor(primaryColor: string): GlobalThemeOverrides['Message'] {
   return {
     closeIconColorSuccess: twColor('lime', 600),
     closeIconColorHoverSuccess: twColor('lime', 550),

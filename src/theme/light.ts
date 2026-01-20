@@ -177,7 +177,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
   }
 }
 
-const closeIconColor = (primaryColor: string): GlobalThemeOverrides['Message'] => {
+function closeIconColor(primaryColor: string): GlobalThemeOverrides['Message'] {
   return {
     closeIconColorInfo: twColor('sky', 500),
     closeIconColorHoverInfo: twColor('sky', 525),

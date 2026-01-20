@@ -74,7 +74,7 @@ const dataList = ref<DataTable[]>([])
 
 const checkedRowKeys = ref<Array<number | string>>([])
 
-const mergeLoading = computed(() => {
+const mergedLoading = computed(() => {
   return (
     deleteDataTableLoading.value ||
     deleteDataTableChildrenLoading.value ||
@@ -575,7 +575,7 @@ watch(data, (newData) => {
           children-key="children"
           :data="dataList"
           :row-key="(row) => row.rowKey || row.id"
-          :loading="mergeLoading"
+          :loading="mergedLoading"
           :striped="enableStriped"
           :row-props="rowProps"
           :single-line="enableSingleLine"
@@ -634,7 +634,7 @@ watch(data, (newData) => {
             :show-quick-jump-dropdown="!isMaxMd"
             :show-quick-jumper="!isMaxMd"
             :show-size-picker="!isMaxMd"
-            :disabled="mergeLoading"
+            :disabled="mergedLoading"
           />
         </div>
       </div>

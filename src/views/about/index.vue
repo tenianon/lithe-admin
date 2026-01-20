@@ -233,6 +233,7 @@ onMounted(async () => {
         <a
           href="https://vuejs.org/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <NButton
             strong
@@ -246,6 +247,8 @@ onMounted(async () => {
         <a
           href="https://www.naiveui.com/"
           target="_blank"
+          class="ml-1!"
+          rel="noopener noreferrer"
         >
           <NButton
             strong
@@ -260,6 +263,7 @@ onMounted(async () => {
         <a
           href="https://vitejs.dev/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <NButton
             strong
@@ -274,6 +278,7 @@ onMounted(async () => {
         <a
           href="https://tailwindcss.com/"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <NButton
             strong

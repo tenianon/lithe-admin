@@ -39,6 +39,8 @@ const onUserDropdownSelected = (key: string) => {
     case 'signOut':
       cleanup()
       break
+    default:
+      break
   }
 }
 </script>

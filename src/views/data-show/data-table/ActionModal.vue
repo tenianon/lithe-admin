@@ -25,8 +25,7 @@ const { id, action } = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'submit' | 'update'): void
-  (e: 'cancel'): void
+  (e: 'submit' | 'update' | 'cancel'): void
 }>()
 
 const formRef = useTemplateRef<InstanceType<typeof NForm>>('formRef')
@@ -65,13 +64,9 @@ const sexSelectOptions = [
   { label: '女', value: '女' },
 ]
 
-const mergeLoading = computed(() => {
-  return createDataTableLoading.value || updateDataTableLoading.value
-})
-
 const { isLoading: getDataTableByIdLoading, data } = useQuery({
   key: () => ['dataTableById', id ?? -1],
-  query: () => getDataTableById(id!),
+  query: () => getDataTableById(id ?? -1),
   enabled: () => action === 'update' && id !== undefined,
 })
 
@@ -85,6 +80,10 @@ const { isLoading: updateDataTableLoading, mutate: mutateUpdateDataTable } = use
   onSuccess: () => emits('update'),
 })
 
+const mergedLoading = computed(() => {
+  return createDataTableLoading.value || updateDataTableLoading.value
+})
+
 const handleSubmitClick = () => {
   formRef.value?.validate().then((valid) => {
     if (valid) {
@@ -92,10 +91,13 @@ const handleSubmitClick = () => {
         case 'create':
           mutateCreateDataTable(form)
           break
-        case 'update':
+        case 'update': {
           if (id && id > 0) {
             mutateUpdateDataTable({ ...form, id })
           }
+          break
+        }
+        default:
           break
       }
     }
@@ -228,8 +230,8 @@ watch(
           <NButton
             type="success"
             @click="handleSubmitClick"
-            :loading="mergeLoading"
-            :disabled="mergeLoading"
+            :loading="mergedLoading"
+            :disabled="mergedLoading"
           >
             确定
           </NButton>

@@ -42,8 +42,6 @@ const illustrations = [
 const isNavigating = ref(false)
 const isRememberMed = ref(false)
 
-const mergedLoading = computed(() => isSignInLoading.value || isNavigating.value)
-
 const textureMaskParams = reactive({
   size: '666px 666px',
   x: 0,
@@ -76,6 +74,8 @@ const { isLoading: isSignInLoading, mutate: signInMutation } = useMutation({
     toLayout()
   },
 })
+
+const mergedLoading = computed(() => isSignInLoading.value || isNavigating.value)
 
 function toLayout() {
   const { r } = router.currentRoute.value.query

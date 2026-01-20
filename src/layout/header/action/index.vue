@@ -30,6 +30,7 @@ const { navigationMode } = toRefsPreferencesStore()
       tag="a"
       href="https://github.com/tenianon/lithe-admin"
       target="_blank"
+      rel="noopener noreferrer"
     >
       <span class="icon-[mdi--github]" />
     </ButtonAnimation>
