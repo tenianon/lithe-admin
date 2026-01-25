@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { isFunction } from 'es-toolkit'
-import { NButton, NPopover } from 'naive-ui'
+import { NPopover } from 'naive-ui'
 import { isVNode } from 'vue'
 
-import type { ButtonProps, PopoverProps } from 'naive-ui'
-import type { AllowedComponentProps, HTMLAttributes, SVGAttributes, VNodeChild } from 'vue'
+import type { PopoverProps } from 'naive-ui'
+import type { HTMLAttributes, SVGAttributes, VNodeChild } from 'vue'
 
 export interface HintHelpProps {
-  buttonProps?: AllowedComponentProps & ButtonProps
   content?: (() => VNodeChild) | string
   iconProps?: SVGAttributes
   label?: string
@@ -19,26 +18,21 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const { label, popoverProps, buttonProps, iconProps, content } = defineProps<HintHelpProps>()
+const { label, popoverProps, iconProps, content } = defineProps<HintHelpProps>()
 </script>
 <template>
   <div class="flex items-center gap-x-0.5">
     <span>{{ label }}</span>
     <NPopover v-bind="popoverProps">
       <template #trigger>
-        <NButton
-          quaternary
-          circle
-          size="small"
-          v-bind="buttonProps"
+        <div
+          class="grid cursor-pointer place-items-center rounded-full p-0.75 transition-[background-color] hover:bg-naive-button2-hover"
         >
-          <template #icon>
-            <span
-              class="iconify ph--question"
-              v-bind="iconProps"
-            />
-          </template>
-        </NButton>
+          <span
+            class="iconify ph--question"
+            v-bind="iconProps"
+          />
+        </div>
       </template>
 
       <component
