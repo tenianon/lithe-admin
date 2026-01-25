@@ -41,6 +41,7 @@ const illustrations = [
 
 const isNavigating = ref(false)
 const isRememberMed = ref(false)
+const isLoading = ref(false)
 
 const textureMaskParams = reactive({
   size: '666px 666px',
@@ -68,10 +69,15 @@ const signInFormRules: Record<string, FormItemRule[]> = {
   password: [{ required: true, message: '请输入密码', trigger: ['input'] }],
 }
 
+const mergeLoading = computed(() => {
+  return isLoading.value || isNavigating.value
+})
+
 const handleSubmitClick = () => {
   signInFormRef.value?.validate((errors) => {
     if (!errors) {
       token.value = 'token'
+      isLoading.value = true
       setTimeout(() => {
         toLayout()
       }, 1000)
@@ -89,6 +95,7 @@ function toLayout() {
     })
     .finally(() => {
       isNavigating.value = false
+      isLoading.value = false
     })
 }
 
@@ -242,7 +249,8 @@ onUnmounted(() => {
               <div class="mt-4">
                 <NButton
                   type="primary"
-                  :disabled="isNavigating"
+                  :disabled="mergeLoading"
+                  :loading="mergeLoading"
                   attr-type="button"
                   block
                   size="medium"
