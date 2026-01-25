@@ -19,7 +19,6 @@ async function setupApp() {
   app.use(pinia)
   app.use(PiniaColada, {
     queryOptions: {
-      // When the window refocuses, data is not re-acquired.
       refetchOnWindowFocus: false,
     },
   })
