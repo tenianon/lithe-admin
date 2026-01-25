@@ -17,7 +17,7 @@ import packageJson from '@/../package.json'
 import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } from '@/components'
 import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore, toRefsPreferencesStore } from '@/stores'
+import { usePreferencesStore, toRefsPreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 import { colorAPCA } from '@/utils/colors'
 import { twColor } from '@/utils/colors'
 
@@ -58,13 +58,43 @@ const colorSwatches = [
 const showWatermarkModal = () => {
   modal.create({
     autoFocus: false,
-    title: '修改水印信息',
     preset: 'dialog',
     content: () => h(WatermarkModal),
     closable: true,
     draggable: true,
     showIcon: false,
     zIndex: 99999,
+    title() {
+      return h(
+        'div',
+        {
+          class: 'flex items-center gap-x-1',
+        },
+        [
+          h('span', '修改水印信息'),
+          h(
+            ButtonAnimation,
+            {
+              title: '恢复默认',
+              animation: 'rotate',
+              size: 'small',
+              onClick() {
+                preferences.value.watermark = structuredClone({
+                  ...DEFAULT_PREFERENCES_OPTIONS.watermark,
+                  show: preferences.value.watermark.show,
+                })
+              },
+            },
+            {
+              default: () =>
+                h('span', {
+                  class: 'iconify ph--arrow-clockwise',
+                }),
+            },
+          ),
+        ],
+      )
+    },
   })
 }
 </script>
