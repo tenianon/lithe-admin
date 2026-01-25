@@ -265,7 +265,7 @@ onUnmounted(() => {
                 <NButton
                   type="primary"
                   :loading="mergedLoading"
-                  :disabled="isNavigating"
+                  :disabled="mergedLoading"
                   attr-type="button"
                   block
                   size="medium"
