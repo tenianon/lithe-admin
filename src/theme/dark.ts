@@ -46,22 +46,22 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
       scrollbarColorHover: twColor('neutral', 750),
 
       infoColor: twColor('sky', 600),
-      infoColorHover: twColor('sky', 600),
+      infoColorHover: twColor('sky', 625),
       infoColorPressed: twColor('sky', 600),
       infoColorSuppl: twColor('sky', 600),
 
       successColor: twColor('lime', 600),
-      successColorHover: twColor('lime', 600),
+      successColorHover: twColor('lime', 625),
       successColorPressed: twColor('lime', 600),
       successColorSuppl: twColor('lime', 600),
 
       warningColor: twColor('amber', 600),
-      warningColorHover: twColor('amber', 600),
+      warningColorHover: twColor('amber', 625),
       warningColorPressed: twColor('amber', 600),
       warningColorSuppl: twColor('amber', 600),
 
       errorColor: twColor('rose', 600),
-      errorColorHover: twColor('rose', 600),
+      errorColorHover: twColor('rose', 625),
       errorColorPressed: twColor('rose', 600),
       errorColorSuppl: twColor('rose', 600),
     },
@@ -84,11 +84,8 @@ export function baseDarkThemeOverrides(primaryColor = ''): GlobalThemeOverrides 
     },
     Button: {
       textColorSuccess: twColor('lime', 100),
-
       textColorInfo: twColor('sky', 100),
-
       textColorWarning: twColor('amber', 100),
-
       textColorError: twColor('rose', 100),
     },
     Card: {

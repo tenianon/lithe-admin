@@ -23,7 +23,8 @@ describe('HintHelp Component', () => {
     expect(wrapper.text()).toContain('help')
     expect(wrapper.find('.iconify.ph--question').exists()).toBe(true)
 
-    const btn = wrapper.find('.n-button')
+    const btn = wrapper.find('.grid.cursor-pointer.place-items-center')
+
     await btn.trigger('mouseenter')
     await sleep(300)
 

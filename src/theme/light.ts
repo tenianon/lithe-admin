@@ -43,22 +43,22 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       scrollbarColorHover: twColor('neutral', 200),
 
       infoColor: twColor('sky', 500),
-      infoColorHover: twColor('sky', 500),
+      infoColorHover: twColor('sky', 525),
       infoColorPressed: twColor('sky', 500),
       infoColorSuppl: twColor('sky', 500),
 
       successColor: twColor('lime', 500),
-      successColorHover: twColor('lime', 500),
+      successColorHover: twColor('lime', 525),
       successColorPressed: twColor('lime', 500),
       successColorSuppl: twColor('lime', 500),
 
       warningColor: twColor('amber', 500),
-      warningColorHover: twColor('amber', 500),
+      warningColorHover: twColor('amber', 525),
       warningColorPressed: twColor('amber', 500),
       warningColorSuppl: twColor('amber', 500),
 
       errorColor: twColor('rose', 500),
-      errorColorHover: twColor('rose', 500),
+      errorColorHover: twColor('rose', 525),
       errorColorPressed: twColor('rose', 500),
       errorColorSuppl: twColor('rose', 500),
     },
