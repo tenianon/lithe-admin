@@ -2,11 +2,7 @@
   "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
     "vite.config.*",
-    "cypress.config.*",
-    "nightwatch.conf.*",
-    "playwright.config.*",
     "eslint.config.*",
-    "tailwind.config.*"
   ],
   "compilerOptions": {
     "noEmit": true,
