@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { isFunction } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
-import { NDropdown, NEllipsis, NScrollbar } from 'naive-ui'
+import { NDropdown, NEllipsis, NScrollbar, NPopover } from 'naive-ui'
 import {
   computed,
   defineComponent,
@@ -460,13 +460,24 @@ onMounted(() => {
       <TabList v-model="tabUnPinnedList" />
     </NScrollbar>
     <div class="flex items-center px-3">
-      <ButtonAnimation
-        title="刷新"
-        @click="handleTabRefreshClick"
-        animation="rotate"
+      <NPopover
+        placement="bottom-start"
+        :disabled="preferences.navigationTransition.enable"
       >
-        <span class="iconify size-5 ph--arrows-clockwise"></span>
-      </ButtonAnimation>
+        <template #trigger>
+          <ButtonAnimation
+            title="刷新"
+            @click="handleTabRefreshClick"
+            animation="rotate"
+            :disabled="!preferences.navigationTransition.enable"
+          >
+            <span class="iconify size-5 ph--arrows-clockwise"></span>
+          </ButtonAnimation>
+        </template>
+        <div>
+          <span>需要开启&nbsp;系统设定 - 启用导航过渡效果</span>
+        </div>
+      </NPopover>
     </div>
     <NDropdown
       placement="bottom-start"
