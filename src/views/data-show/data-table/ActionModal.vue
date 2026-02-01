@@ -158,7 +158,6 @@ watch(
             >
               <NInputNumber
                 min="1"
-                max="150"
                 v-model:value="form.age"
               />
             </NFormItem>

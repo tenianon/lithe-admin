@@ -34,7 +34,7 @@ export function useRequestEventBus() {
         break
 
       case 'responseError':
-        messageApi.error(`${event.error.message}`)
+        messageApi.error(`${event.error.response?.data?.message || event.error.message}`)
         if (event.code === 401) {
           cleanup(currentPath)
         }

@@ -359,7 +359,7 @@ const {
   isLoading: getDataTableLoading,
   refetch,
 } = useQuery({
-  key: () => ['dataTable', pagination.page ?? 1, pagination.pageSize ?? 10, form],
+  key: () => ['dataTable', pagination.page ?? 1, pagination.pageSize ?? 10],
   query: () =>
     getDataTable({
       page: pagination.page ?? 1,
