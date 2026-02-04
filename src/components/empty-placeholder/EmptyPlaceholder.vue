@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { NEmpty } from 'naive-ui'
 
-import type { EmptyProps } from 'naive-ui'
-
-export interface EmptyPlaceholderProps extends /* @vue-ignore */ EmptyProps {
-  show?: boolean
-}
+import type { EmptyPlaceholderProps } from './interface'
 
 defineOptions({
   inheritAttrs: false,

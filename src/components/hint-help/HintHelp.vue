@@ -3,16 +3,7 @@ import { isFunction } from 'es-toolkit'
 import { NPopover } from 'naive-ui'
 import { isVNode } from 'vue'
 
-import type { PopoverProps } from 'naive-ui'
-import type { HTMLAttributes, SVGAttributes, VNodeChild } from 'vue'
-
-export interface HintHelpProps {
-  content?: (() => VNodeChild) | string
-  iconProps?: SVGAttributes
-  label?: string
-  labelProps?: HTMLAttributes
-  popoverProps?: PopoverProps
-}
+import type { HintHelpProps } from './interface'
 
 defineOptions({
   inheritAttrs: false,
