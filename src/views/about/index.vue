@@ -22,172 +22,181 @@ const directoryStructureHighlight = ref('')
 const dependenciesCodeHighlight = ref('')
 const devDependenciesCodeHighlight = ref('')
 
-const dir = `. 📂 lithe-admin
-├── 📄 README.en_US.md
-├── 📄 README.md
+const dir = `
+├── 📁 .vscode
+│   └── 📄 extensions.json
+│   └── 📄 settings.json
+├── 📁 public
+│   ├── 📁 assets
+│   │   └── 🎨 preloader.css
+│   └── 📄 favicon.ico
+├── 📁 src
+│   ├── 📁 api
+│   │   ├── 📄 dataForm.ts
+│   │   ├── 📄 dataTable.ts
+│   │   ├── 📄 index.ts
+│   │   └── 📄 user.ts
+│   ├── 📁 assets
+│   │   ├── 🎨 main.css
+│   │   ├── 🖼️ noise.png
+│   │   ├── 🖼️ texture.png
+│   │   └── 🖼️ topography.svg
+│   ├── 📁 components
+│   │   ├── 📁 button-animation
+│   │   │   ├── 📄 ButtonAnimation.test.ts
+│   │   │   ├── 📄 ButtonAnimation.vue
+│   │   │   ├── 📄 ButtonAnimationProvider.vue
+│   │   │   ├── 📄 index.ts
+│   │   │   ├── 📄 injection.ts
+│   │   │   └── 📄 interface.ts
+│   │   ├── 📁 collapse-transition
+│   │   │   ├── 📄 CollapseTransition.test.ts
+│   │   │   ├── 📄 CollapseTransition.vue
+│   │   │   ├── 📄 CollapseTransitionTrigger.vue
+│   │   │   ├── 📄 index.ts
+│   │   │   └── 📄 interface.ts
+│   │   ├── 📁 empty-placeholder
+│   │   │   ├── 📄 EmptyPlaceholder.test.ts
+│   │   │   ├── 📄 EmptyPlaceholder.vue
+│   │   │   ├── 📄 index.ts
+│   │   │   └── 📄 interface.ts
+│   │   ├── 📁 hint-help
+│   │   │   ├── 📄 HintHelp.test.ts
+│   │   │   ├── 📄 HintHelp.vue
+│   │   │   ├── 📄 index.ts
+│   │   │   └── 📄 interface.ts
+│   │   ├── 📁 scroll-container
+│   │   │   ├── 📄 ScrollContainer.test.ts
+│   │   │   ├── 📄 ScrollContainer.vue
+│   │   │   ├── 📄 index.ts
+│   │   │   └── 📄 interface.ts
+│   │   ├── 📄 AppLogo.vue
+│   │   ├── 📄 Noise.vue
+│   │   ├── 📄 UserAvatar.vue
+│   │   ├── 📄 UserDropdown.vue
+│   │   └── 📄 index.ts
+│   ├── 📁 composables
+│   │   ├── 📄 index.ts
+│   │   ├── 📄 useComponentModifier.ts
+│   │   ├── 📄 useComponentThemeOverrides.ts
+│   │   ├── 📄 useDiscreteApi.ts
+│   │   ├── 📄 useInjection.ts
+│   │   ├── 📄 useResettable.ts
+│   │   └── 📄 useTheme.ts
+│   ├── 📁 event-bus
+│   │   ├── 📄 index.ts
+│   │   ├── 📄 requestEvent.ts
+│   │   └── 📄 routerEvent.ts
+│   ├── 📁 injection
+│   │   ├── 📄 index.ts
+│   │   └── 📄 interface.ts
+│   ├── 📁 layout
+│   │   ├── 📁 aside
+│   │   │   ├── 📄 SidebarMenu.vue
+│   │   │   ├── 📄 SidebarUserPanel.vue
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 footer
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 header
+│   │   │   ├── 📁 action
+│   │   │   │   ├── 📁 component
+│   │   │   │   │   ├── 📄 LayoutThumbnail.vue
+│   │   │   │   │   └── 📄 WatermarkModal.vue
+│   │   │   │   ├── 📄 AvatarDropdown.vue
+│   │   │   │   ├── 📄 FullScreen.vue
+│   │   │   │   ├── 📄 PreferencesDrawer.vue
+│   │   │   │   ├── 📄 SignOut.vue
+│   │   │   │   ├── 📄 ThemeModePopover.vue
+│   │   │   │   └── 📄 index.vue
+│   │   │   ├── 📁 logo
+│   │   │   │   └── 📄 index.vue
+│   │   │   ├── 📁 navigation
+│   │   │   │   ├── 📄 Breadcrumb.vue
+│   │   │   │   ├── 📄 HorizontalMenu.vue
+│   │   │   │   ├── 📄 NavigationButton.vue
+│   │   │   │   └── 📄 index.vue
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 main
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 mobile
+│   │   │   ├── 📄 MobileHeader.vue
+│   │   │   ├── 📄 MobileLeftAside.vue
+│   │   │   └── 📄 MobileRightAside.vue
+│   │   ├── 📁 tabs
+│   │   │   └── 📄 index.vue
+│   │   └── 📄 index.vue
+│   ├── 📁 router
+│   │   ├── 📄 guard.ts
+│   │   ├── 📄 helper.ts
+│   │   ├── 📄 index.ts
+│   │   └── 📄 interface.ts
+│   ├── 📁 stores
+│   │   ├── 📄 index.ts
+│   │   ├── 📄 preferences.ts
+│   │   ├── 📄 tabs.ts
+│   │   └── 📄 user.ts
+│   ├── 📁 theme
+│   │   ├── 📄 common.ts
+│   │   ├── 📄 dark.ts
+│   │   └── 📄 light.ts
+│   ├── 📁 types
+│   │   ├── 📄 api.d.ts
+│   │   ├── 📄 env.d.ts
+│   │   ├── 📄 vue-router.d.ts
+│   │   └── 📄 window.d.ts
+│   ├── 📁 utils
+│   │   ├── 📄 checkVersion.ts
+│   │   ├── 📄 colors.ts
+│   │   └── 📄 request.ts
+│   ├── 📁 views
+│   │   ├── 📁 about
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 dashboard
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 data-show
+│   │   │   ├── 📁 data-form
+│   │   │   │   └── 📄 index.vue
+│   │   │   └── 📁 data-table
+│   │   │       ├── 📄 ActionModal.vue
+│   │   │       └── 📄 index.vue
+│   │   ├── 📁 drag-drop
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 dynamic-route
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 error-page
+│   │   │   ├── 📄 404.vue
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 feedback
+│   │   │   ├── 📄 discreteApi.ts
+│   │   │   └── 📄 index.vue
+│   │   ├── 📁 multi-level-menu
+│   │   │   └── 📄 index.vue
+│   │   └── 📁 sign-in
+│   │       ├── 📁 component
+│   │       │   ├── 📄 Illustration1.vue
+│   │       │   ├── 📄 Illustration2.vue
+│   │       │   ├── 📄 Illustration3.vue
+│   │       │   └── 📄 ThemeColorPopover.vue
+│   │       └── 📄 index.vue
+│   ├── 📄 App.vue
+│   └── 📄 main.ts
+├── ⚙️ .editorconfig
+├── ⚙️ .env
+├── ⚙️ .gitattributes
+├── ⚙️ .gitignore
+├── ⚙️ .npmrc
+├── ⚙️ .prettierrc.json
+├── 📝 README.en_US.md
+├── 📝 README.md
 ├── 📄 eslint.config.ts
-├── 📄 index.html
-├── 📄 package.json
-└── 📂 public/
-│  └── 📂 assets/
-│    ├── 📄 preloader.css
-│  ├── 📄 favicon.ico
-└── 📂 src/
-│  ├── 📄 App.vue
-│  └── 📂 api/
-│    ├── 📄 dataForm.ts
-│    ├── 📄 dataTable.ts
-│    ├── 📄 index.ts
-│    ├── 📄 user.ts
-│  └── 📂 assets/
-│    ├── 📄 main.css
-│    ├── 📄 noise.png
-│    ├── 📄 shimmer-theme-dark-neutral-block.json
-│    ├── 📄 texture.png
-│    ├── 📄 topography.svg
-│  └── 📂 components/
-│    ├── 📄 AppLogo.vue
-│    ├── 📄 Noise.vue
-│    ├── 📄 UserAvatar.vue
-│    ├── 📄 UserDropdown.vue
-│    └── 📂 button-animation/
-│      ├── 📄 ButtonAnimation.test.ts
-│      ├── 📄 ButtonAnimation.vue
-│      ├── 📄 ButtonAnimationProvider.vue
-│      ├── 📄 index.ts
-│      ├── 📄 injection.ts
-│      ├── 📄 interface.ts
-│    └── 📂 collapse-transition/
-│      ├── 📄 CollapseTransition.test.ts
-│      ├── 📄 CollapseTransition.vue
-│      ├── 📄 CollapseTransitionTrigger.vue
-│      ├── 📄 index.ts
-│      ├── 📄 interface.ts
-│    └── 📂 empty-placeholder/
-│      ├── 📄 EmptyPlaceholder.test.ts
-│      ├── 📄 EmptyPlaceholder.vue
-│      ├── 📄 index.ts
-│    └── 📂 hint-help/
-│      ├── 📄 HintHelp.test.ts
-│      ├── 📄 HintHelp.vue
-│      ├── 📄 index.ts
-│    ├── 📄 index.ts
-│    └── 📂 scroll-container/
-│      ├── 📄 ScrollContainer.test.ts
-│      ├── 📄 ScrollContainer.vue
-│      ├── 📄 index.ts
-│  └── 📂 composables/
-│    ├── 📄 index.ts
-│    ├── 📄 useComponentModifier.ts
-│    ├── 📄 useComponentThemeOverrides.ts
-│    ├── 📄 useDiscreteApi.ts
-│    ├── 📄 useInjection.ts
-│    ├── 📄 useResettable.ts
-│    ├── 📄 useTheme.ts
-│  └── 📂 event-bus/
-│    ├── 📄 index.ts
-│    ├── 📄 requestEvent.ts
-│    ├── 📄 routerEvent.ts
-│  └── 📂 injection/
-│    ├── 📄 index.ts
-│    ├── 📄 interface.ts
-│  └── 📂 layout/
-│    └── 📂 aside/
-│      ├── 📄 SidebarMenu.vue
-│      ├── 📄 SidebarUserPanel.vue
-│      ├── 📄 index.vue
-│    └── 📂 footer/
-│      ├── 📄 index.vue
-│    └── 📂 header/
-│      └── 📂 action/
-│        ├── 📄 AvatarDropdown.vue
-│        ├── 📄 FullScreen.vue
-│        ├── 📄 PreferencesDrawer.vue
-│        ├── 📄 SignOut.vue
-│        ├── 📄 ThemeModePopover.vue
-│        └── 📂 component/
-│          ├── 📄 LayoutThumbnail.vue
-│          ├── 📄 WatermarkModal.vue
-│        ├── 📄 index.vue
-│      ├── 📄 index.vue
-│      └── 📂 logo/
-│        ├── 📄 index.vue
-│      └── 📂 navigation/
-│        ├── 📄 Breadcrumb.vue
-│        ├── 📄 HorizontalMenu.vue
-│        ├── 📄 NavigationButton.vue
-│        ├── 📄 index.vue
-│    ├── 📄 index.vue
-│    └── 📂 main/
-│      ├── 📄 index.vue
-│    └── 📂 mobile/
-│      ├── 📄 MobileHeader.vue
-│      ├── 📄 MobileLeftAside.vue
-│      ├── 📄 MobileRightAside.vue
-│    └── 📂 tabs/
-│      ├── 📄 index.vue
-│  ├── 📄 main.ts
-│  └── 📂 router/
-│    ├── 📄 guard.ts
-│    ├── 📄 helper.ts
-│    ├── 📄 index.ts
-│    ├── 📄 interface.ts
-│  └── 📂 stores/
-│    ├── 📄 index.ts
-│    ├── 📄 preferences.ts
-│    ├── 📄 tabs.ts
-│    ├── 📄 user.ts
-│  └── 📂 theme/
-│    ├── 📄 common.ts
-│    ├── 📄 dark.ts
-│    ├── 📄 light.ts
-│  └── 📂 types/
-│    ├── 📄 api.d.ts
-│    ├── 📄 env.d.ts
-│    ├── 📄 vue-router.d.ts
-│    ├── 📄 window.d.ts
-│  └── 📂 utils/
-│    ├── 📄 checkVersion.ts
-│    ├── 📄 colors.ts
-│    ├── 📄 mock.ts
-│    ├── 📄 request.ts
-│  └── 📂 views/
-│    └── 📂 about/
-│      ├── 📄 index.vue
-│    └── 📂 dashboard/
-│      ├── 📄 index.vue
-│    └── 📂 data-show/
-│      └── 📂 data-form/
-│        ├── 📄 index.vue
-│      └── 📂 data-table/
-│        ├── 📄 ActionModal.vue
-│        ├── 📄 index.vue
-│    └── 📂 drag-drop/
-│      ├── 📄 index.vue
-│    └── 📂 dynamic-route/
-│      ├── 📄 index.vue
-│    └── 📂 error-page/
-│      ├── 📄 404.vue
-│      ├── 📄 index.vue
-│    └── 📂 feedback/
-│      ├── 📄 discreteApi.ts
-│      ├── 📄 index.vue
-│    └── 📂 multi-level-menu/
-│      ├── 📄 index.vue
-│    └── 📂 sign-in/
-│      └── 📂 component/
-│        ├── 📄 Illustration1.vue
-│        ├── 📄 Illustration2.vue
-│        ├── 📄 Illustration3.vue
-│        ├── 📄 ThemeColorPopover.vue
-│      ├── 📄 index.vue
-├── 📄 tsconfig.app.json
-├── 📄 tsconfig.json
-├── 📄 tsconfig.node.json
-├── 📄 tsconfig.vitest.json
+├── 🌐 index.html
+├── ⚙️ package.json
+├── ⚙️ tsconfig.app.json
+├── ⚙️ tsconfig.json
+├── ⚙️ tsconfig.node.json
+├── ⚙️ tsconfig.vitest.json
 ├── 📄 vite.config.ts
-└── 📄 vitest.config.ts
-`
+└── 📄 vitest.config.ts`
 
 onMounted(async () => {
   if (!codeToHtml) {
