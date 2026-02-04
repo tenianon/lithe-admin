@@ -14,7 +14,7 @@ export interface DataForm {
 
 export function getRandomDataForm() {
   return request<DataForm>({
-    url: '/dataForm',
+    url: '/data/form',
     method: 'get',
   })
 }

@@ -28,7 +28,7 @@ export interface DataTable extends DataTableChildrenRaw {
 
 export function getDataTable({ page, pageSize, query }: PaginationRequestBody<DataTableQuery>) {
   return request<PaginationData<DataTable[]>>({
-    url: '/dataTable',
+    url: '/data/table',
     method: 'get',
     params: {
       page,
@@ -40,7 +40,7 @@ export function getDataTable({ page, pageSize, query }: PaginationRequestBody<Da
 
 export function getDataTableById(id: number) {
   return request<DataTable>({
-    url: '/dataTable',
+    url: '/data/table',
     method: 'get',
     params: {
       id,
@@ -50,7 +50,7 @@ export function getDataTableById(id: number) {
 
 export function updateDataTable(data: Omit<DataTable, 'number'>) {
   return request({
-    url: '/dataTable',
+    url: '/data/table',
     method: 'put',
     data,
   })
@@ -58,7 +58,7 @@ export function updateDataTable(data: Omit<DataTable, 'number'>) {
 
 export function deleteDataTable(ids: number | number[]) {
   return request({
-    url: '/dataTable',
+    url: '/data/table',
     method: 'delete',
     data: {
       ids: Array.isArray(ids) ? ids : [ids],
@@ -68,7 +68,7 @@ export function deleteDataTable(ids: number | number[]) {
 
 export function createDataTable(data: Omit<DataTable, 'id' | 'parentId' | 'rowKey' | 'number'>) {
   return request({
-    url: '/dataTable',
+    url: '/data/table',
     method: 'post',
     data,
   })
@@ -76,7 +76,7 @@ export function createDataTable(data: Omit<DataTable, 'id' | 'parentId' | 'rowKe
 
 export function deleteDataTableChildren(ids: number | number[]) {
   return request({
-    url: '/dataTableChildren',
+    url: '/data/table-children',
     method: 'delete',
     data: {
       ids: Array.isArray(ids) ? ids : [ids],
