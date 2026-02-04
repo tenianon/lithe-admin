@@ -1,19 +1,39 @@
-<script setup lang="ts">
-import { NAvatar } from 'naive-ui'
+<script setup lang="tsx">
+import { computed, ref } from 'vue'
 
-import type { AvatarProps } from 'naive-ui'
+import { useUserStore } from '@/stores'
 
-interface UserAvatarProps extends /** @vue-ignore */ AvatarProps {}
+const userStore = useUserStore()
 
-defineProps<UserAvatarProps>()
+const avatarUrl = computed(() => userStore.user.avatar)
+
+const loadState = ref<'success' | 'error' | 'loading'>('loading')
+
+function onImgLoad() {
+  loadState.value = 'success'
+}
+
+function onImgError() {
+  loadState.value = 'error'
+}
 </script>
 <template>
-  <NAvatar
-    round
-    src="src path"
-    v-bind="$attrs"
-  >
-    <template #fallback>
+  <div class="aspect-square size-full">
+    <img
+      v-if="avatarUrl && loadState !== 'error'"
+      :src="avatarUrl"
+      :class="{
+        'size-full rounded-full object-fill': loadState === 'success',
+      }"
+      @error="onImgError"
+      @load="onImgLoad"
+    />
+
+    <div
+      v-if="avatarUrl && loadState === 'loading'"
+      class="size-full animate-pulse rounded-full bg-neutral-250 dark:bg-neutral-750"
+    ></div>
+    <div v-if="!avatarUrl || loadState === 'error'">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 640 640"
@@ -77,6 +97,6 @@ defineProps<UserAvatarProps>()
           </g>
         </g>
       </svg>
-    </template>
-  </NAvatar>
+    </div>
+  </div>
 </template>
