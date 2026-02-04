@@ -1,4 +1,4 @@
-import { mockRequest } from '@/utils/mock'
+import request from '@/utils/request'
 
 import type { MenuMixedOptions } from '@/router/interface'
 
@@ -11,6 +11,7 @@ export interface UserInfo {
   menu: MenuMixedOptions[]
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const menu: MenuMixedOptions[] = [
   {
     path: 'dashboard',
@@ -237,66 +238,9 @@ const menu: MenuMixedOptions[] = [
 ]
 
 export async function signIn(data: { account: string; password: string }) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  let responseData: ResponseBody | ResponseBody<UserInfo>
-  let shouldFail = false
-
-  if (data.account === 'admin' && data.password === '123456') {
-    responseData = {
-      code: 200,
-      message: '登录成功',
-      data: {
-        avatar: '',
-        id: 2000,
-        name: '管理员',
-        role: 'admin',
-        token: 'admin',
-        menu,
-      },
-    }
-  } else if (data.account === 'user' && data.password === '123456') {
-    const allowedRoutes = ['dashboard', 'dataShow', 'notfoundPage', 'about']
-    const filteredRoutes = menu.filter((route) => {
-      return !route.type && route.name && allowedRoutes.includes(route.name as string)
-    })
-    responseData = {
-      code: 200,
-      message: '登录成功',
-      data: {
-        avatar: '',
-        id: 2001,
-        name: '普通用户',
-        role: 'user',
-        token: 'user',
-        menu: filteredRoutes,
-      },
-    }
-  } else if (data.account === 'guest' && data.password === '123456') {
-    const allowedRoutes = ['dashboard', 'about']
-    const filteredRoutes = menu.filter((route) => {
-      return !route.type && route.name && allowedRoutes.includes(route.name as string)
-    })
-    responseData = {
-      code: 200,
-      message: '登录成功',
-      data: {
-        avatar: '',
-        id: 2002,
-        name: '访客',
-        role: 'guest',
-        token: 'guest',
-        menu: filteredRoutes,
-      },
-    }
-  } else {
-    responseData = {
-      code: 500,
-      message: '用户名或密码错误',
-      data: null,
-    }
-    shouldFail = true
-  }
-
-  return mockRequest(responseData, { delay: 0, shouldFail, errorCode: responseData.code })
+  return request({
+    url: '/user/sign-in',
+    method: 'post',
+    data,
+  })
 }
