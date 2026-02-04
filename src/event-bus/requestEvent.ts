@@ -39,10 +39,6 @@ export function useRequestEventBus() {
           cleanup(currentPath)
         }
 
-        if (event.code === 403) {
-          messageApi.warning(event.error)
-        }
-
         break
 
       default:
