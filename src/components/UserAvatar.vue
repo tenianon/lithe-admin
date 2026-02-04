@@ -3,11 +3,13 @@ import { computed, ref } from 'vue'
 
 import { useUserStore } from '@/stores'
 
+type LoadState = 'success' | 'error' | 'loading'
+
 const userStore = useUserStore()
 
 const avatarUrl = computed(() => userStore.user.avatar)
 
-const loadState = ref<'success' | 'error' | 'loading'>('loading')
+const loadState = ref<LoadState>('loading')
 
 function onImgLoad() {
   loadState.value = 'success'
