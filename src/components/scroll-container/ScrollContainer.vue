@@ -4,14 +4,8 @@ import { getCurrentInstance } from 'vue'
 
 import { useComponentThemeOverrides } from '@/composables/useComponentThemeOverrides'
 
-import type { ScrollbarProps } from 'naive-ui'
-import type { CSSProperties, ComponentPublicInstance } from 'vue'
-
-export interface ContentWrapperProps extends /* @vue-ignore */ ScrollbarProps {
-  scrollable?: boolean
-  wrapperClass?: string
-  wrapperStyle?: CSSProperties
-}
+import type { ContentWrapperProps } from './interface'
+import type { ComponentPublicInstance } from 'vue'
 
 defineOptions({
   inheritAttrs: false,

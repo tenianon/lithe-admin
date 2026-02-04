@@ -2,7 +2,7 @@
 import { useMessage } from 'naive-ui'
 
 import { ButtonAnimation } from '@/components'
-import Avatar from '@/components/UserAvatar.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 import { toRefsPreferencesStore, toRefsUserStore } from '@/stores'
 
@@ -31,20 +31,16 @@ const handleUserPanelClick = () => {
       :disabled="!sidebarMenu.collapsed"
     >
       <div
-        class="grid place-items-center overflow-hidden rounded-full transition-[margin]"
+        class="grid aspect-square place-items-center overflow-hidden rounded-full transition-[margin]"
         :class="{
           'mr-2': !sidebarMenu.collapsed,
         }"
       >
         <div
           class="flex items-center justify-center overflow-hidden transition-[height,width]"
-          :class="sidebarMenu.collapsed ? 'size-8' : 'size-10'"
+          :class="sidebarMenu.collapsed ? 'w-8' : 'w-10'"
         >
-          <Avatar
-            size="large"
-            class="aspect-square"
-            style="height: unset"
-          />
+          <UserAvatar />
         </div>
       </div>
     </UserDropdown>
@@ -66,7 +62,7 @@ const handleUserPanelClick = () => {
             {{ user.name }}
           </span>
           <span class="truncate text-xs text-neutral-450 dark:text-neutral-500">
-            这里应该写点什么
+            这里或许可以写点什么
           </span>
         </div>
 
