@@ -3,7 +3,6 @@ import { NCard, NSplit, NButton, NScrollbar, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 import packageJson from '@/../package.json'
-import shikiDarkTheme from '@/assets/shimmer-theme-dark-neutral-block.json'
 import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
@@ -193,15 +192,15 @@ const dir = `. 📂 lithe-admin
 onMounted(async () => {
   if (!codeToHtml) {
     // @ts-ignore
-    const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+    const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
     codeToHtml = shiki.codeToHtml
   }
 
   codeToHtml(dir, {
     lang: 'markdown',
     themes: {
-      light: 'min-light',
-      dark: shikiDarkTheme,
+      dark: 'vitesse-dark',
+      light: 'vitesse-light',
     },
   })
     .then((result: string) => (directoryStructureHighlight.value = result))
@@ -210,8 +209,8 @@ onMounted(async () => {
   codeToHtml(JSON.stringify(dependencies, null, 2), {
     lang: 'json',
     themes: {
-      light: 'min-light',
-      dark: shikiDarkTheme,
+      dark: 'vitesse-dark',
+      light: 'vitesse-light',
     },
   })
     .then((result: string) => (dependenciesCodeHighlight.value = result))
@@ -220,8 +219,8 @@ onMounted(async () => {
   codeToHtml(JSON.stringify(devDependencies, null, 2), {
     lang: 'json',
     themes: {
-      light: 'min-light',
-      dark: shikiDarkTheme,
+      dark: 'vitesse-dark',
+      light: 'vitesse-light',
     },
   })
     .then((result: string) => (devDependenciesCodeHighlight.value = result))
@@ -366,7 +365,7 @@ onMounted(async () => {
   html.dark .shiki,
   html.dark .shiki span {
     color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
+    background-color: var(--n-color) !important;
 
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;

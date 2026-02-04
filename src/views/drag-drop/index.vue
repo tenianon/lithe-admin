@@ -3,7 +3,6 @@ import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 
-import shikiDarkTheme from '@/assets/shimmer-theme-dark-neutral-block.json'
 import { ScrollContainer, EmptyPlaceholder } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
@@ -76,15 +75,15 @@ watch(
 
     if (!codeToHtml) {
       // @ts-ignore
-      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.7.0/+esm')
+      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
       codeToHtml = shiki.codeToHtml
     }
 
     codeToHtml(JSON.stringify(baseList, null, 2), {
       lang: 'json',
       themes: {
-        dark: shikiDarkTheme,
-        light: 'min-light',
+        dark: 'vitesse-dark',
+        light: 'vitesse-light',
       },
     })
       .then((result: string) => (baseListCodeHighlight.value = result))
@@ -93,8 +92,8 @@ watch(
     codeToHtml(JSON.stringify(gridList, null, 2), {
       lang: 'json',
       themes: {
-        dark: shikiDarkTheme,
-        light: 'min-light',
+        dark: 'vitesse-dark',
+        light: 'vitesse-light',
       },
     })
       .then((result: string) => (gridListCodeHighlight.value = result))
@@ -103,8 +102,8 @@ watch(
     codeToHtml(JSON.stringify(cloneList2, null, 2), {
       lang: 'json',
       themes: {
-        dark: shikiDarkTheme,
-        light: 'min-light',
+        dark: 'vitesse-dark',
+        light: 'vitesse-light',
       },
     })
       .then((result: string) => (cloneList2CodeHighlight.value = result))
@@ -309,7 +308,7 @@ watch(
   html.dark .shiki,
   html.dark .shiki span {
     color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
+    background-color: var(--n-color) !important;
 
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
