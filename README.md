@@ -130,9 +130,3 @@ pnpm format:fix
   scale: 1.2;
 }
 ```
-
-## 🗺️ 交流群
-
-添加好友后，邀请加入交流群
-
-<img src="https://i.postimg.cc/ZqJzxp5x/mmqrcode1764759869585.png" width="200"/>
