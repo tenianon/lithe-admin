@@ -82,7 +82,7 @@ export function resolveRoute(options: MenuMixedOptions[]) {
     const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption
 
     if (!disabled) {
-      let componentModule: (() => Promise<unknown>) | null = null
+      let componentModule: RouteRecordRaw['component'] | null = null
 
       if (!isEmpty(component) && isString(component)) {
         const extractName = component.replace(/^\/|\.vue$/g, '')
@@ -92,18 +92,29 @@ export function resolveRoute(options: MenuMixedOptions[]) {
         }
       }
 
-      const route = omit(
-        {
-          ...rest,
-          ...(componentModule ? { component: componentModule } : {}),
-          meta: {
-            ...meta,
-            title: meta?.title || label,
-            icon,
-          },
+      const routeSource = {
+        ...rest,
+        label,
+        icon,
+        disabled,
+        ...(componentModule ? { component: componentModule } : {}),
+        meta: {
+          ...meta,
+          title: meta?.title || label,
+          icon,
         },
-        ['type', 'label', 'icon', 'disabled', 'extra', 'props', 'show', 'key'],
-      ) as RouteRecordRaw
+      }
+
+      const route = omit(routeSource, [
+        'type',
+        'label',
+        'icon',
+        'disabled',
+        'extra',
+        'props',
+        'show',
+        'key',
+      ]) as RouteRecordRaw
 
       if (Array.isArray(children) && !isEmpty(children)) {
         route.children = resolveRoute(children)
