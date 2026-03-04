@@ -70,44 +70,44 @@ bun install
 ### 开发模式
 
 ```bash
-pnpm dev
+pnpm run dev
 ```
 
 ### 单元测试
 
 ```bash
-pnpm test:unit
+pnpm run test:unit
 ```
 
 ### 构建生产版本
 
 ```bash
-pnpm build
+pnpm run build
 ```
 
 ### 预览生产版本
 
 ```bash
-pnpm preview
+pnpm run preview
 ```
 
 ### 代码检查
 
 ```bash
 # 检查类型
-pnpm type-check
+pnpm run type-check
 
 # 检查代码质量
-pnpm lint:check
+pnpm run lint:check
 
 # 自动修复代码问题
-pnpm lint:fix
+pnpm run lint:fix
 
 # 检查代码格式
-pnpm format:check
+pnpm run format:check
 
 # 自动格式化代码
-pnpm format:fix
+pnpm run format:fix
 ```
 
 ## 📦 图标
