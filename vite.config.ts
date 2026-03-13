@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      chunkSizeWarningLimit: 1200,
       rolldownOptions: {
         output: {
           codeSplitting: {
@@ -35,7 +36,6 @@ export default defineConfig(({ mode }) => {
               {
                 name: 'echarts',
                 test: /\/echarts/,
-                maxSize: 500000,
               },
               {
                 name: 'chroma-js',
@@ -48,7 +48,6 @@ export default defineConfig(({ mode }) => {
               {
                 name: 'naive-ui',
                 test: /\/naive-ui/,
-                maxSize: 500000,
               },
               {
                 name: 'vue-draggable-plus',
