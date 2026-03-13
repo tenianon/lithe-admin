@@ -9,8 +9,10 @@ import type { RouteMeta } from 'vue-router'
 
 export type Key = string | number | undefined
 
-export interface Tab
-  extends Pick<RouteMeta, 'icon' | 'title' | 'componentName' | 'pinned' | 'keepAlive'> {
+export interface Tab extends Pick<
+  RouteMeta,
+  'icon' | 'title' | 'componentName' | 'pinned' | 'keepAlive'
+> {
   id?: Key
   path: string
   name?: RouteRecordNameGeneric
