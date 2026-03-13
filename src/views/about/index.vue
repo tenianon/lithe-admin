@@ -286,7 +286,7 @@ onMounted(async () => {
             size="small"
             style="margin-left: 4px"
           >
-            Vite7
+            Vite8
           </NButton>
         </a>
         <a
