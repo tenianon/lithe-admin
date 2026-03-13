@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      chunkSizeWarningLimit: 1200,
       rolldownOptions: {
         output: {
           codeSplitting: {
@@ -58,10 +57,6 @@ export default defineConfig(({ mode }) => {
                 test: /\/vueuse/,
               },
               {
-                name: 'vue',
-                test: /\/vue/,
-              },
-              {
                 name: 'vue-router',
                 test: /\/vue-router/,
               },
@@ -69,12 +64,20 @@ export default defineConfig(({ mode }) => {
                 name: 'pinia',
                 test: /\/pinia/,
               },
+              {
+                name: 'axios',
+                test: /\/axios/,
+              },
+              {
+                name: 'vue',
+                test: /\/vue/,
+              },
             ],
           },
 
-          assetFileNames: (info) => {
+          assetFileNames: (asset) => {
             const notHash = ['topography.svg', 'texture.png', 'noise.png']
-            if (info.name && notHash.includes(info.name)) {
+            if (asset.names?.some((name) => notHash.includes(name))) {
               return 'assets/[name][extname]'
             }
             return 'assets/[name]-[hash][extname]'
