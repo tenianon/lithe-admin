@@ -12,31 +12,27 @@ export function setupRouterGuard(router: Router) {
 
   const { cleanup } = userStore
 
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, from) => {
     routerEventBus.emit({ type: 'beforeEach' })
 
     if (to.name === 'signIn') {
       if (!userStore.token) {
-        next()
+        return
       } else {
-        next(from.fullPath)
+        return from.fullPath
       }
-
-      return false
     }
 
     if (!userStore.token) {
       cleanup(to.fullPath)
-      next()
-      return false
+      return
     }
 
     if (userStore.token && !router.hasRoute('layout')) {
       try {
         // if (isEmpty(userStore.userRoute)) {
         //   cleanup()
-        //   next()
-        //   return false
+        //   return
         // }
 
         router.addRoute({
@@ -48,23 +44,16 @@ export function setupRouterGuard(router: Router) {
           children: userStore.userRoute,
         })
 
-        next(to.fullPath)
+        return to.fullPath
       } catch (error) {
         console.error('Error resolving user menu or adding route:', error)
         cleanup()
-        next()
+        return
       }
-
-      return false
     }
-
-    next()
-    return false
   })
 
-  router.beforeResolve((_, __, next) => {
-    next()
-  })
+  router.beforeResolve(() => {})
 
   router.afterEach(() => {
     routerEventBus.emit({ type: 'afterEach' })

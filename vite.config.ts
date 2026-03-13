@@ -8,6 +8,8 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig(() => {
+
+
   return {
     plugins: [vue(), vueJsx(), tailwindcss()],
     resolve: {
@@ -20,9 +22,9 @@ export default defineConfig(() => {
       host: true,
     },
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          advancedChunks: {
+          codeSplitting: {
             groups: [
               {
                 name: 'chroma-js',
@@ -45,10 +47,6 @@ export default defineConfig(() => {
                 test: /\/vueuse/,
               },
               {
-                name: 'vue',
-                test: /\/vue/,
-              },
-              {
                 name: 'vue-router',
                 test: /\/vue-router/,
               },
@@ -56,12 +54,16 @@ export default defineConfig(() => {
                 name: 'pinia',
                 test: /\/pinia/,
               },
+              {
+                name: 'vue',
+                test: /\/vue/,
+              },
             ],
           },
 
-          assetFileNames: (info) => {
+          assetFileNames: (asset) => {
             const notHash = ['topography.svg', 'texture.png', 'noise.png']
-            if (info.name && notHash.includes(info.name)) {
+            if (asset.names?.some((name) => notHash.includes(name))) {
               return 'assets/[name][extname]'
             }
             return 'assets/[name]-[hash][extname]'
