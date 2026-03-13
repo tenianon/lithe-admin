@@ -58,7 +58,6 @@ const rules: FormRules = {
   sex: { required: true, message: '请选择性别', trigger: ['input', 'blur'] },
   phone: { required: true, message: '请输入手机号', trigger: ['input', 'blur'] },
   registerDate: { required: true, message: '请选择注册日期', trigger: ['input', 'blur'] },
-  jobTitle: { required: true, message: '请输入职位', trigger: ['input', 'blur'] },
 }
 
 const sexSelectOptions = [

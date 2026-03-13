@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    navigation: {
+    navigation?: {
       canGoBack: boolean
       canGoForward: boolean
     }
