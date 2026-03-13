@@ -2,9 +2,9 @@
 
 # Lithe Admin
 
-![Vue](https://img.shields.io/badge/Vue-3.5.29-42B883?style=for-the-badge&logo=vue.js)
+![Vue](https://img.shields.io/badge/Vue-3.5.30-42B883?style=for-the-badge&logo=vue.js)
 ![Naive UI](https://img.shields.io/badge/Naive_UI-2.44.1-75B93F?style=for-the-badge&logo=naiveui)
-![Vite](https://img.shields.io/badge/Vite-7.3.1-646cff?style=for-the-badge&logo=vite)
+![Vite](https://img.shields.io/badge/Vite-8.0.0-646cff?style=for-the-badge&logo=vite)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-4ABAFB?style=for-the-badge&logo=tailwindcss)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-4377C1?style=for-the-badge&logo=typescript)
 
@@ -16,7 +16,7 @@
 
 ## 📃 简介
 
-**Lithe Admin** 是一个轻盈而优雅的后台管理模板，基于 **`Vue3`** **`Naive UI`** **`Vite7`** **`TailwindCSS4`** **`TypeScript`** **`Pinia`** 构建，沿用折纸般的页面结构设计，轻量的业务依赖和低耦合代码配置，专为灵活拓展和个性化定制而打造，适用于快速搭建和渐进式迭代的后台管理系统
+**Lithe Admin** 是一个轻盈而优雅的后台管理模板，基于 **`Vue3`** **`Naive UI`** **`Vite8`** **`TailwindCSS4`** **`TypeScript`** **`Pinia`** 构建，沿用折纸般的页面结构设计，轻量的业务依赖和低耦合代码配置，专为灵活拓展和个性化定制而打造，适用于快速搭建和渐进式迭代的后台管理系统
 
 ## ✨ 特性
 
