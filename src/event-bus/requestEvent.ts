@@ -1,4 +1,5 @@
 import { useEventBus } from '@vueuse/core'
+import type { AxiosError } from 'axios'
 
 import { useDiscreteApi } from '@/composables'
 import router from '@/router'
@@ -6,9 +7,9 @@ import { useUserStore } from '@/stores'
 
 export type RequestEventPayload =
   | { type: 'request' }
-  | { type: 'requestError'; error: any }
-  | { type: 'response'; data: ResponseBody<any> }
-  | { type: 'responseError'; error: any; code?: number }
+  | { type: 'requestError'; error: AxiosError<unknown, unknown> }
+  | { type: 'response'; data: ResponseBody<unknown> }
+  | { type: 'responseError'; error: AxiosError<ResponseBody<unknown>, unknown>; code?: number }
 
 export const requestEventBus = useEventBus<RequestEventPayload>('request')
 

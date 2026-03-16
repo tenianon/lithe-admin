@@ -2,7 +2,8 @@ import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
 
 import { ScrollContainer } from '../index'
-;(window as any).matchMedia ||= (q: string) => ({
+const win = window as Window & { matchMedia?: typeof window.matchMedia }
+win.matchMedia ||= (q: string): MediaQueryList => ({
   matches: false,
   media: q,
   onchange: null,

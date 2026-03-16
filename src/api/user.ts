@@ -238,7 +238,7 @@ const menu: MenuMixedOptions[] = [
 ]
 
 export async function signIn(data: { account: string; password: string }) {
-  return request({
+  return request<UserInfo>({
     url: '/user/sign-in',
     method: 'post',
     data,

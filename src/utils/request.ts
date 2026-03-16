@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
   },
 )
 
-export async function request<T = any>(config: AxiosRequestConfig) {
+export async function request<T = unknown>(config: AxiosRequestConfig) {
   const response = await axiosInstance.request<ResponseBody<T>>(config)
   return response.data
 }
