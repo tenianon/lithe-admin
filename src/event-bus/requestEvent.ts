@@ -1,9 +1,10 @@
 import { useEventBus } from '@vueuse/core'
-import type { AxiosError } from 'axios'
 
 import { useDiscreteApi } from '@/composables'
 import router from '@/router'
 import { useUserStore } from '@/stores'
+
+import type { AxiosError } from 'axios'
 
 export type RequestEventPayload =
   | { type: 'request' }
