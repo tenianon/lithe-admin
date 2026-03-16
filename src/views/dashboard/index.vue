@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { watchDebounced } from '@vueuse/core'
 import chroma from 'chroma-js'
-import * as echarts from 'echarts'
+import { BarChart, LineChart } from 'echarts/charts'
+import {
+  AxisPointerComponent,
+  GridComponent,
+  LegendComponent,
+  TitleComponent,
+  TooltipComponent,
+} from 'echarts/components'
+import { init, use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
 import { NNumberAnimation } from 'naive-ui'
 import { onMounted, watch, ref, computed, onUnmounted } from 'vue'
 
@@ -9,34 +18,45 @@ import { ScrollContainer } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
 import { twColor } from '@/utils/colors'
 
-import type { ECharts } from 'echarts'
+import type { EChartsType } from 'echarts/core'
 
 defineOptions({
   name: 'Dashboard',
 })
+
+use([
+  BarChart,
+  LineChart,
+  GridComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent,
+  AxisPointerComponent,
+  CanvasRenderer,
+])
 
 const { sidebarMenu, navigationMode, themeColor, isDark } = toRefsPreferencesStore()
 
 const cardList = ref(generateCardData())
 
 const revenueChart = ref<HTMLDivElement | null>(null)
-let revenueChartInstance: ECharts | null = null
+let revenueChartInstance: EChartsType | null = null
 let revenueChartResizeHandler: (() => void) | null = null
 
 const revenueBarChart = ref<HTMLDivElement | null>(null)
-let revenueBarChartInstance: ECharts | null = null
+let revenueBarChartInstance: EChartsType | null = null
 let revenueBarChartResizeHandler: (() => void) | null = null
 
 const revenueBarChart2 = ref<HTMLDivElement | null>(null)
-let revenueBarChart2Instance: ECharts | null = null
+let revenueBarChart2Instance: EChartsType | null = null
 let revenueBarChart2ResizeHandler: (() => void) | null = null
 
 const monthlyRadarChart = ref<HTMLDivElement | null>(null)
-let monthlyRadarChartInstance: ECharts | null = null
+let monthlyRadarChartInstance: EChartsType | null = null
 let monthlyRadarChartResizeHandler: (() => void) | null = null
 
 const highestRevenueChart = ref<HTMLDivElement | null>(null)
-let highestRevenueChartInstance: ECharts | null = null
+let highestRevenueChartInstance: EChartsType | null = null
 let highestRevenueChartResizeHandler: (() => void) | null = null
 let collapseResizeTimeout: ReturnType<typeof setTimeout> | null = null
 
@@ -231,7 +251,7 @@ const chartDataManager = {
 function initRevenueChart() {
   if (!revenueChart.value) return
 
-  const chart = echarts.init(revenueChart.value)
+  const chart = init(revenueChart.value)
 
   const option = {
     title: [
@@ -389,7 +409,7 @@ function initRevenueChart() {
 function initRevenueBarChart() {
   if (!revenueBarChart.value) return
 
-  const chart = echarts.init(revenueBarChart.value)
+  const chart = init(revenueBarChart.value)
 
   const option = {
     color: chartDataManager.getAllColors(),
@@ -550,7 +570,7 @@ function initRevenueBarChart() {
 function initRevenueBarChart2() {
   if (!revenueBarChart2.value) return
 
-  const chart = echarts.init(revenueBarChart2.value)
+  const chart = init(revenueBarChart2.value)
 
   const selectedLine = chartDataManager.getLineByName(barChartSelectedLegend.value)
   if (!selectedLine) return
@@ -625,7 +645,7 @@ function initMonthlyRadarChart() {
 
   const currentMonthData = chartDataManager.getCurrentMonthData(currentMonth)
 
-  const chart = echarts.init(monthlyRadarChart.value)
+  const chart = init(monthlyRadarChart.value)
 
   const option = {
     title: [
@@ -759,7 +779,7 @@ function initHighestRevenueChart() {
     },
   ] as const
 
-  const chart = echarts.init(highestRevenueChart.value)
+  const chart = init(highestRevenueChart.value)
 
   const legendSelected: Record<string, boolean> = {
     max: highestChartSelected.value === 'max',
