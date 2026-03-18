@@ -10,7 +10,9 @@ defineOptions({
   name: 'About',
 })
 
-let codeToHtml: any
+type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+
+let codeToHtml: CodeToHtml | null = null
 
 const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
@@ -200,12 +202,14 @@ const dir = `
 
 onMounted(async () => {
   if (!codeToHtml) {
-    // @ts-ignore
     const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
     codeToHtml = shiki.codeToHtml
   }
 
-  codeToHtml(dir, {
+  const highlight = codeToHtml
+  if (!highlight) return
+
+  highlight(dir, {
     lang: 'markdown',
     themes: {
       dark: 'vitesse-dark',
@@ -215,7 +219,7 @@ onMounted(async () => {
     .then((result: string) => (directoryStructureHighlight.value = result))
     .catch(() => (directoryStructureHighlight.value = dir))
 
-  codeToHtml(JSON.stringify(dependencies, null, 2), {
+  highlight(JSON.stringify(dependencies, null, 2), {
     lang: 'json',
     themes: {
       dark: 'vitesse-dark',
@@ -225,7 +229,7 @@ onMounted(async () => {
     .then((result: string) => (dependenciesCodeHighlight.value = result))
     .catch(() => (dependenciesCodeHighlight.value = JSON.stringify(dependencies, null, 2)))
 
-  codeToHtml(JSON.stringify(devDependencies, null, 2), {
+  highlight(JSON.stringify(devDependencies, null, 2), {
     lang: 'json',
     themes: {
       dark: 'vitesse-dark',

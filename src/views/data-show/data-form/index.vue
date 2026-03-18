@@ -35,7 +35,9 @@ defineOptions({
   name: 'DataForm',
 })
 
-let codeToHtml: any
+type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+
+let codeToHtml: CodeToHtml | null = null
 
 const { isMaxMd, isMaxLg, isMaxXl } = useInjection(mediaQueryInjectionKey)
 
@@ -175,12 +177,14 @@ watch(
   form,
   async (newForm) => {
     if (!codeToHtml) {
-      // @ts-ignore
       const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
       codeToHtml = shiki.codeToHtml
     }
 
-    codeToHtml(JSON.stringify(newForm, null, 2), {
+    const highlight = codeToHtml
+    if (!highlight) return
+
+    highlight(JSON.stringify(newForm, null, 2), {
       lang: 'json',
       themes: {
         dark: 'vitesse-dark',
@@ -190,7 +194,7 @@ watch(
       .then((result: string) => (formCodeHighlight.value = result))
       .catch(() => (formCodeHighlight.value = JSON.stringify(newForm, null, 2)))
 
-    codeToHtml(JSON.stringify(rules, null, 2), {
+    highlight(JSON.stringify(rules, null, 2), {
       lang: 'json',
       themes: {
         dark: 'vitesse-dark',

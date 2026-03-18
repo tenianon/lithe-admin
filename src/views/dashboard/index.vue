@@ -18,7 +18,26 @@ import { ScrollContainer } from '@/components'
 import { toRefsPreferencesStore } from '@/stores'
 import { twColor } from '@/utils/colors'
 
-import type { EChartsType } from 'echarts/core'
+import type { BarSeriesOption, LineSeriesOption } from 'echarts/charts'
+import type {
+  AxisPointerComponentOption,
+  GridComponentOption,
+  LegendComponentOption,
+  TitleComponentOption,
+  TooltipComponentOption,
+} from 'echarts/components'
+import type {
+  ComposeOption,
+  EChartsType,
+  LinearGradientObject,
+} from 'echarts/core'
+import type {
+  AnimationDelayCallback,
+  CallbackDataParams,
+  TopLevelFormatterParams,
+  XAXisOption,
+  YAXisOption,
+} from 'echarts/types/dist/shared'
 
 defineOptions({
   name: 'Dashboard',
@@ -34,6 +53,69 @@ use([
   AxisPointerComponent,
   CanvasRenderer,
 ])
+
+type DashboardCartesianComponentOption =
+  | AxisPointerComponentOption
+  | GridComponentOption
+  | LegendComponentOption
+  | TitleComponentOption
+  | TooltipComponentOption
+  | XAXisOption
+  | YAXisOption
+type DashboardLineChartOption = ComposeOption<
+  DashboardCartesianComponentOption | LineSeriesOption
+>
+type DashboardBarChartOption = ComposeOption<
+  DashboardCartesianComponentOption | BarSeriesOption
+>
+
+type DashboardTooltipFormatter = Exclude<NonNullable<TooltipComponentOption['formatter']>, string>
+type LegendSelectedMap = NonNullable<LegendComponentOption['selected']>
+type DashboardLegendData = NonNullable<LegendComponentOption['data']>
+type DashboardLineSeriesDataItem = Extract<NonNullable<LineSeriesOption['data']>[number], number>
+type DashboardLineSeriesData = DashboardLineSeriesDataItem[]
+type DashboardBarSeriesData = Exclude<NonNullable<BarSeriesOption['data']>, ArrayLike<number>>
+type DashboardAnimationDelay = AnimationDelayCallback
+type HighestChartSelectedValue = 'max' | 'min'
+
+interface DashboardCardData {
+  title: string
+  value: number
+  percentage: number
+  iconClass: string
+  iconBgClass: string
+  precision: number
+  description: string
+}
+
+interface BusinessLineConfig {
+  name: string
+  color: string
+  dataRange: {
+    min: number
+    max: number
+  }
+}
+
+interface BusinessLineData extends BusinessLineConfig {
+  data: DashboardLineSeriesData
+}
+
+interface CurrentMonthRevenueData {
+  name: string
+  value: number
+  color: string
+}
+
+interface DashboardTooltipDataParams extends CallbackDataParams {
+  axisValue?: string | number
+  axisValueLabel?: string
+}
+
+interface LegendSelectChangedEvent {
+  name: string
+  selected: LegendSelectedMap
+}
 
 const { sidebarMenu, navigationMode, themeColor, isDark } = toRefsPreferencesStore()
 
@@ -64,7 +146,7 @@ const CHART_CONFIG = {
   MONTHS: Array.from({ length: 12 }, (_, i) => `${i + 1}月`),
 }
 
-const getBusinessLinesConfig = () =>
+const getBusinessLinesConfig = (): readonly BusinessLineConfig[] =>
   [
     {
       name: '主要收入',
@@ -91,17 +173,17 @@ const getBusinessLinesConfig = () =>
       color: twColor('pink', 500),
       dataRange: { min: 8000, max: 25000 },
     },
-  ] as const
+  ]
 
-const barChartSelectedLegend = ref(getBusinessLinesConfig()[0].name)
+const barChartSelectedLegend = ref<string>(getBusinessLinesConfig()[0].name)
 
-const revenueChartSelected = ref<Record<string, boolean>>(
+const revenueChartSelected = ref<LegendSelectedMap>(
   Object.fromEntries(getBusinessLinesConfig().map((line) => [line.name, true])),
 )
 
-const highestChartSelected = ref<'max' | 'min'>('max')
+const highestChartSelected = ref<HighestChartSelectedValue>('max')
 
-function generateCardData() {
+function generateCardData(): DashboardCardData[] {
   const now = new Date()
   const currentMonth = now.getMonth() + 1
 
@@ -160,8 +242,8 @@ const generateRandomData = (
   baseMin: number,
   baseMax: number,
   trend: 'up' | 'down' | 'stable' = 'stable',
-) => {
-  const data = []
+): DashboardLineSeriesData => {
+  const data: number[] = []
   let currentBase = (baseMin + baseMax) / 2
 
   for (let i = 0; i < 12; i++) {
@@ -189,41 +271,96 @@ const businessLinesWithData = computed(() =>
   })),
 )
 
-const createTooltipConfig = (formatter?: any) => ({
-  trigger: 'axis',
-  backgroundColor: isDark.value ? twColor('neutral', 750) : '#fff',
-  borderWidth: 1,
-  borderColor: isDark.value ? twColor('neutral', 700) : twColor('neutral', 150),
-  padding: 8,
-  extraCssText: 'box-shadow: none;',
-  textStyle: {
-    color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
-    fontSize: 12,
-  },
-  axisPointer: {
-    type: 'none',
-  },
-  ...(formatter && { formatter }),
-})
+function normalizeTooltipParams(params: TopLevelFormatterParams): DashboardTooltipDataParams[] {
+  return Array.isArray(params) ? params : [params]
+}
+
+function createAnimationDelay(step: number): DashboardAnimationDelay {
+  return (idx) => idx * step
+}
+
+function createAreaGradient(color: string): LinearGradientObject {
+  return {
+    type: 'linear',
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 1,
+    colorStops: [
+      { offset: 0, color: chroma(color).alpha(0.12).hex() },
+      { offset: 1, color: chroma(color).alpha(0.02).hex() },
+    ],
+  }
+}
+
+function resolveTooltipAxisLabel(param: DashboardTooltipDataParams): string {
+  return String(param.axisValueLabel ?? param.axisValue ?? param.name)
+}
+
+function formatMetricValue(value: CallbackDataParams['value']): string {
+  if (typeof value === 'number') return value.toLocaleString()
+  if (typeof value === 'string') return value
+
+  if (Array.isArray(value)) {
+    return value.join(', ')
+  }
+
+  if (value && typeof value === 'object' && 'value' in value) {
+    const rawValue = value.value
+    if (typeof rawValue === 'number') return rawValue.toLocaleString()
+    if (typeof rawValue === 'string') return rawValue
+    if (Array.isArray(rawValue)) return rawValue.join(', ')
+  }
+
+  return ''
+}
+
+function resolveTooltipColor(param: CallbackDataParams, fallback: string): string {
+  return typeof param.color === 'string' ? param.color : fallback
+}
+
+function createTooltipConfig(formatter?: DashboardTooltipFormatter): TooltipComponentOption {
+  const tooltipConfig: TooltipComponentOption = {
+    trigger: 'axis',
+    backgroundColor: isDark.value ? twColor('neutral', 750) : '#fff',
+    borderWidth: 1,
+    borderColor: isDark.value ? twColor('neutral', 700) : twColor('neutral', 150),
+    padding: 8,
+    extraCssText: 'box-shadow: none;',
+    textStyle: {
+      color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
+      fontSize: 12,
+    },
+    axisPointer: {
+      type: 'none',
+    },
+  }
+
+  if (formatter) {
+    tooltipConfig.formatter = formatter
+  }
+
+  return tooltipConfig
+}
 
 const chartDataManager = {
   getMonths: () => CHART_CONFIG.MONTHS,
 
-  getAllLines: () => businessLinesWithData.value,
+  getAllLines: (): BusinessLineData[] => businessLinesWithData.value,
 
-  getLineByName: (name: string) => {
+  getLineByName: (name: string): BusinessLineData | undefined => {
     return businessLinesWithData.value.find((line) => line.name === name)
   },
 
-  getAllNames: () => {
+  getAllNames: (): string[] => {
     return businessLinesWithData.value.map((line) => line.name)
   },
 
-  getAllColors: () => {
+  getAllColors: (): string[] => {
     return businessLinesWithData.value.map((line) => line.color)
   },
 
-  getHighestRevenueLine: () => {
+  getHighestRevenueLine: (): BusinessLineData => {
     return businessLinesWithData.value.reduce((prev, current) => {
       const prevTotal = prev.data.reduce((sum, value) => sum + value, 0)
       const currentTotal = current.data.reduce((sum, value) => sum + value, 0)
@@ -231,7 +368,7 @@ const chartDataManager = {
     })
   },
 
-  getLowestRevenueLine: () => {
+  getLowestRevenueLine: (): BusinessLineData => {
     return businessLinesWithData.value.reduce((prev, current) => {
       const prevTotal = prev.data.reduce((sum, value) => sum + value, 0)
       const currentTotal = current.data.reduce((sum, value) => sum + value, 0)
@@ -239,7 +376,7 @@ const chartDataManager = {
     })
   },
 
-  getCurrentMonthData: (month: number) => {
+  getCurrentMonthData: (month: number): CurrentMonthRevenueData[] => {
     return businessLinesWithData.value.map((line) => ({
       name: line.name,
       value: line.data[month],
@@ -252,6 +389,34 @@ function initRevenueChart() {
   if (!revenueChart.value) return
 
   const chart = init(revenueChart.value)
+  const series: LineSeriesOption[] = businessLinesWithData.value.map((line, idx) => ({
+    name: line.name,
+    type: 'line',
+    data: line.data,
+    symbol: 'circle',
+    showSymbol: false,
+    smooth: true,
+    lineStyle: {
+      color: line.color,
+      width: idx < 2 ? 2 : 1,
+      type: idx < 2 ? 'solid' : 'dashed',
+    },
+    itemStyle: {
+      color: line.color,
+    },
+    emphasis: {
+      focus: 'series',
+      symbolSize: 6,
+      itemStyle: {
+        color: line.color,
+        borderColor: line.color,
+        borderWidth: 2,
+      },
+    },
+    areaStyle: {
+      color: createAreaGradient(line.color),
+    },
+  }))
 
   const option = {
     title: [
@@ -276,14 +441,18 @@ function initRevenueChart() {
         },
       },
     ],
-    tooltip: createTooltipConfig((params: any) => {
-      const date = params[0].axisValue
+    tooltip: createTooltipConfig((params) => {
+      const items = normalizeTooltipParams(params)
+      const firstItem = items[0]
+      if (!firstItem) return ''
+
+      const date = resolveTooltipAxisLabel(firstItem)
       let result = `<div>${date}数据</div>`
-      params.forEach((item: any) => {
-        const value = item.value.toLocaleString()
+      items.forEach((item) => {
+        const value = formatMetricValue(item.value)
         result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
-          <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${item.color};"></span>
+          <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${resolveTooltipColor(item, themeColor.value)};"></span>
           <span style="margin-right: 10px">${item.seriesName}</span>
           <span>${value}</span>
         </div>
@@ -347,57 +516,19 @@ function initRevenueChart() {
         },
       },
     },
-    series: businessLinesWithData.value.map((line, idx) => ({
-      name: line.name,
-      type: 'line',
-      data: line.data,
-      symbol: 'circle',
-      showSymbol: false,
-      smooth: true,
-      lineStyle: {
-        color: line.color,
-        width: idx < 2 ? 2 : 1,
-        type: idx < 2 ? 'solid' : 'dashed',
-      },
-      itemStyle: {
-        color: line.color,
-      },
-      emphasis: {
-        focus: 'series',
-        symbolSize: 6,
-        itemStyle: {
-          color: line.color,
-          borderColor: line.color,
-          borderWidth: 2,
-        },
-      },
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            { offset: 0, color: chroma(line.color).alpha(0.12).hex() },
-            { offset: 1, color: chroma(line.color).alpha(0.02).hex() },
-          ],
-        },
-      },
-    })),
+    series,
 
     animationDuration: 1000,
     animationEasing: 'cubicOut' as const,
-    animationDelay(idx: number) {
-      return idx * 100
-    },
-  }
+    animationDelay: createAnimationDelay(100),
+  } satisfies DashboardLineChartOption
 
   chart.setOption(option)
 
-  chart.on('legendselectchanged', (params: any) => {
-    if (params?.selected) {
-      revenueChartSelected.value = params.selected
+  chart.on('legendselectchanged', (params) => {
+    const legendParams = params as LegendSelectChangedEvent
+    if (legendParams.selected) {
+      revenueChartSelected.value = legendParams.selected
     }
   })
 
@@ -410,6 +541,41 @@ function initRevenueBarChart() {
   if (!revenueBarChart.value) return
 
   const chart = init(revenueBarChart.value)
+  const legendData: DashboardLegendData = businessLinesWithData.value.map((line) => ({
+    name: line.name,
+    icon: 'circle',
+    itemStyle: {
+      borderColor: line.color,
+    },
+  }))
+  const series: LineSeriesOption[] = businessLinesWithData.value.map((line) => ({
+    name: line.name,
+    type: 'line',
+    stack: 'Total',
+    data: line.data,
+    symbol: 'circle',
+    symbolSize: 6,
+    showSymbol: true,
+    lineStyle: {
+      width: 2,
+    },
+    itemStyle: {
+      borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
+      borderWidth: 2,
+    },
+    emphasis: {
+      focus: 'series',
+      symbolSize: 6,
+      itemStyle: {
+        color: line.color,
+        borderColor: line.color,
+        borderWidth: 2,
+      },
+    },
+    areaStyle: {
+      color: createAreaGradient(line.color),
+    },
+  }))
 
   const option = {
     color: chartDataManager.getAllColors(),
@@ -443,58 +609,19 @@ function initRevenueBarChart() {
           line.name === barChartSelectedLegend.value,
         ]),
       ),
-      data: businessLinesWithData.value.map((line) => ({
-        name: line.name,
-        icon: 'circle',
-        itemStyle: {
-          borderColor: line.color,
-        },
-      })),
+      data: legendData,
     },
-    series: businessLinesWithData.value.map((line) => ({
-      name: line.name,
-      type: 'line',
-      stack: 'Total',
-      data: line.data,
-      symbol: 'circle',
-      symbolSize: 6,
-      showSymbol: true,
-      lineStyle: {
-        width: 2,
-      },
-      itemStyle: {
-        borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
-        borderWidth: 2,
-      },
-      emphasis: {
-        focus: 'series',
-        symbolSize: 6,
-        itemStyle: {
-          color: line.color,
-          borderColor: line.color,
-          borderWidth: 2,
-        },
-      },
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            { offset: 0, color: chroma(line.color).alpha(0.12).hex() },
-            { offset: 1, color: chroma(line.color).alpha(0.02).hex() },
-          ],
-        },
-      },
-    })),
-    tooltip: createTooltipConfig((params: any) => {
-      const color = params[0].color
-      const date = params[0].axisValue
-      const value = params[0].value.toLocaleString()
+    series,
+    tooltip: createTooltipConfig((params) => {
+      const items = normalizeTooltipParams(params)
+      const firstItem = items[0]
+      if (!firstItem) return ''
+
+      const color = resolveTooltipColor(firstItem, themeColor.value)
+      const date = resolveTooltipAxisLabel(firstItem)
+      const value = formatMetricValue(firstItem.value)
       let result = `<div>${date}数据</div>`
-      params.forEach((item: any) => {
+      items.forEach((item) => {
         result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${color};"></span>
@@ -508,10 +635,8 @@ function initRevenueBarChart() {
 
     animationDuration: 1000,
     animationEasing: 'cubicOut' as const,
-    animationDelay(idx: number) {
-      return idx * 100
-    },
-  }
+    animationDelay: createAnimationDelay(100),
+  } satisfies DashboardLineChartOption
 
   chart.setOption(option)
 
@@ -519,20 +644,44 @@ function initRevenueBarChart() {
   revenueBarChartResizeHandler = () => chart.resize()
   window.addEventListener('resize', revenueBarChartResizeHandler, { passive: true })
 
-  chart.on('legendselectchanged', (params: any) => {
-    barChartSelectedLegend.value = params.name
+  chart.on('legendselectchanged', (params) => {
+    const legendParams = params as LegendSelectChangedEvent
+    barChartSelectedLegend.value = legendParams.name
 
     if (revenueBarChart2Instance) {
-      const selectedLine = chartDataManager.getLineByName(params.name)
+      const selectedLine = chartDataManager.getLineByName(legendParams.name)
       if (!selectedLine) return
 
-      revenueBarChart2Instance.setOption({
-        tooltip: createTooltipConfig((params: any) => {
-          const date = params[0].axisValue
-          const seriesName = params[0].seriesName
-          const value = params[0].value.toLocaleString()
+      const series: BarSeriesOption[] = [
+        {
+          name: legendParams.name,
+          type: 'bar',
+          barWidth: '60%',
+          data: selectedLine.data,
+          itemStyle: {
+            color: chroma(selectedLine.color).alpha(0.15).hex(),
+            borderWidth: 0,
+            borderRadius: [3, 3, 0, 0],
+          },
+          emphasis: {
+            itemStyle: {
+              color: chroma(selectedLine.color).alpha(0.3).hex(),
+              borderWidth: 0,
+            },
+          },
+        },
+      ]
+      const updateOption = {
+        tooltip: createTooltipConfig((tooltipParams) => {
+          const items = normalizeTooltipParams(tooltipParams)
+          const firstItem = items[0]
+          if (!firstItem) return ''
+
+          const date = resolveTooltipAxisLabel(firstItem)
+          const seriesName = firstItem.seriesName
+          const value = formatMetricValue(firstItem.value)
           let result = `<div>${date}数据</div>`
-          params.forEach(() => {
+          items.forEach(() => {
             result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${selectedLine.color};"></span>
@@ -543,26 +692,10 @@ function initRevenueBarChart() {
           })
           return result
         }),
-        series: [
-          {
-            name: params.name,
-            type: 'bar',
-            barWidth: '60%',
-            data: selectedLine.data,
-            itemStyle: {
-              color: chroma(selectedLine.color).alpha(0.15).hex(),
-              borderWidth: 0,
-              borderRadius: [3, 3, 0, 0],
-            },
-            emphasis: {
-              itemStyle: {
-                color: chroma(selectedLine.color).alpha(0.3).hex(),
-                borderWidth: 0,
-              },
-            },
-          },
-        ],
-      })
+        series,
+      } satisfies DashboardBarChartOption
+
+      revenueBarChart2Instance.setOption(updateOption)
     }
   })
 }
@@ -574,16 +707,39 @@ function initRevenueBarChart2() {
 
   const selectedLine = chartDataManager.getLineByName(barChartSelectedLegend.value)
   if (!selectedLine) return
+  const series: BarSeriesOption[] = [
+    {
+      name: barChartSelectedLegend.value,
+      type: 'bar',
+      barWidth: '60%',
+      data: selectedLine.data,
+      itemStyle: {
+        color: chroma(selectedLine.color).alpha(0.15).hex(),
+        borderWidth: 0,
+        borderRadius: [3, 3, 0, 0],
+      },
+      emphasis: {
+        itemStyle: {
+          color: chroma(selectedLine.color).alpha(0.3).hex(),
+          borderWidth: 0,
+        },
+      },
+    },
+  ]
 
   const option = {
     color: chartDataManager.getAllColors(),
     grid: { left: 0, right: 0, top: 0, bottom: 0, containLabel: false },
-    tooltip: createTooltipConfig((params: any) => {
-      const date = params[0].axisValue
-      const value = params[0].value.toLocaleString()
-      const seriesName = params[0].seriesName
+    tooltip: createTooltipConfig((params) => {
+      const items = normalizeTooltipParams(params)
+      const firstItem = items[0]
+      if (!firstItem) return ''
+
+      const date = resolveTooltipAxisLabel(firstItem)
+      const value = formatMetricValue(firstItem.value)
+      const seriesName = firstItem.seriesName
       let result = `<div>${date}数据</div>`
-      params.forEach(() => {
+      items.forEach(() => {
         result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:4px; width:10px; height:10px; border-radius:50%; background-color:${selectedLine.color};"></span>
@@ -603,32 +759,12 @@ function initRevenueBarChart2() {
       type: 'value',
       show: false,
     },
-    series: [
-      {
-        name: barChartSelectedLegend.value,
-        type: 'bar',
-        barWidth: '60%',
-        data: selectedLine.data,
-        itemStyle: {
-          color: chroma(selectedLine.color).alpha(0.15).hex(),
-          borderWidth: 0,
-          borderRadius: [3, 3, 0, 0],
-        },
-        emphasis: {
-          itemStyle: {
-            color: chroma(selectedLine.color).alpha(0.3).hex(),
-            borderWidth: 0,
-          },
-        },
-      },
-    ],
+    series,
 
     animationDuration: 1000,
     animationEasing: 'cubicOut' as const,
-    animationDelay(idx: number) {
-      return idx * 50
-    },
-  }
+    animationDelay: createAnimationDelay(50),
+  } satisfies DashboardBarChartOption
 
   chart.setOption(option)
 
@@ -646,6 +782,13 @@ function initMonthlyRadarChart() {
   const currentMonthData = chartDataManager.getCurrentMonthData(currentMonth)
 
   const chart = init(monthlyRadarChart.value)
+  const seriesData: DashboardBarSeriesData = currentMonthData.map((item) => ({
+    value: item.value,
+    itemStyle: {
+      color: chroma(item.color).alpha(0.35).hex(),
+      borderRadius: [3, 3, 0, 0],
+    },
+  }))
 
   const option = {
     title: [
@@ -670,12 +813,19 @@ function initMonthlyRadarChart() {
         },
       },
     ],
-    tooltip: createTooltipConfig((params: any) => {
-      const color = params[0].color.slice(0, -2)
-      const date = params[0].axisValue
-      const value = params[0].data.value
+    tooltip: createTooltipConfig((params) => {
+      const items = normalizeTooltipParams(params)
+      const firstItem = items[0]
+      if (!firstItem) return ''
+
+      const currentItem = currentMonthData[firstItem.dataIndex]
+      if (!currentItem) return ''
+
+      const color = currentItem.color
+      const date = resolveTooltipAxisLabel(firstItem)
+      const value = currentItem.value
       let result = `<div>${date}</div>`
-      params.forEach(() => {
+      items.forEach(() => {
         result += `
         <div style="display: flex; align-items: center; margin-top: 4px;">
           <span style="display:inline-block; margin-right:8px; width:10px; height:10px; border-radius:50%; background-color:${color};"></span>
@@ -714,32 +864,26 @@ function initMonthlyRadarChart() {
       axisLabel: {
         color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 12,
-        formatter(value: number) {
-          if (value >= 1000) {
-            return `${(value / 1000).toFixed(0)}k`
-          }
-          return value
+          formatter(value: number) {
+            if (value >= 1000) {
+              return `${(value / 1000).toFixed(0)}k`
+            }
+            return String(value)
+          },
         },
-      },
     },
     series: [
       {
         type: 'bar',
         barWidth: '50%',
-        data: currentMonthData.map((item) => ({
-          value: item.value,
-          itemStyle: {
-            color: chroma(item.color).alpha(0.35).hex(),
-            borderRadius: [3, 3, 0, 0],
-          },
-        })),
+        data: seriesData,
         label: {
           show: true,
           position: 'top',
           distance: 10,
           color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
           fontSize: 12,
-          formatter(params: any) {
+          formatter(params: CallbackDataParams) {
             const index = params.dataIndex
             return `${chartDataManager.getAllNames()[index]}`
           },
@@ -748,7 +892,7 @@ function initMonthlyRadarChart() {
     ],
     animationDuration: 1000,
     animationEasing: 'cubicOut' as const,
-  }
+  } satisfies DashboardBarChartOption
 
   chart.setOption(option)
   monthlyRadarChartInstance = chart
@@ -781,10 +925,39 @@ function initHighestRevenueChart() {
 
   const chart = init(highestRevenueChart.value)
 
-  const legendSelected: Record<string, boolean> = {
+  const legendSelected: LegendSelectedMap = {
     max: highestChartSelected.value === 'max',
     min: highestChartSelected.value === 'min',
   }
+  const legendData: DashboardLegendData = chartData.map((item) => ({
+    name: item.legendName,
+    itemStyle: {
+      borderColor: item.color,
+      borderWidth: 0,
+    },
+  }))
+  const series: LineSeriesOption[] = chartData.map((item) => ({
+    name: item.legendName,
+    type: 'line',
+    step: 'middle',
+    data: item.data,
+    left: 0,
+    symbol: 'circle',
+    symbolSize: 6,
+    showSymbol: true,
+    lineStyle: {
+      width: 2,
+      color: item.color,
+    },
+    itemStyle: {
+      color: item.color,
+      borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
+      borderWidth: 2,
+    },
+    areaStyle: {
+      color: createAreaGradient(item.color),
+    },
+  }))
 
   const option = {
     title: [
@@ -850,25 +1023,23 @@ function initHighestRevenueChart() {
         color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 14,
       },
-      data: chartData.map((item) => ({
-        name: item.legendName,
-        itemStyle: {
-          borderColor: item.color,
-          borderWidth: 0,
-        },
-      })),
+      data: legendData,
       selectedMode: 'single',
       selected: Object.fromEntries(
         chartData.map((item) => [item.legendName, legendSelected[item.legendValue] ?? false]),
       ),
     },
-    tooltip: createTooltipConfig((params: any) => {
-      const color = params[0].color
-      const date = params[0].axisValue
-      const value = params[0].value.toLocaleString()
+    tooltip: createTooltipConfig((params) => {
+      const items = normalizeTooltipParams(params)
+      const firstItem = items[0]
+      if (!firstItem) return ''
 
-      const chartItem = chartData.find((item) => item.legendName === params[0].seriesName)
-      const realName = chartItem ? chartItem.businessName : params[0].seriesName
+      const color = resolveTooltipColor(firstItem, chartData[0].color)
+      const date = resolveTooltipAxisLabel(firstItem)
+      const value = formatMetricValue(firstItem.value)
+
+      const chartItem = chartData.find((item) => item.legendName === firstItem.seriesName)
+      const realName = chartItem ? chartItem.businessName : firstItem.seriesName
       let result = `<div>${date}数据</div>`
       result += `
           <div style="display: flex; align-items: center; margin-top: 4px;">
@@ -879,56 +1050,24 @@ function initHighestRevenueChart() {
         `
       return result
     }),
-    series: chartData.map((item) => ({
-      name: item.legendName,
-      type: 'line',
-      step: 'middle',
-      data: item.data,
-      left: 0,
-      symbol: 'circle',
-      symbolSize: 6,
-      showSymbol: true,
-      lineStyle: {
-        width: 2,
-        color: item.color,
-      },
-      itemStyle: {
-        color: item.color,
-        borderColor: isDark.value ? twColor('neutral', 800) : twColor('neutral', 50),
-        borderWidth: 2,
-      },
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            { offset: 0, color: chroma(item.color).alpha(0.12).hex() },
-            { offset: 1, color: chroma(item.color).alpha(0.02).hex() },
-          ],
-        },
-      },
-    })),
+    series,
     animationDuration: 1000,
     animationEasing: 'cubicOut' as const,
-    animationDelay(idx: number) {
-      return idx * 100
-    },
-  }
+    animationDelay: createAnimationDelay(100),
+  } satisfies DashboardLineChartOption
 
   chart.setOption(option)
   highestRevenueChartInstance = chart
   highestRevenueChartResizeHandler = () => chart.resize()
   window.addEventListener('resize', highestRevenueChartResizeHandler, { passive: true })
 
-  chart.on('legendselectchanged', (params: any) => {
-    const chartItem = chartData.find((item) => item.legendName === params.name)
+  chart.on('legendselectchanged', (params) => {
+    const legendParams = params as LegendSelectChangedEvent
+    const chartItem = chartData.find((item) => item.legendName === legendParams.name)
     if (!chartItem) return
     const isHighest = chartItem.legendValue === 'max'
     highestChartSelected.value = isHighest ? 'max' : 'min'
-    chart.setOption({
+    const updateOption = {
       title: [
         {
           text: isHighest ? '年度最高收入业务' : '年度最低收入业务',
@@ -945,7 +1084,9 @@ function initHighestRevenueChart() {
           },
         },
       ],
-    })
+    } satisfies DashboardLineChartOption
+
+    chart.setOption(updateOption)
   })
 }
 

@@ -13,7 +13,9 @@ defineOptions({
   name: 'DragDrop',
 })
 
-let codeToHtml: any
+type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+
+let codeToHtml: CodeToHtml | null = null
 
 const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
@@ -74,12 +76,14 @@ watch(
     const [baseList, gridList, cloneList2] = newVal
 
     if (!codeToHtml) {
-      // @ts-ignore
       const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
       codeToHtml = shiki.codeToHtml
     }
 
-    codeToHtml(JSON.stringify(baseList, null, 2), {
+    const highlight = codeToHtml
+    if (!highlight) return
+
+    highlight(JSON.stringify(baseList, null, 2), {
       lang: 'json',
       themes: {
         dark: 'vitesse-dark',
@@ -89,7 +93,7 @@ watch(
       .then((result: string) => (baseListCodeHighlight.value = result))
       .catch(() => (baseListCodeHighlight.value = JSON.stringify(baseList, null, 2)))
 
-    codeToHtml(JSON.stringify(gridList, null, 2), {
+    highlight(JSON.stringify(gridList, null, 2), {
       lang: 'json',
       themes: {
         dark: 'vitesse-dark',
@@ -99,7 +103,7 @@ watch(
       .then((result: string) => (gridListCodeHighlight.value = result))
       .catch(() => (gridListCodeHighlight.value = JSON.stringify(gridList, null, 2)))
 
-    codeToHtml(JSON.stringify(cloneList2, null, 2), {
+    highlight(JSON.stringify(cloneList2, null, 2), {
       lang: 'json',
       themes: {
         dark: 'vitesse-dark',
