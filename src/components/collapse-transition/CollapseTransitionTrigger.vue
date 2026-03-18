@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import CollapseTransition from './CollapseTransition.vue'
 
-import type { CollapseTransitionTriggerProps, CollapseTransitionTriggerSlot } from './interface'
+import type { CollapseTransitionTriggerProps, CollapseTransitionTriggerSlots } from './interface'
 
 const {
   defaultCollapsed,
@@ -15,7 +15,7 @@ const {
   ...props
 } = defineProps<CollapseTransitionTriggerProps>()
 
-defineSlots<CollapseTransitionTriggerSlot>()
+defineSlots<CollapseTransitionTriggerSlots>()
 
 const collapsed = defineModel<boolean>({ default: undefined })
 

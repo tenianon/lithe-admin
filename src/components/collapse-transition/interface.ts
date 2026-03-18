@@ -16,7 +16,7 @@ export type CollapseTransitionTriggerProps = Omit<CollapseTransitionProps, 'disp
   defaultCollapsed?: boolean
 }
 
-export interface CollapseTransitionTriggerSlot {
+export interface CollapseTransitionTriggerSlots {
   default(): VNodeChild
   trigger(props: { collapsed: boolean }): VNodeChild
 }
