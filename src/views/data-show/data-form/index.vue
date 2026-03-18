@@ -35,7 +35,13 @@ defineOptions({
   name: 'DataForm',
 })
 
-type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+type CodeToHtml = (
+  code: string,
+  options: { lang: string; themes: { dark: string; light: string } },
+) => Promise<string>
+
+const SHIKI_CDN_URL = 'https://esm.sh/shiki@3.22.0'
+const shikiThemes = { dark: 'vitesse-dark', light: 'vitesse-light' }
 
 let codeToHtml: CodeToHtml | null = null
 
@@ -61,9 +67,8 @@ const [form, setForm, reset] = useResettableReactive<DataForm>({
   address: '',
 })
 
-const formCodeHighlight = ref()
-
-const rulesCodeHighlight = ref()
+const formCodeHighlight = ref('')
+const rulesCodeHighlight = ref('')
 
 const formDisabled = ref(false)
 
@@ -173,36 +178,25 @@ function removePhoneField(index: number) {
   form.phones.splice(index, 1)
 }
 
+function highlightCode(code: string, lang: string) {
+  return (
+    codeToHtml?.(code, { lang, themes: shikiThemes }).catch(() => code) ?? Promise.resolve(code)
+  )
+}
+
 watch(
   form,
   async (newForm) => {
-    if (!codeToHtml) {
-      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
-      codeToHtml = shiki.codeToHtml
-    }
+    codeToHtml ??= ((await import(/* @vite-ignore */ SHIKI_CDN_URL)) as { codeToHtml: CodeToHtml })
+      .codeToHtml
 
-    const highlight = codeToHtml
-    if (!highlight) return
+    const formCode = JSON.stringify(newForm, null, 2)
+    const rulesCode = JSON.stringify(rules, null, 2)
 
-    highlight(JSON.stringify(newForm, null, 2), {
-      lang: 'json',
-      themes: {
-        dark: 'vitesse-dark',
-        light: 'vitesse-light',
-      },
-    })
-      .then((result: string) => (formCodeHighlight.value = result))
-      .catch(() => (formCodeHighlight.value = JSON.stringify(newForm, null, 2)))
-
-    highlight(JSON.stringify(rules, null, 2), {
-      lang: 'json',
-      themes: {
-        dark: 'vitesse-dark',
-        light: 'vitesse-light',
-      },
-    })
-      .then((result: string) => (rulesCodeHighlight.value = result))
-      .catch(() => (rulesCodeHighlight.value = JSON.stringify(rules, null, 2)))
+    ;[formCodeHighlight.value, rulesCodeHighlight.value] = await Promise.all([
+      highlightCode(formCode, 'json'),
+      highlightCode(rulesCode, 'json'),
+    ])
   },
   {
     immediate: true,

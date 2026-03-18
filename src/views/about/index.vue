@@ -6,11 +6,18 @@ import packageJson from '@/../package.json'
 import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
+
 defineOptions({
   name: 'About',
 })
 
-type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+type CodeToHtml = (
+  code: string,
+  options: { lang: string; themes: { dark: string; light: string } },
+) => Promise<string>
+
+const SHIKI_CDN_URL = 'https://esm.sh/shiki@3.22.0'
+const shikiThemes = { dark: 'vitesse-dark', light: 'vitesse-light' }
 
 let codeToHtml: CodeToHtml | null = null
 
@@ -200,44 +207,28 @@ const dir = `
 ├── 📄 vite.config.ts
 └── 📄 vitest.config.ts`
 
+function highlightCode(code: string, lang: string) {
+  return (
+    codeToHtml?.(code, { lang, themes: shikiThemes }).catch(() => code) ?? Promise.resolve(code)
+  )
+}
+
 onMounted(async () => {
-  if (!codeToHtml) {
-    const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
-    codeToHtml = shiki.codeToHtml
-  }
+  codeToHtml ??= ((await import(/* @vite-ignore */ SHIKI_CDN_URL)) as { codeToHtml: CodeToHtml })
+    .codeToHtml
 
-  const highlight = codeToHtml
-  if (!highlight) return
+  const dependenciesCode = JSON.stringify(dependencies, null, 2)
+  const devDependenciesCode = JSON.stringify(devDependencies, null, 2)
 
-  highlight(dir, {
-    lang: 'markdown',
-    themes: {
-      dark: 'vitesse-dark',
-      light: 'vitesse-light',
-    },
-  })
-    .then((result: string) => (directoryStructureHighlight.value = result))
-    .catch(() => (directoryStructureHighlight.value = dir))
-
-  highlight(JSON.stringify(dependencies, null, 2), {
-    lang: 'json',
-    themes: {
-      dark: 'vitesse-dark',
-      light: 'vitesse-light',
-    },
-  })
-    .then((result: string) => (dependenciesCodeHighlight.value = result))
-    .catch(() => (dependenciesCodeHighlight.value = JSON.stringify(dependencies, null, 2)))
-
-  highlight(JSON.stringify(devDependencies, null, 2), {
-    lang: 'json',
-    themes: {
-      dark: 'vitesse-dark',
-      light: 'vitesse-light',
-    },
-  })
-    .then((result: string) => (devDependenciesCodeHighlight.value = result))
-    .catch(() => (devDependenciesCodeHighlight.value = JSON.stringify(devDependencies, null, 2)))
+  ;[
+    directoryStructureHighlight.value,
+    dependenciesCodeHighlight.value,
+    devDependenciesCodeHighlight.value,
+  ] = await Promise.all([
+    highlightCode(dir, 'markdown'),
+    highlightCode(dependenciesCode, 'json'),
+    highlightCode(devDependenciesCode, 'json'),
+  ])
 })
 </script>
 <template>

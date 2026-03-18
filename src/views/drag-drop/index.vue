@@ -13,7 +13,13 @@ defineOptions({
   name: 'DragDrop',
 })
 
-type CodeToHtml = typeof import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm').codeToHtml
+type CodeToHtml = (
+  code: string,
+  options: { lang: string; themes: { dark: string; light: string } },
+) => Promise<string>
+
+const SHIKI_CDN_URL = 'https://esm.sh/shiki@3.22.0'
+const shikiThemes = { dark: 'vitesse-dark', light: 'vitesse-light' }
 
 let codeToHtml: CodeToHtml | null = null
 
@@ -21,11 +27,9 @@ const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const baseListCodeHighlight = ref()
-
-const gridListCodeHighlight = ref()
-
-const cloneList2CodeHighlight = ref()
+const baseListCodeHighlight = ref('')
+const gridListCodeHighlight = ref('')
+const cloneList2CodeHighlight = ref('')
 
 const baseList = ref(
   Object.keys(Array.from({ length: 4 }).fill(0)).map((item, index) => ({
@@ -70,48 +74,30 @@ function removeTask(element: Record<'name' | 'id' | 'key', string>) {
   }
 }
 
+function highlightCode(code: string, lang: string) {
+  return (
+    codeToHtml?.(code, { lang, themes: shikiThemes }).catch(() => code) ?? Promise.resolve(code)
+  )
+}
+
 watch(
   [baseList, gridList, cloneTaskList],
   async (newVal) => {
     const [baseList, gridList, cloneList2] = newVal
 
-    if (!codeToHtml) {
-      const shiki = await import('https://cdn.jsdelivr.net/npm/shiki@3.22.0/+esm')
-      codeToHtml = shiki.codeToHtml
-    }
+    codeToHtml ??= ((await import(/* @vite-ignore */ SHIKI_CDN_URL)) as { codeToHtml: CodeToHtml })
+      .codeToHtml
 
-    const highlight = codeToHtml
-    if (!highlight) return
+    const baseListCode = JSON.stringify(baseList, null, 2)
+    const gridListCode = JSON.stringify(gridList, null, 2)
+    const cloneList2Code = JSON.stringify(cloneList2, null, 2)
 
-    highlight(JSON.stringify(baseList, null, 2), {
-      lang: 'json',
-      themes: {
-        dark: 'vitesse-dark',
-        light: 'vitesse-light',
-      },
-    })
-      .then((result: string) => (baseListCodeHighlight.value = result))
-      .catch(() => (baseListCodeHighlight.value = JSON.stringify(baseList, null, 2)))
-
-    highlight(JSON.stringify(gridList, null, 2), {
-      lang: 'json',
-      themes: {
-        dark: 'vitesse-dark',
-        light: 'vitesse-light',
-      },
-    })
-      .then((result: string) => (gridListCodeHighlight.value = result))
-      .catch(() => (gridListCodeHighlight.value = JSON.stringify(gridList, null, 2)))
-
-    highlight(JSON.stringify(cloneList2, null, 2), {
-      lang: 'json',
-      themes: {
-        dark: 'vitesse-dark',
-        light: 'vitesse-light',
-      },
-    })
-      .then((result: string) => (cloneList2CodeHighlight.value = result))
-      .catch(() => (cloneList2CodeHighlight.value = JSON.stringify(cloneList2, null, 2)))
+    ;[baseListCodeHighlight.value, gridListCodeHighlight.value, cloneList2CodeHighlight.value] =
+      await Promise.all([
+        highlightCode(baseListCode, 'json'),
+        highlightCode(gridListCode, 'json'),
+        highlightCode(cloneList2Code, 'json'),
+      ])
   },
   {
     immediate: true,
