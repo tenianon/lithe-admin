@@ -31,7 +31,7 @@ export function resolveMenu(
           key: key || name || path,
           icon: renderIcon,
           label,
-          disabled,
+          disabled: mergedDisabled,
           extra,
           props,
           show,
@@ -62,26 +62,22 @@ export function resolveMenu(
 export function resolveRoute(options: MenuMixedOptions[]) {
   const modules = import.meta.glob('@/views/**/*.vue')
 
-  const routeOptions: RouteRecordRaw[] = []
-
-  function flattenOptions(options: MenuMixedOptions[]): MenuMixedOptions[] {
-    return options.flatMap((item) => {
+  function buildRoutes(items: MenuMixedOptions[]): RouteRecordRaw[] {
+    return items.flatMap((item) => {
       if (item.type === 'divider') {
         return []
       }
 
-      if (item.type === 'group' && Array.isArray(item.children) && !isEmpty(item.children)) {
-        return flattenOptions(item.children)
+      if (item.type === 'group') {
+        return Array.isArray(item.children) && !isEmpty(item.children) ? buildRoutes(item.children) : []
       }
 
-      return [item]
-    })
-  }
+      const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption
 
-  flattenOptions(options).forEach((item) => {
-    const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption
+      if (disabled) {
+        return []
+      }
 
-    if (!disabled) {
       let componentModule: RouteRecordRaw['component'] | null = null
 
       if (!isEmpty(component) && isString(component)) {
@@ -117,12 +113,12 @@ export function resolveRoute(options: MenuMixedOptions[]) {
       ]) as RouteRecordRaw
 
       if (Array.isArray(children) && !isEmpty(children)) {
-        route.children = resolveRoute(children)
+        route.children = buildRoutes(children)
       }
 
-      routeOptions.push(route)
-    }
-  })
+      return [route]
+    })
+  }
 
-  return routeOptions
+  return buildRoutes(options)
 }
