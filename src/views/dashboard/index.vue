@@ -26,11 +26,7 @@ import type {
   TitleComponentOption,
   TooltipComponentOption,
 } from 'echarts/components'
-import type {
-  ComposeOption,
-  EChartsType,
-  LinearGradientObject,
-} from 'echarts/core'
+import type { ComposeOption, EChartsType, LinearGradientObject } from 'echarts/core'
 import type {
   AnimationDelayCallback,
   CallbackDataParams,
@@ -62,12 +58,8 @@ type DashboardCartesianComponentOption =
   | TooltipComponentOption
   | XAXisOption
   | YAXisOption
-type DashboardLineChartOption = ComposeOption<
-  DashboardCartesianComponentOption | LineSeriesOption
->
-type DashboardBarChartOption = ComposeOption<
-  DashboardCartesianComponentOption | BarSeriesOption
->
+type DashboardLineChartOption = ComposeOption<DashboardCartesianComponentOption | LineSeriesOption>
+type DashboardBarChartOption = ComposeOption<DashboardCartesianComponentOption | BarSeriesOption>
 
 type DashboardTooltipFormatter = Exclude<NonNullable<TooltipComponentOption['formatter']>, string>
 type LegendSelectedMap = NonNullable<LegendComponentOption['selected']>
@@ -146,34 +138,33 @@ const CHART_CONFIG = {
   MONTHS: Array.from({ length: 12 }, (_, i) => `${i + 1}月`),
 }
 
-const getBusinessLinesConfig = (): readonly BusinessLineConfig[] =>
-  [
-    {
-      name: '主要收入',
-      color: themeColor.value,
-      dataRange: { min: 30000, max: 85000 },
-    },
-    {
-      name: '核心业务',
-      color: twColor('cyan', 500),
-      dataRange: { min: 25000, max: 75000 },
-    },
-    {
-      name: '辅助收入',
-      color: twColor('lime', 500),
-      dataRange: { min: 15000, max: 50000 },
-    },
-    {
-      name: '订阅收入',
-      color: twColor('orange', 500),
-      dataRange: { min: 10000, max: 35000 },
-    },
-    {
-      name: '广告收入',
-      color: twColor('pink', 500),
-      dataRange: { min: 8000, max: 25000 },
-    },
-  ]
+const getBusinessLinesConfig = (): readonly BusinessLineConfig[] => [
+  {
+    name: '主要收入',
+    color: themeColor.value,
+    dataRange: { min: 30000, max: 85000 },
+  },
+  {
+    name: '核心业务',
+    color: twColor('cyan', 500),
+    dataRange: { min: 25000, max: 75000 },
+  },
+  {
+    name: '辅助收入',
+    color: twColor('lime', 500),
+    dataRange: { min: 15000, max: 50000 },
+  },
+  {
+    name: '订阅收入',
+    color: twColor('orange', 500),
+    dataRange: { min: 10000, max: 35000 },
+  },
+  {
+    name: '广告收入',
+    color: twColor('pink', 500),
+    dataRange: { min: 8000, max: 25000 },
+  },
+]
 
 const barChartSelectedLegend = ref<string>(getBusinessLinesConfig()[0].name)
 
@@ -864,13 +855,13 @@ function initMonthlyRadarChart() {
       axisLabel: {
         color: isDark.value ? twColor('neutral', 400) : twColor('neutral', 600),
         fontSize: 12,
-          formatter(value: number) {
-            if (value >= 1000) {
-              return `${(value / 1000).toFixed(0)}k`
-            }
-            return String(value)
-          },
+        formatter(value: number) {
+          if (value >= 1000) {
+            return `${(value / 1000).toFixed(0)}k`
+          }
+          return String(value)
         },
+      },
     },
     series: [
       {
