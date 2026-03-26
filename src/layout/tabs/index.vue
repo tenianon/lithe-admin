@@ -1,5 +1,6 @@
 <script setup lang="tsx">
-import { isFunction } from 'es-toolkit'
+import { Icon } from '@iconify/vue'
+import { isFunction, isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown, NEllipsis, NScrollbar, NPopover } from 'naive-ui'
 import {
@@ -145,11 +146,7 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
     },
     {
       key: 'keepalive',
-      icon: () => (
-        <span
-          class={keepAlive ? 'icon-[hugeicons--database-02]' : 'icon-[hugeicons--database-locked]'}
-        />
-      ),
+      icon: () => <span class={keepAlive ? 'iconify ph--file-text' : 'iconify ph--file-lock'} />,
       label: keepAlive ? '取消缓存' : '缓存标签页',
       disabled: isEmpty(componentName),
     },
@@ -372,6 +369,16 @@ const TabList = defineComponent({
                   <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
                     {tab.icon && isFunction(tab.icon) ? (
                       tab.icon()
+                    ) : tab.icon && isString(tab.icon) && tab.icon.includes(':') ? (
+                      <Icon
+                        icon={tab.icon}
+                        class={[
+                          'size-4.5',
+                          {
+                            'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
+                          },
+                        ]}
+                      />
                     ) : (
                       <span
                         class={[
@@ -403,7 +410,21 @@ const TabList = defineComponent({
                       handleTabCloseClick(tab.id)
                     }}
                   >
-                    <span class='icon-[line-md--close] size-3.5' />
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='14'
+                      height='14'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        fill='none'
+                        stroke='currentColor'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        stroke-width='2'
+                        d='M12 12l7 7M12 12l-7 -7M12 12l-7 7M12 12l7 -7'
+                      />
+                    </svg>
                   </div>
                 )}
               </div>

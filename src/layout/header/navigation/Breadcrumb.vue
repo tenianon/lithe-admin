@@ -1,5 +1,6 @@
 <script setup lang="tsx">
-import { isFunction } from 'es-toolkit'
+import { Icon } from '@iconify/vue'
+import { isFunction, isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
 import { computed, defineComponent, h } from 'vue'
@@ -43,7 +44,11 @@ function resolveDropdownOptions(route: RouteRecordRaw[] | undefined): DropdownPr
   return route.map((item) => ({
     label: item.meta?.title || item.meta?.label,
     key: (item.name as string) || item.path,
-    icon: item.meta?.icon ? () => h('span', { class: `${item.meta?.icon} size-5` }) : undefined,
+    icon: item.meta?.icon
+      ? typeof item.meta.icon === 'string' && item.meta.icon.includes(':')
+        ? () => h(Icon, { icon: item.meta!.icon as string, class: 'size-5' })
+        : () => h('span', { class: `${item.meta?.icon} size-5` })
+      : undefined,
     children:
       Array.isArray(item.children) && !isEmpty(item.children)
         ? resolveDropdownOptions(item.children)
@@ -64,6 +69,11 @@ const BreadcrumbNode = defineComponent({
       <div class='flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1'>
         {props.meta?.icon && isFunction(props.meta?.icon) ? (
           props.meta.icon()
+        ) : props.meta?.icon && isString(props.meta.icon) && props.meta.icon.includes(':') ? (
+          <Icon
+            icon={props.meta.icon}
+            class='size-5'
+          />
         ) : (
           <span class={`${props.meta?.icon} size-5`} />
         )}
@@ -112,7 +122,17 @@ const BreadcrumbItem = defineComponent({
           </NDropdown>
         )}
         {!isCurrentRoute(name) && (
-          <span class='icon-[fluent--slash-forward-20-regular] w-3.5 text-naive-text3' />
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='14'
+            class='text-naive-text3'
+            viewBox='0 0 20 20'
+          >
+            <path
+              fill='currentColor'
+              d='M12.658 2.026a.5.5 0 0 1 .317.632l-5 15a.5.5 0 1 1-.95-.316l5-15a.5.5 0 0 1 .633-.316'
+            />
+          </svg>
         )}
       </div>
     )

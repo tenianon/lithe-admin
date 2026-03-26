@@ -115,17 +115,18 @@ pnpm format:fix
 This project uses [Iconify](https://iconify.design). Usage examples:
 
 ```html
-<!-- Using the `ph` prefix -->
-<span class="iconify ph--x"></span>
+<!-- Using dynamic icons -->
+<Icon icon="ph:gear" />
 
-<!-- Direct usage -->
-<span class="icon-[fluent--data-area-32-regular]"></span>
+<!-- Using static icons -->
+<span class="iconify ph--gear"></span>
 ```
 
-The `ph` prefix needs to be configured in `src/assets/base.css`. Refer to the official docs: [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
+Static icons need to install the corresponding icon library of [Iconify JSON](https://iconify.design/docs/usage/css/tailwind/tailwind4), currently using [Phosphor Icons](https://icon-sets.iconify.design/ph/) as the default, the corresponding configuration is as follows:
 
 ```css
-@plugin "@iconify/tailwind4" {
+/* Configure in src/assets/main.css */
+@plugin '@iconify/tailwind4' {
   prefixes: ph;
   scale: 1.2;
 }

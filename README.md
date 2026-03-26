@@ -115,16 +115,17 @@ pnpm run format:fix
 图标库使用 [Iconify](https://iconify.design)，使用方式如下：
 
 ```html
-<!-- 使用 ph 前缀 -->
-<span class="iconify ph--x"></span>
+<!-- 使用动态图标 -->
+<Icon icon="ph:gear" />
 
-<!-- 直接使用 -->
-<span class="icon-[fluent--data-area-32-regular]"></span>
+<!-- 使用静态图标 -->
+<span class="iconify ph--gear"></span>
 ```
 
-上面的 `ph` 前缀需要在 `src/assets/base.css` 中进行配置，详细文档请参考 [Iconify Tailwind 4](https://iconify.design/docs/usage/css/tailwind/tailwind4)
+静态图标需要安装 [Iconify JSON](https://iconify.design/docs/usage/css/tailwind/tailwind4) 对应的图标库，当前默认使用 [Phosphor Icons](https://icon-sets.iconify.design/ph/)，对应的配置如下：
 
 ```css
+/* 在 src/assets/main.css 中配置 */
 @plugin '@iconify/tailwind4' {
   prefixes: ph;
   scale: 1.2;

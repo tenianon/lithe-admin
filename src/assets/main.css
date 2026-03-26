@@ -37,6 +37,12 @@
   }
 }
 
+@layer iconify-vue {
+  svg.iconify {
+    @apply bg-transparent;
+  }
+}
+
 @layer naive-ui {
   .n-notification-container .n-notification .n-notification__avatar {
     @apply top-2.5!;

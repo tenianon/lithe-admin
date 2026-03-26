@@ -16,7 +16,7 @@ const menu: MenuMixedOptions[] = [
   {
     path: 'dashboard',
     name: 'dashboard',
-    icon: 'icon-[mage--dashboard-chart]',
+    icon: 'mage:dashboard-chart-arrow',
     label: '仪表板',
     meta: {
       componentName: 'Dashboard',
@@ -29,13 +29,13 @@ const menu: MenuMixedOptions[] = [
     path: 'data-show',
     name: 'dataShow',
     label: '数据展示',
-    icon: 'icon-[fluent--data-area-32-regular]',
+    icon: 'fluent:data-area-32-regular',
     redirect: 'data-show/data-table',
     children: [
       {
         path: 'data-table',
         name: 'dataTable',
-        icon: 'iconify ph--table',
+        icon: 'ph:table',
         label: '数据表格',
         meta: {
           componentName: 'DataTable',
@@ -47,7 +47,7 @@ const menu: MenuMixedOptions[] = [
       {
         path: 'data-form',
         name: 'dataForm',
-        icon: 'iconify ph--article',
+        icon: 'ph:article',
         label: '数据表单',
         meta: {
           componentName: 'DataForm',
@@ -62,14 +62,14 @@ const menu: MenuMixedOptions[] = [
     path: 'multi-level-menu',
     redirect: 'multi-level-menu/level-1',
     name: 'multiLevelMenu',
-    icon: 'iconify ph--list',
+    icon: 'ph:list',
     label: '多级菜单',
     children: [
       {
         path: 'level-2-1',
         key: 'level-2-1',
         name: 'level-2-1',
-        icon: 'iconify ph--squares-four',
+        icon: 'ph:squares-four',
         label: '图标菜单',
         component: 'multi-level-menu/index',
         meta: {
@@ -95,7 +95,7 @@ const menu: MenuMixedOptions[] = [
             path: 'level-2-3',
             key: 'level-2-3',
             name: 'level-2-3',
-            icon: 'iconify ph--squares-four',
+            icon: 'ph:squares-four',
             label: '菜单2-3',
             component: 'multi-level-menu/index',
             meta: {
@@ -110,7 +110,7 @@ const menu: MenuMixedOptions[] = [
             path: 'level-2-4',
             key: 'level-2-4',
             name: 'level-2-4',
-            icon: 'iconify ph--squares-four',
+            icon: 'ph:squares-four',
             label: '不创建tab',
             component: 'multi-level-menu/index',
           },
@@ -121,14 +121,14 @@ const menu: MenuMixedOptions[] = [
         key: 'level-2-5',
         name: 'level-2-5',
         redirect: 'level-2-5/level-2-1',
-        icon: 'iconify ph--squares-four',
+        icon: 'ph:squares-four',
         label: '三级菜单',
         children: [
           {
             path: 'level-3-1',
             key: 'level-3-1',
             name: 'level-3-1',
-            icon: 'iconify ph--squares-four',
+            icon: 'ph:squares-four',
             label: '菜单3-1',
             component: 'multi-level-menu/index',
             meta: {
@@ -155,7 +155,7 @@ const menu: MenuMixedOptions[] = [
             key: 'level-3-2',
             name: 'level-3-2',
             label: '菜单3-2',
-            icon: 'iconify ph--squares-four',
+            icon: 'ph:squares-four',
             component: 'multi-level-menu/index',
             meta: {
               showTab: true,
@@ -166,7 +166,7 @@ const menu: MenuMixedOptions[] = [
             key: 'level-3-3',
             name: 'level-3-3',
             label: '禁用菜单',
-            icon: 'iconify ph--squares-four',
+            icon: 'ph:squares-four',
             component: 'multi-level-menu/index',
             disabled: true,
             meta: {
@@ -181,7 +181,7 @@ const menu: MenuMixedOptions[] = [
     path: 'dynamic-route/:id?/:name?',
     name: 'dynamicRoute',
     label: '动态路由',
-    icon: 'icon-[material-symbols--dynamic-feed]',
+    icon: 'material-symbols:dynamic-feed',
     meta: {
       componentName: 'DynamicRoute',
       showTab: true,
@@ -195,7 +195,7 @@ const menu: MenuMixedOptions[] = [
   {
     path: 'feedback',
     name: 'feedback',
-    icon: 'iconify ph--messenger-logo',
+    icon: 'ph:messenger-logo',
     label: '反馈组件',
     meta: {
       componentName: 'Feedback',
@@ -206,7 +206,7 @@ const menu: MenuMixedOptions[] = [
   {
     path: 'drag-drop',
     name: 'dragDrop',
-    icon: 'icon-[pixelarticons--drag-and-drop]',
+    icon: 'pixelarticons:drag-and-drop',
     label: '拖拽模块',
     meta: {
       componentName: 'DragDrop',
@@ -217,7 +217,7 @@ const menu: MenuMixedOptions[] = [
   {
     path: 'not-found-page-404',
     name: 'notfoundPage',
-    icon: 'icon-[streamline-freehand--server-error-404-not-found]',
+    icon: 'streamline-freehand:server-error-404-not-found',
     label: '404页面',
     meta: {
       componentName: 'notfoundPage404',
@@ -228,7 +228,7 @@ const menu: MenuMixedOptions[] = [
     path: '/about',
     key: 'about',
     name: 'about',
-    icon: 'iconify ph--info',
+    icon: 'ph:info',
     label: '关于项目',
     component: 'about/index',
     meta: {

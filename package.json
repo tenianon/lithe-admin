@@ -32,8 +32,9 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.455",
+    "@iconify-json/ph": "^1.2.2",
     "@iconify/tailwind4": "^1.2.3",
+    "@iconify/vue": "^5.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@tsconfig/node22": "^22.0.5",
     "@types/chroma-js": "^3.1.2",

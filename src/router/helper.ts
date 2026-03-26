@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/vue'
 import { isFunction, omit, isString, pickBy } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { h } from 'vue'
@@ -23,7 +24,9 @@ export function resolveMenu(
       const renderIcon = icon
         ? isFunction(icon)
           ? icon
-          : () => h('span', { class: `${icon}` })
+          : icon.includes(':')
+            ? () => h(Icon, { icon })
+            : () => h('span', { class: `${icon}` })
         : null
 
       const menu = pickBy(
