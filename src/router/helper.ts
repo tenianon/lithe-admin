@@ -69,7 +69,9 @@ export function resolveRoute(options: MenuMixedOptions[]) {
       }
 
       if (item.type === 'group') {
-        return Array.isArray(item.children) && !isEmpty(item.children) ? buildRoutes(item.children) : []
+        return Array.isArray(item.children) && !isEmpty(item.children)
+          ? buildRoutes(item.children)
+          : []
       }
 
       const { label, icon, meta, component, children, disabled, ...rest } = item as MenuOption
