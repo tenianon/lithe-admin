@@ -9,7 +9,7 @@ import router from '@/router'
 import { toRefsPreferencesStore, useTabsStore, toRefsTabsStore } from '@/stores'
 
 import type { Tab } from '@/stores'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouteParamsGeneric } from 'vue-router'
 
 defineOptions({
   name: 'MainLayout',
@@ -38,6 +38,12 @@ const keepAliveTabs = computed(() => {
 
 let oldTabs: Tab[] = []
 
+const renderTabTitleMap: Record<string, (params: RouteParamsGeneric) => string> = {
+  dynamicRoute: ({ id, name }) => {
+    return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
+  },
+}
+
 function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
   const {
     icon = 'iconify ph--browser',
@@ -49,7 +55,8 @@ function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
 
   const { fullPath, name, params } = route
 
-  const renderTitle = renderTabTitle ? renderTabTitle(params) : title
+  const titleFn = renderTabTitle || (name ? renderTabTitleMap[name as string] : undefined)
+  const renderTitle = titleFn ? titleFn(params) : title
 
   createTab({
     path: fullPath,

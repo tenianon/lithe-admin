@@ -186,9 +186,6 @@ const menu: MenuMixedOptions[] = [
       componentName: 'DynamicRoute',
       showTab: true,
       enableMultiTab: true,
-      renderTabTitle({ id, name }) {
-        return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
-      },
     },
     component: 'dynamic-route/index',
   },
