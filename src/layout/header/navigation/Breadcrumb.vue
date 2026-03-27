@@ -100,6 +100,7 @@ const BreadcrumbItem = defineComponent({
       type: String as PropType<RouteRecordRaw['name']>,
     },
   },
+  inheritAttrs: false,
   setup(props) {
     const { children, meta, name } = props
 
