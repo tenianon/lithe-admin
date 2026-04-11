@@ -1,108 +1,142 @@
-<script setup lang="ts">
-import { NAlert, NCard, NSplit, NScrollbar, NButton } from 'naive-ui'
-import { ref, watch } from 'vue'
-import { VueDraggable } from 'vue-draggable-plus'
+<script setup lang="tsx">
+import { DragDropProvider } from '@dnd-kit/vue'
+import { isSortable, useSortable } from '@dnd-kit/vue/sortable'
+import { NAlert, NCard, NScrollbar, NButton } from 'naive-ui'
+import { computed, defineComponent, ref, toRef } from 'vue'
 
-import { ScrollContainer, EmptyPlaceholder } from '@/components'
+import { ScrollContainer } from '@/components'
 import { useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 
-import type { UseDraggableReturn } from 'vue-draggable-plus'
+import type { DragEndEvent } from '@dnd-kit/vue'
 
 defineOptions({
   name: 'DragDrop',
 })
 
-type CodeToHtml = (
-  code: string,
-  options: { lang: string; themes: { dark: string; light: string } },
-) => Promise<string>
-
-const SHIKI_CDN_URL = 'https://esm.sh/shiki@3.22.0'
-const shikiThemes = { dark: 'vitesse-dark', light: 'vitesse-light' }
-
-let codeToHtml: CodeToHtml | null = null
-
 const { isMaxMd } = useInjection(mediaQueryInjectionKey)
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
-const baseListCodeHighlight = ref('')
-const gridListCodeHighlight = ref('')
-const cloneList2CodeHighlight = ref('')
+const sortableList = ref(Array.from({ length: 30 }, (_, i) => i + 1))
 
-const baseList = ref(
-  Object.keys(Array.from({ length: 4 }).fill(0)).map((item, index) => ({
-    name: item,
-    id: index,
-  })),
+const gridList = ref(Array.from({ length: 100 }, (_, i) => i + 1))
+
+const sortableGameList = ref(createGame())
+
+const isGameSortSuccess = computed(() =>
+  sortableGameList.value.every(
+    (item, index, list) => index === 0 || list[index - 1]!.height <= item.height,
+  ),
 )
 
-const gridList = ref(
-  Object.keys(Array.from({ length: 50 }).fill(0)).map((item, index) => ({
-    name: Number(item) + 4,
-    id: index + 4,
-  })),
-)
-
-const taskList = ref(
-  Object.keys(Array.from({ length: 5 }).fill(0)).map((item) => ({
-    name: `任务-${item}`,
-    id: `任务-${item}`,
-  })),
-)
-
-const cloneTaskList = ref<{ name: string; id: string; key: string }[]>([])
-
-const baseDragRef = ref<UseDraggableReturn>()
-const gridDragRef = ref<UseDraggableReturn>()
-const taskDragRef = ref<UseDraggableReturn>()
-const cloneTaskListDragRef = ref<UseDraggableReturn>()
-
-function cloneTask(element: Record<'name' | 'id', string>) {
-  return {
-    name: `${element.name}`,
-    id: `${element.id}`,
-    key: element.name + new Date().getTime(),
-  }
-}
-
-function removeTask(element: Record<'name' | 'id' | 'key', string>) {
-  const find = cloneTaskList.value.find((item) => item.key === element.key)
-  if (find) {
-    cloneTaskList.value = cloneTaskList.value.filter((item) => item.key !== element.key)
-  }
-}
-
-function highlightCode(code: string, lang: string) {
-  return (
-    codeToHtml?.(code, { lang, themes: shikiThemes }).catch(() => code) ?? Promise.resolve(code)
-  )
-}
-
-watch(
-  [baseList, gridList, cloneTaskList],
-  async (newVal) => {
-    const [baseList, gridList, cloneList2] = newVal
-
-    codeToHtml ??= ((await import(/* @vite-ignore */ SHIKI_CDN_URL)) as { codeToHtml: CodeToHtml })
-      .codeToHtml
-
-    const baseListCode = JSON.stringify(baseList, null, 2)
-    const gridListCode = JSON.stringify(gridList, null, 2)
-    const cloneList2Code = JSON.stringify(cloneList2, null, 2)
-
-    ;[baseListCodeHighlight.value, gridListCodeHighlight.value, cloneList2CodeHighlight.value] =
-      await Promise.all([
-        highlightCode(baseListCode, 'json'),
-        highlightCode(gridListCode, 'json'),
-        highlightCode(cloneList2Code, 'json'),
-      ])
+const SortableItem = defineComponent({
+  name: 'SortableItem',
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    group: {
+      type: Number,
+    },
   },
-  {
-    immediate: true,
+  setup(props, { slots }) {
+    const id = toRef(props, 'id')
+    const index = toRef(props, 'index')
+    const group = toRef(props, 'group')
+    const element = ref<HTMLDivElement | null>(null)
+
+    const { isDropTarget } = useSortable({
+      id,
+      index,
+      group,
+      element,
+      type: 'item',
+      accept: ['item'],
+    })
+
+    return () => (
+      <div
+        ref={element}
+        class={[
+          'flex cursor-grabbing items-center justify-center rounded bg-neutral-500/8 p-3 transition-[background-color,box-shadow]',
+          {
+            'bg-primary/20 ring-1 ring-primary/30': isDropTarget.value,
+          },
+        ]}
+      >
+        {slots.default?.()}
+      </div>
+    )
   },
-)
+})
+
+function onSortableDragEnd(event: DragEndEvent) {
+  sortableList.value = reorderSortableList(sortableList.value, event)
+}
+
+function onGridDragEnd(event: DragEndEvent) {
+  gridList.value = reorderSortableList(gridList.value, event)
+}
+
+function onGameDragEnd(event: DragEndEvent) {
+  sortableGameList.value = reorderSortableList(sortableGameList.value, event)
+}
+
+function shuffleList<T>(list: T[]) {
+  const nextList = [...list]
+
+  for (let index = nextList.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const currentItem = nextList[index]
+    nextList[index] = nextList[randomIndex]!
+    nextList[randomIndex] = currentItem!
+  }
+
+  return nextList
+}
+
+function reorderSortableList<T>(list: T[], event: DragEndEvent) {
+  if (event.canceled) return list
+
+  const { source } = event.operation
+
+  if (!isSortable(source)) return list
+
+  const { initialIndex, index } = source
+
+  const isInvalidIndex =
+    initialIndex < 0 || index < 0 || initialIndex >= list.length || index >= list.length
+
+  if (isInvalidIndex || initialIndex === index) return list
+
+  const nextList = [...list]
+  const [movedItem] = nextList.splice(initialIndex, 1)
+
+  if (movedItem === undefined) return list
+
+  nextList.splice(index, 0, movedItem)
+
+  return nextList
+}
+
+function createGame() {
+  const heights = Array.from({ length: 10 }, (_, index) => 60 + index * 12)
+
+  return shuffleList(heights).map((height, index) => ({
+    id: index + 1,
+    height,
+  }))
+}
+
+function resetGame() {
+  sortableGameList.value = createGame()
+}
 </script>
 <template>
   <ScrollContainer wrapper-class="flex flex-col gap-y-2">
@@ -110,205 +144,92 @@ watch(
       type="info"
       closable
     >
-      {{ APP_NAME }} 的 Tabs 栏的拖拽模块使用了
-      vue-draggable-plus，在一些拖拽的场景下，它也许可以帮助到你
+      {{ APP_NAME }} 的 Tabs 栏的拖放模块使用了 @dnd-kit/vue，dnd-kit
+      是一个强大的拖放工具包，下面只演示了一些简单的例子，更多例子请参考
+      <NButton
+        text
+        tag="a"
+        href="https://dndkit.com"
+        target="_blank"
+        type="info"
+        >dnd-kit 文档</NButton
+      >
     </NAlert>
     <NCard
-      title="基础使用"
+      title="Sortable 排序"
       :size="isMaxMd ? 'small' : undefined"
     >
-      <NSplit
-        :direction="isMaxMd ? 'vertical' : 'horizontal'"
-        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
-        :style="{
-          height: isMaxMd ? '580px' : '280px',
-        }"
-      >
-        <template #1>
-          <NScrollbar>
-            <VueDraggable
-              ref="baseDragRef"
-              v-model="baseList"
-              :animation="150"
-              :scrollSensitivity="100"
-              ghostClass="ghost"
-              group="drag1"
-              class="flex flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
+      <NScrollbar :style="{ height: isMaxMd ? '580px' : '280px' }">
+        <DragDropProvider @drag-end="onSortableDragEnd">
+          <div class="flex flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none">
+            <SortableItem
+              v-for="(id, index) in sortableList"
+              :key="id"
+              :id="id"
+              :index="index"
+              class="h-12"
             >
-              <div
-                v-for="{ id, name } in baseList"
-                :key="id"
-                class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
-              >
-                {{ name }}
-              </div>
-            </VueDraggable>
-          </NScrollbar>
-        </template>
-        <template #2>
-          <NScrollbar>
-            <div v-html="baseListCodeHighlight"></div>
-          </NScrollbar>
-        </template>
-        <template #resize-trigger>
-          <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] max-lg:h-px max-lg:w-full dark:bg-neutral-700"
-          ></div>
-        </template>
-      </NSplit>
-    </NCard>
-    <NCard
-      title="网格布局"
-      :size="isMaxMd ? 'small' : undefined"
-    >
-      <div class="mb-4">
-        你可以把<span class="text-primary">网格布局</span>的元素拖进<span class="text-primary"
-          >基础使用</span
-        >中，它们可以相互拖放
-      </div>
-      <NSplit
-        :direction="isMaxMd ? 'vertical' : 'horizontal'"
-        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
-        :style="{
-          height: isMaxMd ? '680px' : '280px',
-        }"
-        :default-size="0.7"
-      >
-        <template #1>
-          <NScrollbar>
-            <VueDraggable
-              ref="gridDragRef"
-              v-model="gridList"
-              :animation="150"
-              ghostClass="ghost"
-              group="drag1"
-              class="m-auto grid grid-cols-8 gap-2 rounded bg-neutral-500/5 p-4 select-none max-lg:grid-cols-4"
-            >
-              <div
-                v-for="{ id, name } in gridList"
-                :key="id"
-                class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
-              >
-                {{ name }}
-              </div>
-            </VueDraggable>
-          </NScrollbar>
-        </template>
-        <template #2>
-          <NScrollbar>
-            <div v-html="gridListCodeHighlight"></div>
-          </NScrollbar>
-        </template>
-        <template #resize-trigger>
-          <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] max-lg:h-px max-lg:w-full dark:bg-neutral-700"
-          ></div>
-        </template>
-      </NSplit>
-    </NCard>
-    <NCard
-      title="克隆使用"
-      :size="isMaxMd ? 'small' : undefined"
-    >
-      <NSplit
-        :direction="isMaxMd ? 'vertical' : 'horizontal'"
-        :pane1-class="isMaxMd ? 'pb-4' : 'pr-8'"
-        :pane2-class="isMaxMd ? 'pt-4' : 'pl-8'"
-        :style="{
-          height: isMaxMd ? '780px' : '280px',
-        }"
-        :default-size="0.7"
-      >
-        <template #1>
-          <div class="flex h-full gap-4 max-lg:flex-col">
-            <NScrollbar>
-              <VueDraggable
-                ref="taskDragRef"
-                v-model="taskList"
-                :animation="150"
-                :scrollSensitivity="100"
-                ghostClass="ghost"
-                :group="{ name: 'clone', pull: 'clone', put: false }"
-                class="flex flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
-                :clone="cloneTask"
-              >
-                <div
-                  v-for="{ id, name } in taskList"
-                  :key="id"
-                  class="flex h-14 cursor-move items-center justify-center rounded bg-neutral-500/8 p-3"
-                >
-                  {{ name }}
-                </div>
-              </VueDraggable>
-            </NScrollbar>
-            <NScrollbar>
-              <EmptyPlaceholder
-                :show="cloneTaskList.length <= 0"
-                :description="`把${isMaxMd ? '上' : '左'}边的任务拖拽到这里`"
-              />
-              <VueDraggable
-                ref="cloneTaskListDragRef"
-                v-model="cloneTaskList"
-                :animation="150"
-                :scrollSensitivity="100"
-                ghostClass="ghost"
-                group="clone"
-                class="flex h-full flex-col gap-2 rounded bg-neutral-500/5 p-4 select-none"
-                style="min-height: 278px"
-              >
-                <div
-                  v-for="item in cloneTaskList"
-                  :key="item.key"
-                  class="flex h-14 cursor-move items-center justify-between rounded bg-neutral-500/8 px-4 py-3"
-                >
-                  <span>{{ item.name }}</span>
-                  <NButton
-                    quaternary
-                    circle
-                    size="small"
-                    @click="removeTask(item)"
-                  >
-                    <template #icon>
-                      <span class="iconify ph--x"></span>
-                    </template>
-                  </NButton>
-                </div>
-              </VueDraggable>
-            </NScrollbar>
+              {{ id }}
+            </SortableItem>
           </div>
-        </template>
-        <template #2>
-          <NScrollbar>
-            <div v-html="cloneList2CodeHighlight"></div>
-          </NScrollbar>
-        </template>
-        <template #resize-trigger>
-          <div
-            class="h-full w-px cursor-col-resize bg-neutral-200 transition-[background-color] dark:bg-neutral-700"
-          ></div>
-        </template>
-      </NSplit>
+        </DragDropProvider>
+      </NScrollbar>
+    </NCard>
+    <NCard
+      title="Grid 网格排序"
+      :size="isMaxMd ? 'small' : undefined"
+    >
+      <NScrollbar :style="{ height: isMaxMd ? '680px' : '280px' }">
+        <DragDropProvider @drag-end="onGridDragEnd">
+          <div class="grid grid-cols-10 gap-2 rounded bg-neutral-500/5 p-4 select-none">
+            <SortableItem
+              v-for="(id, index) in gridList"
+              :key="id"
+              :id="id"
+              :index="index"
+              class="h-12"
+            >
+              {{ id }}
+            </SortableItem>
+          </div>
+        </DragDropProvider>
+      </NScrollbar>
+    </NCard>
+    <NCard
+      title="水平排序小游戏"
+      :size="isMaxMd ? 'small' : undefined"
+    >
+      <template #header-extra>
+        <div class="flex items-center gap-4">
+          <span>把柱子从低到高的顺序</span>
+          <NButton
+            type="primary"
+            @click="resetGame"
+          >
+            重新随机
+          </NButton>
+        </div>
+      </template>
+
+      <DragDropProvider @drag-end="onGameDragEnd">
+        <div
+          class="grid h-[200px] items-end gap-4 rounded bg-neutral-500/5 p-4 select-none"
+          :style="`grid-template-columns: repeat(${sortableGameList.length}, minmax(0, 1fr));`"
+        >
+          <SortableItem
+            v-for="(item, index) in sortableGameList"
+            :key="item.id"
+            :id="item.id"
+            :index="index"
+            class="transition-[height]"
+            :style="{ height: `${item.height}px` }"
+            :class="{
+              'bg-primary/20 ring-1 ring-primary/30': isGameSortSuccess,
+            }"
+          >
+          </SortableItem>
+        </div>
+      </DragDropProvider>
     </NCard>
   </ScrollContainer>
 </template>
-<style>
-@layer shiki {
-  html.dark .shiki,
-  html.dark .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--n-color) !important;
-
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-    transition: background-color var(--default-transition-duration)
-      var(--default-transition-timing-function);
-  }
-  pre.shiki {
-    transition: background-color var(--default-transition-duration)
-      var(--default-transition-timing-function);
-  }
-}
-</style>

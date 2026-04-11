@@ -35,7 +35,7 @@
 - **Node.js**: `^20.19.0` 或 `>=22.12.0`
 - **包管理器**: `pnpm`、`npm`、`yarn`、`bun`
 
-### 创建项目
+### 创建项目（推荐）
 
 ```bash
 # 使用 pnpm 创建项目
@@ -50,6 +50,9 @@ yarn create lithe@latest
 # 使用 bun 创建项目
 bun create lithe@latest
 ```
+目前提供了
+- Lithe Admin（默认演示版）
+- [Lithe Admin lite](https://github.com/tenianon/lithe-admin/tree/lite)（精简版，只有基础的页面）
 
 ### 安装依赖
 

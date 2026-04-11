@@ -20,6 +20,7 @@
     "format:fix": "prettier --write src/"
   },
   "dependencies": {
+    "@dnd-kit/vue": "0.4.0-beta-20260407122551",
     "@pinia/colada": "^1.0.0",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.13.6",
@@ -28,7 +29,6 @@
     "es-toolkit": "^1.45.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.31",
-    "vue-draggable-plus": "^0.6.1",
     "vue-router": "^5.0.4"
   },
   "devDependencies": {

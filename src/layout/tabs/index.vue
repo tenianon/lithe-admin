@@ -1,4 +1,6 @@
 <script setup lang="tsx">
+import { DragDropProvider } from '@dnd-kit/vue'
+import { useSortable, isSortable } from '@dnd-kit/vue/sortable'
 import { Icon } from '@iconify/vue'
 import { isFunction, isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
@@ -10,12 +12,11 @@ import {
   onMounted,
   reactive,
   ref,
+  toRef,
   Transition,
-  TransitionGroup,
   useTemplateRef,
   watch,
 } from 'vue'
-import { VueDraggable } from 'vue-draggable-plus'
 
 import { ButtonAnimation } from '@/components'
 import { useInjection } from '@/composables'
@@ -24,8 +25,9 @@ import { layoutInjectionKey } from '@/injection'
 import { useTabsStore, usePreferencesStore, toRefsTabsStore } from '@/stores'
 
 import type { Tab, Key } from '@/stores'
+import type { DragEndEvent } from '@dnd-kit/vue'
 import type { DropdownOption } from 'naive-ui'
-import type { PropType } from 'vue'
+import type { PropType, VNodeChild } from 'vue'
 
 type ContextMenuActions = {
   close: () => void
@@ -58,25 +60,13 @@ const {
   getRemovableIds,
 } = useTabsStore()
 
-const { tabs, tabActivePath } = toRefsTabsStore()
-
 const preferences = usePreferencesStore()
 
-const tabPinnedList = computed({
-  get: () => tabs.value.filter((tab) => tab.pinned),
-  set: (newPinnedTabs: Tab[]) => {
-    const currentUnpinnedTabs = tabs.value.filter((tab) => !tab.pinned)
-    setTabs([...newPinnedTabs, ...currentUnpinnedTabs])
-  },
-})
+const { tabs, tabActivePath } = toRefsTabsStore()
 
-const tabUnPinnedList = computed({
-  get: () => tabs.value.filter((tab) => !tab.pinned),
-  set: (newUnpinnedTabs: Tab[]) => {
-    const currentPinnedTabs = tabs.value.filter((tab) => tab.pinned)
-    setTabs([...currentPinnedTabs, ...newUnpinnedTabs])
-  },
-})
+const emptyTabs: Tab[] = []
+
+const tabGroups = computed(() => splitTabGroups(tabs.value))
 
 const pendingActivePath = ref('')
 
@@ -84,8 +74,6 @@ const tabBackgroundTransitionClasses = reactive({
   leaveToClass: '',
   enterFromClass: '',
 })
-
-const isTabDragging = ref(false)
 
 const showTabTooltip = ref(true)
 
@@ -100,6 +88,15 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
     return []
   }
 
+  return createTabDropdownOptions(targetTab)
+})
+
+const dropdownPosition = reactive({
+  x: 0,
+  y: 0,
+})
+
+function createTabDropdownOptions(targetTab: Tab): DropdownOption[] {
   const { id, componentName } = targetTab
 
   const { pinned, locked, keepAlive } = getTab(id) ?? {}
@@ -159,71 +156,115 @@ const tabDropdownOptions = computed<DropdownOption[]>(() => {
       disabled: pinned,
     },
   ]
-})
+}
 
-const dropdownPosition = reactive({
-  x: 0,
-  y: 0,
-})
-
-const handleTabClick = (path: string) => {
+function handleTabClick(path: string) {
   setTabActivePath(path)
 }
 
-const handleTabCloseClick = (id: Key) => {
+function handleTabCloseClick(id: Key) {
   removeTab(id)
 }
 
-const handleTabContextMenuClick = (e: MouseEvent, tab: Tab) => {
-  e.preventDefault()
+function handleTabContextMenuClick(event: MouseEvent, tab: Tab) {
+  event.preventDefault()
   tabContextMenu.value = tab
   showTabDropdown.value = false
   showTabTooltip.value = false
 
   nextTick(() => {
     showTabDropdown.value = true
-    dropdownPosition.x = e.clientX
-    dropdownPosition.y = e.clientY
+    dropdownPosition.x = event.clientX
+    dropdownPosition.y = event.clientY
   })
 }
 
-const onTabDropdownClickOutside = () => {
+function onTabDropdownClickOutside() {
   showTabDropdown.value = false
   showTabTooltip.value = true
   tabContextMenu.value = null
 }
 
-const onTabDraggableStart = () => {
+function onTabDragStart() {
   showTabDropdown.value = false
   showTabTooltip.value = false
 }
 
-const onTabDraggableEnd = () => {
+function onTabDragEnd(event: DragEndEvent, group: 'pinned' | 'unpinned') {
   showTabTooltip.value = true
+
+  if (event.canceled) return
+
+  const { source } = event.operation
+
+  if (isSortable(source)) {
+    const { initialIndex, index } = source
+
+    if (initialIndex === index) return
+    if (initialIndex < 0 || index < 0) return
+
+    const { pinned, unpinned } = tabGroups.value
+    const currentGroupTabs = group === 'pinned' ? pinned : unpinned
+    const nextGroupTabs = reorderTabs(currentGroupTabs, initialIndex, index)
+
+    if (!nextGroupTabs) return
+
+    setTabs(group === 'pinned' ? [...nextGroupTabs, ...unpinned] : [...pinned, ...nextGroupTabs])
+  }
 }
 
-const onTabDraggableChoose = () => {
-  isTabDragging.value = true
-}
-
-const onTabDraggableUnchoose = () => {
-  isTabDragging.value = false
-}
-
-const onTabDropdownSelected = (key: keyof ContextMenuActions) => {
+function onTabDropdownSelected(key: keyof ContextMenuActions) {
   showTabDropdown.value = false
   showTabTooltip.value = true
 
   getTabContextMenuActions()?.[key]()
 }
 
-const onScrollbarWheeled = (e: WheelEvent) => {
+function onScrollbarWheeled(event: WheelEvent) {
   if (!scrollbarRef.value) return
 
   scrollbarRef.value.scrollBy({
-    left: (e.deltaY || e.deltaX) * 3,
+    left: (event.deltaY || event.deltaX) * 3,
     behavior: 'smooth',
   })
+}
+
+function handleTabRefreshClick() {
+  shouldRefreshRoute.value = true
+}
+
+function splitTabGroups(allTabs: Tab[]) {
+  const firstUnPinnedIndex = allTabs.findIndex((tab) => !tab.pinned)
+
+  if (firstUnPinnedIndex === -1) {
+    return {
+      pinned: allTabs,
+      unpinned: emptyTabs,
+    }
+  }
+
+  if (firstUnPinnedIndex === 0) {
+    return {
+      pinned: emptyTabs,
+      unpinned: allTabs,
+    }
+  }
+
+  return {
+    pinned: allTabs.slice(0, firstUnPinnedIndex),
+    unpinned: allTabs.slice(firstUnPinnedIndex),
+  }
+}
+
+function reorderTabs(list: Tab[], initialIndex: number, targetIndex: number) {
+  const nextTabs = [...list]
+  const [movedTab] = nextTabs.splice(initialIndex, 1)
+
+  if (!movedTab) return null
+
+  nextTabs.splice(targetIndex, 0, movedTab)
+
+  return nextTabs
 }
 
 function getTabContextMenuActions(): ContextMenuActions | null {
@@ -273,9 +314,163 @@ function scrollToActiveTab(behavior: ScrollBehavior = 'auto') {
   })
 }
 
-function handleTabRefreshClick() {
-  shouldRefreshRoute.value = true
+function renderTabIcon(tab: Tab) {
+  const { icon } = tab
+  if (!icon) return null
+
+  if (isFunction(icon)) return icon()
+
+  const highlightKeepAlive = Boolean(tab.componentName && tab.keepAlive)
+
+  if (isString(icon)) {
+    return icon.includes(':') ? (
+      <Icon
+        icon={icon}
+        class={[
+          'size-4.5',
+          {
+            'text-primary': highlightKeepAlive,
+          },
+        ]}
+      />
+    ) : (
+      <span
+        class={[
+          'size-4.5',
+          icon,
+          {
+            'text-primary': highlightKeepAlive,
+          },
+        ]}
+      />
+    )
+  }
+
+  return null
 }
+
+function renderTabTitle(label?: string | (() => VNodeChild)) {
+  if (!label) return null
+
+  if (isFunction(label)) return label()
+
+  return <span>{label}</span>
+}
+
+const TabItem = defineComponent({
+  name: 'TabItem',
+  props: {
+    tab: {
+      type: Object as PropType<Tab>,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+  },
+  setup(props) {
+    const tab = toRef(props, 'tab')
+    const index = toRef(props, 'index')
+    const element = ref<HTMLDivElement | null>(null)
+
+    const { isDropTarget } = useSortable({
+      id: computed(() => tab.value.id ?? tab.value.path),
+      index,
+      element,
+    })
+
+    const currentTab = tab.value
+
+    return () => (
+      <div
+        ref={element}
+        class={[
+          'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
+          {
+            'tab-active': currentTab.path === pendingActivePath.value,
+            group: !currentTab.locked && !preferences.tabs.showTabClose,
+            'bg-primary/10 ring-1 ring-primary/30': isDropTarget.value,
+          },
+        ]}
+        onClick={() => handleTabClick(currentTab.path)}
+        onContextmenu={(e) => handleTabContextMenuClick(e, currentTab)}
+      >
+        <Transition
+          type='transition'
+          leaveActiveClass='transition-[opacity,scale,translate]'
+          enterActiveClass='transition-[opacity,scale,translate]'
+          leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
+          enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
+          onAfterEnter={() => scrollToActiveTab('smooth')}
+        >
+          {currentTab.path === pendingActivePath.value && (
+            <div
+              class={[
+                'absolute inset-0 size-full border-primary bg-primary/6',
+                preferences.tabs.tabBorderPosition === 'top'
+                  ? 'border-t-[1.5px]'
+                  : 'border-b-[1.5px]',
+              ]}
+            />
+          )}
+        </Transition>
+        <div
+          class={['relative flex h-full items-center pl-4', currentTab.pinned ? 'pr-4' : 'pr-2.5']}
+        >
+          <div
+            class={[
+              'flex flex-1 items-center overflow-hidden transition-[translate]',
+              {
+                'translate-x-2.5':
+                  !currentTab.pinned && (currentTab.locked || !preferences.tabs.showTabClose),
+                'group-hover:translate-x-0':
+                  !currentTab.pinned && !currentTab.locked && !preferences.tabs.showTabClose,
+              },
+            ]}
+          >
+            <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
+              {renderTabIcon(currentTab)}
+            </div>
+            <NEllipsis tooltip={showTabTooltip.value}>{renderTabTitle(currentTab.title)}</NEllipsis>
+          </div>
+          {!currentTab.pinned && (
+            <div
+              class={[
+                'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button2-hover',
+                {
+                  'scale-0 opacity-0': currentTab.locked || !preferences.tabs.showTabClose,
+                  'group-hover:scale-100 group-hover:opacity-100':
+                    !currentTab.locked && !preferences.tabs.showTabClose,
+                },
+              ]}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleTabCloseClick(currentTab.id)
+              }}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='14'
+                height='14'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  fill='none'
+                  stroke='currentColor'
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                  stroke-width='2'
+                  d='M12 12l7 7M12 12l-7 -7M12 12l-7 7M12 12l7 -7'
+                />
+              </svg>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  },
+})
 
 routerEventBus.on((event) => {
   if (event.type === 'afterEach') {
@@ -285,160 +480,11 @@ routerEventBus.on((event) => {
   }
 })
 
-const TabList = defineComponent({
-  props: {
-    modelValue: {
-      type: Array as PropType<Tab[]>,
-      required: true,
-    },
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return () => (
-      <VueDraggable
-        class='flex h-10.5'
-        modelValue={props.modelValue}
-        animation={150}
-        easing='cubic-bezier(0, 0, 1, 1)'
-        direction='horizontal'
-        scrollSensitivity={100}
-        ghostClass='bg-primary/20'
-        onStart={onTabDraggableStart}
-        onEnd={onTabDraggableEnd}
-        onChoose={onTabDraggableChoose}
-        onUnchoose={onTabDraggableUnchoose}
-        {...{
-          'onUpdate:modelValue': (value: Tab[]) => emit('update:modelValue', value),
-        }}
-      >
-        <TransitionGroup
-          duration={300}
-          type='transition'
-          enterFromClass='max-w-0'
-          leaveToClass='max-w-0'
-          onAfterEnter={() => scrollToActiveTab('smooth')}
-        >
-          {props.modelValue.map((tab) => (
-            <div
-              key={tab.id}
-              class={[
-                'relative cursor-pointer overflow-hidden border-r border-r-naive-border transition-[background-color,border-color,max-width] hover:bg-primary/6 [&:not(.max-w-0)]:max-w-48',
-                {
-                  'tab-active': tab.path === pendingActivePath.value,
-                  group: !tab.locked && !preferences.tabs.showTabClose,
-                },
-              ]}
-              onClick={() => handleTabClick(tab.path)}
-              onContextmenu={(e) => handleTabContextMenuClick(e, tab)}
-            >
-              <Transition
-                type='transition'
-                leaveActiveClass='transition-[opacity,scale,translate]'
-                enterActiveClass='transition-[opacity,scale,translate]'
-                leaveToClass={tabBackgroundTransitionClasses.leaveToClass}
-                enterFromClass={tabBackgroundTransitionClasses.enterFromClass}
-                onAfterEnter={() => {
-                  scrollToActiveTab('smooth')
-                }}
-              >
-                {tab.path === pendingActivePath.value && (
-                  <div
-                    class={[
-                      'absolute inset-0 size-full border-primary bg-primary/6',
-                      preferences.tabs.tabBorderPosition === 'top'
-                        ? 'border-t-[1.5px]'
-                        : 'border-b-[1.5px]',
-                    ]}
-                  />
-                )}
-              </Transition>
-              <div
-                class={['relative flex h-full items-center pl-4', tab.pinned ? 'pr-4' : 'pr-2.5']}
-              >
-                <div
-                  class={[
-                    'flex flex-1 items-center overflow-hidden transition-[translate]',
-                    {
-                      'translate-x-2.5':
-                        !tab.pinned && (tab.locked || !preferences.tabs.showTabClose),
-                      'group-hover:translate-x-0':
-                        !tab.pinned && !tab.locked && !preferences.tabs.showTabClose,
-                    },
-                  ]}
-                >
-                  <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
-                    {tab.icon && isFunction(tab.icon) ? (
-                      tab.icon()
-                    ) : tab.icon && isString(tab.icon) && tab.icon.includes(':') ? (
-                      <Icon
-                        icon={tab.icon}
-                        class={[
-                          'size-4.5',
-                          {
-                            'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
-                          },
-                        ]}
-                      />
-                    ) : (
-                      <span
-                        class={[
-                          'size-4.5',
-                          tab.icon,
-                          {
-                            'text-primary': tab.componentName && getTab(tab.id)?.keepAlive,
-                          },
-                        ]}
-                      />
-                    )}
-                  </div>
-                  <NEllipsis tooltip={showTabTooltip.value}>
-                    {tab.title && isFunction(tab.title) ? tab.title() : <span>{tab.title}</span>}
-                  </NEllipsis>
-                </div>
-                {!tab.pinned && (
-                  <div
-                    class={[
-                      'ml-1 flex overflow-hidden rounded-full p-1 transition-[background-color,opacity,scale] hover:bg-naive-button2-hover',
-                      {
-                        'scale-0 opacity-0': tab.locked || !preferences.tabs.showTabClose,
-                        'group-hover:scale-100 group-hover:opacity-100':
-                          !tab.locked && !preferences.tabs.showTabClose,
-                      },
-                    ]}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleTabCloseClick(tab.id)
-                    }}
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='14'
-                      height='14'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        fill='none'
-                        stroke='currentColor'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        stroke-width='2'
-                        d='M12 12l7 7M12 12l-7 -7M12 12l-7 7M12 12l7 -7'
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </TransitionGroup>
-      </VueDraggable>
-    )
-  },
-})
-
 watch(
   [() => tabs.value, () => tabActivePath.value],
   ([newTabs, newTabActivePath], [oldTabs, oldTabActivePath]) => {
+    if (newTabActivePath === oldTabActivePath) return
+
     if (!newTabActivePath) {
       tabBackgroundTransitionClasses.leaveToClass = 'scale-0 opacity-0'
       return
@@ -472,13 +518,53 @@ onMounted(() => {
   <div
     class="flex min-h-0 overflow-hidden border-b border-naive-border bg-naive-card transition-[background-color,border-color] select-none"
   >
-    <TabList v-model="tabPinnedList" />
+    <DragDropProvider
+      @dragEnd="(event) => onTabDragEnd(event, 'pinned')"
+      @drag-start="onTabDragStart"
+    >
+      <TransitionGroup
+        tag="div"
+        class="flex h-10.5"
+        :duration="300"
+        type="transition"
+        enterFromClass="max-w-0"
+        leaveToClass="max-w-0"
+        @after-enter="scrollToActiveTab('smooth')"
+      >
+        <TabItem
+          v-for="(tab, index) in tabGroups.pinned"
+          :key="tab.id"
+          :tab="tab"
+          :index="index"
+        />
+      </TransitionGroup>
+    </DragDropProvider>
     <NScrollbar
       ref="scrollbarRef"
       x-scrollable
       @wheel.passive="onScrollbarWheeled"
     >
-      <TabList v-model="tabUnPinnedList" />
+      <DragDropProvider
+        @dragEnd="(event) => onTabDragEnd(event, 'unpinned')"
+        @drag-start="onTabDragStart"
+      >
+        <TransitionGroup
+          tag="div"
+          class="flex h-10.5"
+          :duration="300"
+          type="transition"
+          enterFromClass="max-w-0"
+          leaveToClass="max-w-0"
+          @after-enter="scrollToActiveTab('smooth')"
+        >
+          <TabItem
+            v-for="(tab, index) in tabGroups.unpinned"
+            :key="tab.id"
+            :tab="tab"
+            :index="index"
+          />
+        </TransitionGroup>
+      </DragDropProvider>
     </NScrollbar>
     <div class="flex items-center px-3">
       <NPopover

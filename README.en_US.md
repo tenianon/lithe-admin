@@ -35,7 +35,7 @@ English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/READM
 - **Node.js**: `^20.19.0` or `>=22.12.0`
 - **Package Manager**: `pnpm`, `npm`, `yarn`, `bun`
 
-### Create project
+### Create project (recommend)
 
 ```bash
 # Using pnpm
@@ -50,6 +50,12 @@ yarn create lithe@latest
 # Using bun
 bun create lithe@latest
 ```
+Currently available are:
+
+- Lithe Admin (default demo version)
+
+- [Lithe Admin lite](https://github.com/tenianon/lithe-admin/tree/lite) (simplified version, with only basic pages)
+
 
 ### Install Dependencies
 
