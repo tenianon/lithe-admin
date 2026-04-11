@@ -3,13 +3,13 @@ import { Icon } from '@iconify/vue'
 import { isFunction, isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
-import { computed, defineComponent, h } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 import router from '@/router'
 import { toRefsPreferencesStore } from '@/stores'
 
 import type { DropdownProps } from 'naive-ui'
-import type { PropType } from 'vue'
+import type { PropType, VNodeChild } from 'vue'
 import type { RouteRecordNameGeneric, RouteRecordRaw } from 'vue-router'
 
 const { breadcrumb } = toRefsPreferencesStore()
@@ -22,14 +22,6 @@ const currentRouteName = computed(() => {
   return router.currentRoute.value.name as string
 })
 
-const renderIcon: DropdownProps['renderIcon'] = (option) => {
-  return isFunction(option.icon)
-    ? h(option.icon, {
-        class: 'ml-1.5 size-5',
-      })
-    : null
-}
-
 const onDropdownSelected: DropdownProps['onSelect'] = (key) => {
   router.push({ name: key })
 }
@@ -38,22 +30,43 @@ function isCurrentRoute(name: RouteRecordNameGeneric) {
   return name === currentRouteName.value
 }
 
-function resolveDropdownOptions(route: RouteRecordRaw[] | undefined): DropdownProps['options'] {
+function resolveDropdownOptions(route?: RouteRecordRaw[]): DropdownProps['options'] {
   if (!route) return []
 
   return route.map((item) => ({
     label: item.meta?.title || item.meta?.label,
     key: (item.name as string) || item.path,
-    icon: item.meta?.icon
-      ? typeof item.meta.icon === 'string' && item.meta.icon.includes(':')
-        ? () => h(Icon, { icon: item.meta!.icon as string, class: 'size-5' })
-        : () => h('span', { class: `${item.meta?.icon} size-5` })
-      : undefined,
+    icon: () => renderIcon(item.meta?.icon, 'ml-1.5'),
     children:
       Array.isArray(item.children) && !isEmpty(item.children)
         ? resolveDropdownOptions(item.children)
         : undefined,
   }))
+}
+
+function renderIcon(icon?: string | (() => VNodeChild), iconClasses?: string) {
+  if (!icon) return null
+
+  if (isFunction(icon)) return icon()
+
+  if (isString(icon)) {
+    return icon.includes(':') ? (
+      <Icon
+        icon={icon}
+        class={`size-5 ${iconClasses}`}
+      />
+    ) : (
+      <span class={`${icon} ${iconClasses} size-5`} />
+    )
+  }
+
+  return null
+}
+
+function renderTitle(title?: string | (() => VNodeChild)) {
+  if (!title) return null
+
+  return isFunction(title) ? title() : <span>{title}</span>
 }
 
 const BreadcrumbNode = defineComponent({
@@ -67,21 +80,8 @@ const BreadcrumbNode = defineComponent({
   setup(props) {
     return () => (
       <div class='flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1'>
-        {props.meta?.icon && isFunction(props.meta?.icon) ? (
-          props.meta.icon()
-        ) : props.meta?.icon && isString(props.meta.icon) && props.meta.icon.includes(':') ? (
-          <Icon
-            icon={props.meta.icon}
-            class='size-5'
-          />
-        ) : (
-          <span class={`${props.meta?.icon} size-5`} />
-        )}
-        {props.meta?.title && isFunction(props.meta?.title) ? (
-          props.meta.title()
-        ) : (
-          <span>{props.meta?.title}</span>
-        )}
+        {renderIcon(props.meta?.icon)}
+        {renderTitle(props.meta?.title)}
       </div>
     )
   },
@@ -102,27 +102,24 @@ const BreadcrumbItem = defineComponent({
   },
   inheritAttrs: false,
   setup(props) {
-    const { children, meta, name } = props
-
     return () => (
       <div class='flex min-w-0 items-center'>
-        {isEmpty(children) ? (
-          <BreadcrumbNode meta={meta} />
+        {isEmpty(props.children) ? (
+          <BreadcrumbNode meta={props.meta} />
         ) : (
           <NDropdown
-            options={resolveDropdownOptions(children)}
-            disabled={isEmpty(children)}
+            options={resolveDropdownOptions(props.children)}
+            disabled={isEmpty(props.children)}
             value={currentRouteName.value}
-            renderIcon={renderIcon}
             onSelect={onDropdownSelected}
           >
             <BreadcrumbNode
-              meta={meta}
+              meta={props.meta}
               class='cursor-pointer transition-[background-color,color] not-hover:text-naive-text3 hover:bg-naive-button2-hover'
             />
           </NDropdown>
         )}
-        {!isCurrentRoute(name) && (
+        {!isCurrentRoute(props.name) && (
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='14'
