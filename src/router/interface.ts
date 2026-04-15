@@ -31,8 +31,8 @@ export type MenuOption = ReplaceKeys<
   NoIndex<MenuOptionRaw>,
   {
     icon?: string | (() => VNodeChild)
-    children?: MenuMixedOptions[]
     label?: string | (() => VNodeChild)
+    children?: MenuMixedOptions[]
   }
 > &
   RouteOption
@@ -51,8 +51,8 @@ type MenuDivider = NoIndex<MenuDividerOptionRaw>
 export type MenuMixedOptions = MenuOption | MenuGroup | MenuDivider
 
 export interface CustomRouteMeta {
-  title?: string | (() => VNodeChild)
   icon?: string | (() => VNodeChild)
+  title?: string | (() => VNodeChild)
   componentName?: string
   pinned?: boolean
   showTab?: boolean
