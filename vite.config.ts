@@ -48,8 +48,8 @@ export default defineConfig(({ mode }) => {
                 test: /\/naive-ui/,
               },
               {
-                name: 'vue-draggable-plus',
-                test: /\/vue-draggable-plus/,
+                name: '@dnd-kit/vue',
+                test: /\/@dnd-kit\/vue/,
               },
               {
                 name: 'vueuse',
