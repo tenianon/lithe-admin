@@ -110,9 +110,11 @@ const dir = `
 │   │   │   ├── 📁 action
 │   │   │   │   ├── 📁 component
 │   │   │   │   │   ├── 📄 LayoutThumbnail.vue
+│   │   │   │   │   ├── 📄 MenuSearchModal.vue
 │   │   │   │   │   └── 📄 WatermarkModal.vue
 │   │   │   │   ├── 📄 AvatarDropdown.vue
 │   │   │   │   ├── 📄 FullScreen.vue
+│   │   │   │   ├── 📄 MenuSearch.vue
 │   │   │   │   ├── 📄 PreferencesDrawer.vue
 │   │   │   │   ├── 📄 SignOut.vue
 │   │   │   │   ├── 📄 ThemeModePopover.vue
@@ -190,11 +192,11 @@ const dir = `
 │   ├── 📄 App.vue
 │   └── 📄 main.ts
 ├── ⚙️ .editorconfig
-├── ⚙️ .env
 ├── ⚙️ .gitattributes
 ├── ⚙️ .gitignore
 ├── ⚙️ .npmrc
 ├── ⚙️ .prettierrc.json
+├── 📄 LICENSE
 ├── 📝 README.en_US.md
 ├── 📝 README.md
 ├── 📄 eslint.config.ts
