@@ -21,7 +21,6 @@ const menu: MenuMixedOptions[] = [
     meta: {
       componentName: 'Dashboard',
       pinned: true,
-      showTab: true,
     },
     component: 'dashboard/index',
   },
@@ -40,7 +39,6 @@ const menu: MenuMixedOptions[] = [
         meta: {
           componentName: 'DataTable',
           title: '数据表格',
-          showTab: true,
         },
         component: 'data-show/data-table/index',
       },
@@ -52,7 +50,6 @@ const menu: MenuMixedOptions[] = [
         meta: {
           componentName: 'DataForm',
           title: '数据表单',
-          showTab: true,
         },
         component: 'data-show/data-form/index',
       },
@@ -71,18 +68,12 @@ const menu: MenuMixedOptions[] = [
         icon: 'ph:squares-four',
         label: '图标菜单',
         component: 'multi-level-menu/index',
-        meta: {
-          showTab: true,
-        },
       },
       {
         path: 'level-2-2',
         name: 'level-2-2',
         label: '无图标菜单',
         component: 'multi-level-menu/index',
-        meta: {
-          showTab: true,
-        },
       },
       {
         type: 'group',
@@ -95,9 +86,6 @@ const menu: MenuMixedOptions[] = [
             icon: 'ph:squares-four',
             label: '菜单2-3',
             component: 'multi-level-menu/index',
-            meta: {
-              showTab: true,
-            },
           },
           {
             type: 'divider',
@@ -109,6 +97,9 @@ const menu: MenuMixedOptions[] = [
             icon: 'ph:squares-four',
             label: '不创建tab',
             component: 'multi-level-menu/index',
+            meta: {
+              showTab: false,
+            },
           },
         ],
       },
@@ -125,9 +116,6 @@ const menu: MenuMixedOptions[] = [
             icon: 'ph:squares-four',
             label: '菜单3-1',
             component: 'multi-level-menu/index',
-            meta: {
-              showTab: true,
-            },
           },
           {
             type: 'divider',
@@ -150,9 +138,6 @@ const menu: MenuMixedOptions[] = [
             label: '菜单3-2',
             icon: 'ph:squares-four',
             component: 'multi-level-menu/index',
-            meta: {
-              showTab: true,
-            },
           },
           {
             path: 'level-3-3',
@@ -161,9 +146,6 @@ const menu: MenuMixedOptions[] = [
             icon: 'ph:squares-four',
             component: 'multi-level-menu/index',
             disabled: true,
-            meta: {
-              showTab: true,
-            },
           },
         ],
       },
@@ -176,7 +158,6 @@ const menu: MenuMixedOptions[] = [
     icon: 'material-symbols:dynamic-feed',
     meta: {
       componentName: 'DynamicRoute',
-      showTab: true,
       enableMultiTab: true,
     },
     component: 'dynamic-route/index',
@@ -184,11 +165,10 @@ const menu: MenuMixedOptions[] = [
   {
     path: 'feedback',
     name: 'feedback',
+    label: '反馈组件',
     icon: 'ph:messenger-logo',
     meta: {
       componentName: 'Feedback',
-      showTab: true,
-      title: '反馈组件',
     },
     component: 'feedback/index',
   },
@@ -199,7 +179,6 @@ const menu: MenuMixedOptions[] = [
     label: '拖拽模块',
     meta: {
       componentName: 'DragDrop',
-      showTab: true,
     },
     component: 'drag-drop/index',
   },
@@ -219,9 +198,6 @@ const menu: MenuMixedOptions[] = [
     icon: 'ph:info',
     label: '关于项目',
     component: 'about/index',
-    meta: {
-      showTab: true,
-    },
   },
 ]
 
