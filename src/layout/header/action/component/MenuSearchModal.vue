@@ -151,7 +151,7 @@ function renderHighlightedLabel(label: string) {
     }
 
     nodes.push(
-      <span class='font-medium text-primary'>
+      <span class='font-semibold text-primary'>
         {label.slice(index, index + normalizedSearchKeyword.value.length)}
       </span>,
     )
