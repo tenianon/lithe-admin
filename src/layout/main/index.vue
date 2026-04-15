@@ -132,7 +132,8 @@ watch(
     }
 
     if (newRoute.fullPath !== oldRoute?.fullPath) {
-      const { showTab, enableMultiTab } = newRoute.meta
+      const activeRouteRecord = newRoute.matched.at(-1)
+      const { showTab, enableMultiTab } = activeRouteRecord?.meta ?? {}
       const shouldShowTab = showTab !== false
       const targetPath = enableMultiTab ? newRoute.fullPath : newRoute.path
 
@@ -140,7 +141,7 @@ watch(
 
       if (!isEmpty(findTab)) {
         setTabActivePath(findTab.path)
-      } else if (shouldShowTab) {
+      } else if (shouldShowTab && activeRouteRecord?.name !== 'layout') {
         createTabFromRoute(newRoute)
       } else {
         setTabActivePath('')
