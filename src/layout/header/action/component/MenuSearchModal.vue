@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { Icon } from '@iconify/vue'
-import { onKeyStroke } from '@vueuse/core'
+import { onKeyStroke, useThrottleFn } from '@vueuse/core'
 import { isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NEl, NInput, NScrollbar, NConfigProvider } from 'naive-ui'
@@ -49,9 +49,7 @@ const activeNode = computed(() =>
   navigableSearchNodes.value.find((node) => node.key === activeNodeKey.value),
 )
 
-onKeyStroke(['ArrowUp', 'ArrowDown', 'Enter'], handleSearchKeyStroke, {
-  dedupe: true,
-})
+onKeyStroke(['ArrowUp', 'ArrowDown', 'Enter'], handleSearchKeyStroke)
 
 function isNavigableNode(node: SearchTreeNode) {
   return !node.disabled && node.name !== undefined && isEmpty(node.children)
@@ -209,6 +207,8 @@ function moveActiveSelection(step: -1 | 1) {
   scrollActiveNodeIntoView()
 }
 
+const moveActiveSelectionThrottled = useThrottleFn(moveActiveSelection, 80, false)
+
 function scrollActiveNodeIntoView() {
   nextTick(() => {
     const activeElement = document.querySelector<HTMLElement>('.active-search-node')
@@ -235,20 +235,30 @@ function isSearchModalFocused() {
   return activeElement instanceof Element && !!activeElement.closest('[data-menu-search-modal]')
 }
 
+function handleArrowNavigation(step: -1 | 1, event: KeyboardEvent) {
+  event.preventDefault()
+
+  if (event.repeat) {
+    moveActiveSelectionThrottled(step)
+    return
+  }
+
+  moveActiveSelection(step)
+}
+
 function handleSearchKeyStroke(event: KeyboardEvent) {
   if (!isSearchModalFocused()) return
   if (event.isComposing) return
 
   switch (event.key) {
     case 'ArrowUp':
-      event.preventDefault()
-      moveActiveSelection(-1)
+      handleArrowNavigation(-1, event)
       break
     case 'ArrowDown':
-      event.preventDefault()
-      moveActiveSelection(1)
+      handleArrowNavigation(1, event)
       break
     case 'Enter':
+      if (event.repeat) return
       event.preventDefault()
       navigateToRoute(activeNode.value?.name, event.altKey)
       break
