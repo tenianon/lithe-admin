@@ -401,26 +401,38 @@ watch(
             </kbd>
             <span class="ml-0.5 text-xs">进入</span>
           </div>
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center">
             <kbd
               class="flex h-4.5 items-center justify-center rounded-naive border border-neutral-300 bg-neutral-200 px-1.25 dark:border-neutral-625 dark:bg-neutral-725"
             >
               <span class="text-xs">Alt</span>
             </kbd>
             <kbd
-              class="flex h-4.5 items-center justify-center rounded-naive border border-neutral-300 bg-neutral-200 px-1.25 dark:border-neutral-625 dark:bg-neutral-725"
+              class="ml-1.5 flex h-4.5 items-center justify-center rounded-naive border border-neutral-300 bg-neutral-200 px-1.25 dark:border-neutral-625 dark:bg-neutral-725"
             >
               <span class="iconify size-3 ph--option"></span>
             </kbd>
-            <span class="iconify size-2.5 ph--plus"></span>
+            <span class="mx-1.5 iconify size-3 ph--plus"></span>
             <kbd
               class="flex h-4.5 items-center justify-center rounded-naive border border-neutral-300 bg-neutral-200 px-1.25 dark:border-neutral-625 dark:bg-neutral-725"
             >
               <span class="iconify size-3 ph--arrow-elbow-down-left"></span>
             </kbd>
-            <span class="text-xs">/</span>
-            <span class="-ml-0.5 iconify size-4 ph--mouse-left-click"></span>
-            <span class="text-xs">新窗口</span>
+            <span class="ml-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                class="text-naive-text3"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12.658 2.026a.5.5 0 0 1 .317.632l-5 15a.5.5 0 1 1-.95-.316l5-15a.5.5 0 0 1 .633-.316"
+                />
+              </svg>
+            </span>
+            <span class="iconify size-4 ph--mouse-left-click"></span>
+            <span class="ml-1.5 text-xs">新窗口</span>
           </div>
           <div class="ml-auto flex items-center gap-1.5">
             <kbd
