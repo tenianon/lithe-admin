@@ -7,9 +7,11 @@ import { mediaQueryInjectionKey } from '@/injection'
 import { toRefsPreferencesStore } from '@/stores'
 
 import FullScreen from './FullScreen.vue'
+import MenuSearch from './MenuSearch.vue'
 import PreferencesDrawer from './PreferencesDrawer.vue'
 import SignOut from './SignOut.vue'
 import ThemeModePopover from './ThemeModePopover.vue'
+
 defineOptions({
   name: 'Actions',
 })
@@ -44,6 +46,7 @@ const { navigationMode } = toRefsPreferencesStore()
         />
       </svg>
     </ButtonAnimation>
+    <MenuSearch />
     <FullScreen />
     <ThemeModePopover />
     <PreferencesDrawer />

@@ -25,6 +25,7 @@
   --color-primary: var(--primary-color);
   --color-naive-border: var(--border-color);
   --color-naive-card: var(--card-color);
+  --color-naive-modal: var(--modal-color);
   --color-naive-text3: var(--text-color-3);
   --color-naive-button2-hover: var(--button-color-2-hover);
   --radius-naive: var(--border-radius);

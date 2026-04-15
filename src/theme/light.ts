@@ -22,7 +22,7 @@ export function baseLightThemeOverrides(primaryColor = ''): GlobalThemeOverrides
       textColor2: LIGHT.textColor2,
       textColor3: LIGHT.textColor3,
 
-      bodyColor: twColor('neutral', 25),
+      bodyColor: twColor('neutral', 30),
 
       borderColor: LIGHT.borderColor,
 

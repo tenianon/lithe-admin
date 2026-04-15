@@ -5,7 +5,6 @@ import {
   NDrawer,
   NDrawerContent,
   NSwitch,
-  useModal,
   NSelect,
   NConfigProvider,
   NSlider,
@@ -15,7 +14,7 @@ import { h, ref } from 'vue'
 
 import packageJson from '@/../package.json'
 import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } from '@/components'
-import { useComponentThemeOverrides, useInjection } from '@/composables'
+import { useComponentThemeOverrides, useInjection, useDiscreteApi } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
 import { usePreferencesStore, toRefsPreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
 import { colorAPCA } from '@/utils/colors'
@@ -28,11 +27,11 @@ const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { overlayThemeOverrides } = useComponentThemeOverrides()
 
-const { reset } = usePreferencesStore()
+const { modal } = useDiscreteApi()
+
+const { reset: resetPreferences } = usePreferencesStore()
 
 const { preferences, themeColor, sidebarMenu } = toRefsPreferencesStore()
-
-const modal = useModal()
 
 const showPreferencesDrawer = ref(false)
 
@@ -55,7 +54,7 @@ const colorSwatches = [
   twColor('pink', 500),
 ]
 
-const showWatermarkModal = () => {
+function showWatermarkModal() {
   modal.create({
     autoFocus: false,
     preset: 'dialog',
@@ -63,7 +62,6 @@ const showWatermarkModal = () => {
     closable: true,
     draggable: true,
     showIcon: false,
-    zIndex: 99999,
     title() {
       return h(
         'div',
@@ -125,7 +123,7 @@ const showWatermarkModal = () => {
                 <span>系统设定</span>
                 <ButtonAnimation
                   animation="rotate"
-                  @click="reset"
+                  @click="resetPreferences"
                 >
                   <span class="iconify ph--arrow-clockwise" />
                 </ButtonAnimation>

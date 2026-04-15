@@ -67,7 +67,6 @@ const menu: MenuMixedOptions[] = [
     children: [
       {
         path: 'level-2-1',
-        key: 'level-2-1',
         name: 'level-2-1',
         icon: 'ph:squares-four',
         label: '图标菜单',
@@ -78,7 +77,6 @@ const menu: MenuMixedOptions[] = [
       },
       {
         path: 'level-2-2',
-        key: 'level-2-2',
         name: 'level-2-2',
         label: '无图标菜单',
         component: 'multi-level-menu/index',
@@ -93,7 +91,6 @@ const menu: MenuMixedOptions[] = [
         children: [
           {
             path: 'level-2-3',
-            key: 'level-2-3',
             name: 'level-2-3',
             icon: 'ph:squares-four',
             label: '菜单2-3',
@@ -108,7 +105,6 @@ const menu: MenuMixedOptions[] = [
           },
           {
             path: 'level-2-4',
-            key: 'level-2-4',
             name: 'level-2-4',
             icon: 'ph:squares-four',
             label: '不创建tab',
@@ -118,7 +114,6 @@ const menu: MenuMixedOptions[] = [
       },
       {
         path: 'level-2-5',
-        key: 'level-2-5',
         name: 'level-2-5',
         redirect: 'level-2-5/level-2-1',
         icon: 'ph:squares-four',
@@ -126,7 +121,6 @@ const menu: MenuMixedOptions[] = [
         children: [
           {
             path: 'level-3-1',
-            key: 'level-3-1',
             name: 'level-3-1',
             icon: 'ph:squares-four',
             label: '菜单3-1',
@@ -152,7 +146,6 @@ const menu: MenuMixedOptions[] = [
           },
           {
             path: 'level-3-2',
-            key: 'level-3-2',
             name: 'level-3-2',
             label: '菜单3-2',
             icon: 'ph:squares-four',
@@ -163,7 +156,6 @@ const menu: MenuMixedOptions[] = [
           },
           {
             path: 'level-3-3',
-            key: 'level-3-3',
             name: 'level-3-3',
             label: '禁用菜单',
             icon: 'ph:squares-four',
@@ -193,10 +185,10 @@ const menu: MenuMixedOptions[] = [
     path: 'feedback',
     name: 'feedback',
     icon: 'ph:messenger-logo',
-    label: '反馈组件',
     meta: {
       componentName: 'Feedback',
       showTab: true,
+      title: '反馈组件',
     },
     component: 'feedback/index',
   },
@@ -222,8 +214,7 @@ const menu: MenuMixedOptions[] = [
     component: 'error-page/404',
   },
   {
-    path: '/about',
-    key: 'about',
+    path: 'about',
     name: 'about',
     icon: 'ph:info',
     label: '关于项目',

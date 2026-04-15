@@ -45,12 +45,9 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
-  const userMenu = computed(() => {
-    return resolveMenu(user.value.menu)
-  })
-  const userRoute = computed(() => {
-    return resolveRoute(user.value.menu)
-  })
+  const userMenu = computed(() => resolveMenu(user.value.menu))
+
+  const userRoute = computed(() => resolveRoute(user.value.menu))
 
   return {
     user,
