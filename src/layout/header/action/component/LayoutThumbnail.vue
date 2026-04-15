@@ -19,7 +19,7 @@ const { preferences } = usePreferencesStore()
         <div
           class="flex w-full items-center justify-between border-b border-neutral-350 p-0.5 dark:border-neutral-650"
         >
-          <div class="flex items-center gap-x-[1px]">
+          <div class="flex items-center gap-x-px">
             <div
               v-for="i in 2"
               :key="i"
@@ -27,7 +27,7 @@ const { preferences } = usePreferencesStore()
             />
             <div class="h-1 w-2 border border-primary" />
           </div>
-          <div class="flex items-center gap-x-[1px]">
+          <div class="flex items-center gap-x-px">
             <div
               v-for="i in 4"
               :key="i"
@@ -58,14 +58,14 @@ const { preferences } = usePreferencesStore()
       <div class="flex h-2.5 border-b border-neutral-350 dark:border-neutral-650">
         <div class="h-full w-3 shrink-0"></div>
         <div class="flex w-full items-center justify-between p-0.5">
-          <div class="flex items-center gap-x-[1px]">
+          <div class="flex items-center gap-x-px">
             <div
               v-for="i in 5"
               :key="i"
               class="h-1 w-1.5 border border-primary"
             />
           </div>
-          <div class="flex items-center gap-x-[1px]">
+          <div class="flex items-center gap-x-px">
             <div
               v-for="i in 3"
               :key="i"
