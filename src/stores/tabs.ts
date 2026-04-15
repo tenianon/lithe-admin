@@ -1,4 +1,4 @@
-import { useStorage } from '@vueuse/core'
+import { useSessionStorage, useStorage } from '@vueuse/core'
 import { isEmpty } from 'es-toolkit/compat'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 
@@ -22,7 +22,7 @@ export interface Tab extends Pick<
 export const useTabsStore = defineStore('tabsStore', () => {
   const tabs = useStorage<Tab[]>('tabs', [])
 
-  const tabActivePath = useStorage<string>('tabActivePath', '')
+  const tabActivePath = useSessionStorage<string>('tabActivePath', '')
 
   function findTabIndex(id: Key) {
     return tabs.value.findIndex((tab) => tab.id === id)
