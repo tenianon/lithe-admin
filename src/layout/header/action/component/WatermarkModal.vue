@@ -218,11 +218,11 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
                 <HintHelp
                   label="图像宽度"
                   content="修改后需重新打开水印"
-                  class="pb-1.5"
                 />
                 <NInputNumber
                   v-model:value="watermark.imageWidth"
                   :disabled="!watermark.image"
+                  class="mt-1.5"
                 />
               </div>
             </NFormItem>
@@ -235,11 +235,11 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
                 <HintHelp
                   label="图像高度"
                   content="修改后需重新打开水印"
-                  class="pb-1.5"
                 />
                 <NInputNumber
                   v-model:value="watermark.imageHeight"
                   :disabled="!watermark.image"
+                  class="mt-1.5"
                 />
               </div>
             </NFormItem>
@@ -253,14 +253,13 @@ const { overlayThemeOverrides } = useComponentThemeOverrides()
                 <HintHelp
                   label="图像透明度"
                   content="修改后需重新打开水印"
-                  class="pb-1.5"
                 />
                 <NSlider
                   v-model:value="watermark.imageOpacity"
                   :min="0"
                   :max="1"
                   :step="0.01"
-                  class="mt-2"
+                  class="mt-3.5"
                   :disabled="!watermark.image"
                 />
               </div>
