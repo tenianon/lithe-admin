@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { Icon } from '@iconify/vue'
-import { isFunction, isString } from 'es-toolkit'
+import { isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
@@ -47,8 +47,6 @@ function resolveDropdownOptions(route?: RouteRecordRaw[]): DropdownProps['option
 function renderIcon(icon?: string | (() => VNodeChild), iconClasses?: string) {
   if (!icon) return null
 
-  if (isFunction(icon)) return icon()
-
   if (isString(icon)) {
     return icon.includes(':') ? (
       <Icon
@@ -63,12 +61,6 @@ function renderIcon(icon?: string | (() => VNodeChild), iconClasses?: string) {
   return null
 }
 
-function renderTitle(title?: string | (() => VNodeChild)) {
-  if (!title) return null
-
-  return isFunction(title) ? title() : <span>{title}</span>
-}
-
 const BreadcrumbNode = defineComponent({
   name: 'BreadcrumbNode',
   props: {
@@ -81,7 +73,7 @@ const BreadcrumbNode = defineComponent({
     return () => (
       <div class='flex shrink-0 items-center gap-x-1.5 rounded px-1.5 py-1'>
         {renderIcon(props.meta?.icon)}
-        {renderTitle(props.meta?.title)}
+        <span>{props.meta?.title}</span>
       </div>
     )
   },
