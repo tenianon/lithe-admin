@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/vue'
-import { isFunction, omit, isString, pickBy } from 'es-toolkit'
+import { omit, isString, pickBy } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { h } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -21,12 +21,10 @@ export function resolveMenu(
 
       const mergedDisabled = parentDisabled || disabled
 
-      const renderIcon = icon
-        ? isFunction(icon)
-          ? icon
-          : icon.includes(':')
-            ? () => h(Icon, { icon })
-            : () => h('span', { class: `${icon}` })
+      const renderIcon = isString(icon)
+        ? icon.includes(':')
+          ? () => h(Icon, { icon })
+          : () => h('span', { class: `${icon}` })
         : null
 
       const menu = pickBy(
@@ -47,10 +45,9 @@ export function resolveMenu(
       if (Array.isArray(children) && !isEmpty(children)) {
         menu.children = resolveMenu(children, mergedDisabled)
       } else {
-        menu.label =
-          mergedDisabled || isFunction(label)
-            ? label
-            : () => h(RouterLink, { to: { name } }, { default: () => label })
+        menu.label = mergedDisabled
+          ? label
+          : () => h(RouterLink, { to: { name } }, { default: () => label })
       }
 
       menuOptions.push(menu)
