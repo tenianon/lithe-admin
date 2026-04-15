@@ -41,6 +41,9 @@ export function setupRouterGuard(router: Router) {
           component: Layout,
           // if you need to have a redirect when accessing / routing
           // redirect: '/',
+          meta: {
+            showTab: false,
+          },
           children: userStore.userRoute,
         })
 

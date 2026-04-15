@@ -1,6 +1,6 @@
 {
   "name": "lithe-admin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -19,7 +19,7 @@
     "format:fix": "prettier --write src/"
   },
   "dependencies": {
-    "@dnd-kit/vue": "0.4.0-beta-20260407122551",
+    "@dnd-kit/vue": "^0.4.0",
     "@vueuse/core": "^14.2.1",
     "chroma-js": "^3.2.0",
     "es-toolkit": "^1.45.1",

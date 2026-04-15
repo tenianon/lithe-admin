@@ -10,6 +10,7 @@ import FullScreen from './FullScreen.vue'
 import PreferencesDrawer from './PreferencesDrawer.vue'
 import SignOut from './SignOut.vue'
 import ThemeModePopover from './ThemeModePopover.vue'
+
 defineOptions({
   name: 'Actions',
 })

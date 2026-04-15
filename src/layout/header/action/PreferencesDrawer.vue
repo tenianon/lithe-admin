@@ -10,24 +10,21 @@ import {
   NSlider,
   NInputNumber,
 } from 'naive-ui'
-import { h, ref } from 'vue'
+import { ref } from 'vue'
 
 import packageJson from '@/../package.json'
 import { ButtonAnimation, ButtonAnimationProvider, CollapseTransitionTrigger } from '@/components'
-import { useComponentThemeOverrides, useInjection, useDiscreteApi } from '@/composables'
+import { useComponentThemeOverrides, useInjection } from '@/composables'
 import { mediaQueryInjectionKey } from '@/injection'
-import { usePreferencesStore, toRefsPreferencesStore, DEFAULT_PREFERENCES_OPTIONS } from '@/stores'
+import { usePreferencesStore, toRefsPreferencesStore } from '@/stores'
 import { colorAPCA } from '@/utils/colors'
 import { twColor } from '@/utils/colors'
 
 import LayoutThumbnail from './component/LayoutThumbnail.vue'
-import WatermarkModal from './component/WatermarkModal.vue'
 
 const { isMaxSm } = useInjection(mediaQueryInjectionKey)
 
 const { overlayThemeOverrides } = useComponentThemeOverrides()
-
-const { modal } = useDiscreteApi()
 
 const { reset: resetPreferences } = usePreferencesStore()
 
@@ -53,48 +50,6 @@ const colorSwatches = [
   twColor('fuchsia', 500),
   twColor('pink', 500),
 ]
-
-function showWatermarkModal() {
-  modal.create({
-    autoFocus: false,
-    preset: 'dialog',
-    content: () => h(WatermarkModal),
-    closable: true,
-    draggable: true,
-    showIcon: false,
-    title() {
-      return h(
-        'div',
-        {
-          class: 'flex items-center gap-x-1',
-        },
-        [
-          h('span', '修改水印信息'),
-          h(
-            ButtonAnimation,
-            {
-              title: '恢复默认',
-              animation: 'rotate',
-              size: 'small',
-              onClick() {
-                preferences.value.watermark = structuredClone({
-                  ...DEFAULT_PREFERENCES_OPTIONS.watermark,
-                  show: preferences.value.watermark.show,
-                })
-              },
-            },
-            {
-              default: () =>
-                h('span', {
-                  class: 'iconify ph--arrow-clockwise',
-                }),
-            },
-          ),
-        ],
-      )
-    },
-  })
-}
 </script>
 <template>
   <div>
@@ -370,23 +325,6 @@ function showWatermarkModal() {
             <div>
               <NDivider>页面相关</NDivider>
               <div class="flex flex-col gap-y-1.5">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-x-1">
-                    <span>显示水印</span>
-                    <ButtonAnimation
-                      size="small"
-                      @click="showWatermarkModal"
-                      label="修改"
-                      :theme-overrides="{
-                        heightSmall: '24px',
-                      }"
-                    >
-                      <span class="iconify size-4 ph--pencil-simple-line" />
-                    </ButtonAnimation>
-                  </div>
-                  <NSwitch v-model:value="preferences.watermark.show" />
-                </div>
-
                 <CollapseTransitionTrigger>
                   <template #trigger="{ collapsed }">
                     <div class="flex items-center">
