@@ -2,7 +2,7 @@
 import { DragDropProvider } from '@dnd-kit/vue'
 import { useSortable, isSortable } from '@dnd-kit/vue/sortable'
 import { Icon } from '@iconify/vue'
-import { isFunction, isString } from 'es-toolkit'
+import { isString } from 'es-toolkit'
 import { isEmpty } from 'es-toolkit/compat'
 import { NDropdown, NEllipsis, NScrollbar, NPopover } from 'naive-ui'
 import {
@@ -27,7 +27,7 @@ import { useTabsStore, usePreferencesStore, toRefsTabsStore } from '@/stores'
 import type { Tab, Key } from '@/stores'
 import type { DragEndEvent } from '@dnd-kit/vue'
 import type { DropdownOption } from 'naive-ui'
-import type { PropType, VNodeChild } from 'vue'
+import type { PropType } from 'vue'
 
 type ContextMenuActions = {
   close: () => void
@@ -318,8 +318,6 @@ function renderTabIcon(tab: Tab) {
   const { icon } = tab
   if (!icon) return null
 
-  if (isFunction(icon)) return icon()
-
   const highlightKeepAlive = Boolean(tab.componentName && tab.keepAlive)
 
   if (isString(icon)) {
@@ -347,14 +345,6 @@ function renderTabIcon(tab: Tab) {
   }
 
   return null
-}
-
-function renderTabTitle(label?: string | (() => VNodeChild)) {
-  if (!label) return null
-
-  if (isFunction(label)) return label()
-
-  return <span>{label}</span>
 }
 
 const TabItem = defineComponent({
@@ -432,7 +422,9 @@ const TabItem = defineComponent({
             <div class='mr-2 grid shrink-0 place-items-center overflow-hidden'>
               {renderTabIcon(currentTab)}
             </div>
-            <NEllipsis tooltip={showTabTooltip.value}>{renderTabTitle(currentTab.title)}</NEllipsis>
+            <NEllipsis tooltip={showTabTooltip.value}>
+              <span>{currentTab.title}</span>
+            </NEllipsis>
           </div>
           {!currentTab.pinned && (
             <div
