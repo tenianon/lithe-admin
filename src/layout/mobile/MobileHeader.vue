@@ -1,4 +1,6 @@
-<script setup lang="ts">
+<script setup lang="tsx">
+import { Icon } from '@iconify/vue'
+
 import { ButtonAnimation } from '@/components'
 import AppLogo from '@/components/AppLogo.vue'
 import { useInjection } from '@/composables'
@@ -6,6 +8,19 @@ import { layoutInjectionKey } from '@/injection'
 import router from '@/router'
 
 const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInjectionKey)
+
+function renderIcon(icon?: string) {
+  if (!icon) return null
+
+  return icon.includes(':') ? (
+    <Icon
+      icon={icon}
+      class='size-6'
+    />
+  ) : (
+    <span class={`${icon} size-5`} />
+  )
+}
 </script>
 <template>
   <header
@@ -21,10 +36,7 @@ const { layoutSlideDirection, setLayoutSlideDirection } = useInjection(layoutInj
       <AppLogo />
     </div>
     <div class="flex items-center gap-x-2">
-      <span
-        class="size-6"
-        :class="router.currentRoute.value.meta.icon"
-      />
+      <component :is="renderIcon(router.currentRoute.value.meta.icon)" />
       <span class="text-base">{{ router.currentRoute.value.meta.title }}</span>
     </div>
     <div class="flex items-center gap-x-2">
