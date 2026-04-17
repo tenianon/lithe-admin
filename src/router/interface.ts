@@ -4,7 +4,7 @@ import type {
   MenuGroupOption as MenuGroupOptionRaw,
 } from 'naive-ui'
 import type { VNodeChild } from 'vue'
-import type { RouteRecordRaw, RouteParamsGeneric } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
 type NoIndex<T> = {
   [K in keyof T as string extends K ? never : number extends K ? never : K]: T[K]
@@ -51,12 +51,11 @@ type MenuDivider = NoIndex<MenuDividerOptionRaw>
 export type MenuMixedOptions = MenuOption | MenuGroup | MenuDivider
 
 export interface CustomRouteMeta {
-  icon?: string | (() => VNodeChild)
-  title?: string | (() => VNodeChild)
+  icon?: string
+  title?: string
   componentName?: string
   pinned?: boolean
   showTab?: boolean
   enableMultiTab?: boolean
   keepAlive?: boolean
-  renderTabTitle?: (params: RouteParamsGeneric) => string
 }

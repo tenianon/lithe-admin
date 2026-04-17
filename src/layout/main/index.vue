@@ -38,30 +38,22 @@ const keepAliveTabs = computed(() => {
 
 let oldTabs: Tab[] = []
 
-const renderTabTitleMap: Record<string, (params: RouteParamsGeneric) => string> = {
+const tabTitleResolvers: Record<string, (params: RouteParamsGeneric) => string> = {
   dynamicRoute: ({ id, name }) => {
     return `动态路由${id ? `-${id}` : ''}${name ? `-${name}` : ''}`
   },
 }
 
 function createTabFromRoute(route: RouteLocationNormalizedLoaded) {
-  const {
-    icon = 'iconify ph--browser',
-    title = '未命名标签',
-    renderTabTitle,
-    componentName,
-    pinned,
-  } = route.meta
+  const { icon = 'iconify ph--browser', title = '未命名标签', componentName, pinned } = route.meta
 
   const { fullPath, name, params } = route
-
-  const titleFn = renderTabTitle || (name ? renderTabTitleMap[name as string] : undefined)
-  const renderTitle = titleFn ? titleFn(params) : title
+  const resolvedTitle = name ? (tabTitleResolvers[name as string]?.(params) ?? title) : title
 
   createTab({
     path: fullPath,
     icon,
-    title: renderTitle,
+    title: resolvedTitle,
     name,
     componentName,
     pinned,
