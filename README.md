@@ -10,6 +10,8 @@
 
 [预览地址(国内)](https://lithe-admin.havenovelgod.com) | [预览地址](https://lithe-admin.vercel.app)
 
+[📖文档地址](https://docs.lithe-admin.havenovelgod.com)
+
 [English](https://github.com/tenianon/lithe-admin/blob/main/README.en_US.md) | 简体中文
 
 </div>
@@ -112,26 +114,4 @@ pnpm run format:check
 
 # 自动格式化代码
 pnpm run format:fix
-```
-
-## 📦 图标
-
-图标库使用 [Iconify](https://iconify.design)，使用方式如下：
-
-```html
-<!-- 使用动态图标 -->
-<Icon icon="ph:gear" />
-
-<!-- 使用静态图标 -->
-<span class="iconify ph--gear"></span>
-```
-
-静态图标需要安装 [Iconify JSON](https://iconify.design/docs/usage/css/tailwind/tailwind4) 对应的图标库，当前默认使用 [Phosphor Icons](https://icon-sets.iconify.design/ph/)，对应的配置如下：
-
-```css
-/* 在 src/assets/main.css 中配置 */
-@plugin '@iconify/tailwind4' {
-  prefixes: ph;
-  scale: 1.2;
-}
 ```
