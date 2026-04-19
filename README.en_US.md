@@ -10,6 +10,8 @@
 
 [Preview](https://lithe-admin.vercel.app)
 
+[📖Documentation](https://lithe-admin-docs.vercel.app)
+
 English | [简体中文](https://github.com/tenianon/lithe-admin/blob/main/README.md)
 
 </div>
@@ -113,26 +115,4 @@ pnpm format:check
 
 # Format fix
 pnpm format:fix
-```
-
-## 📦 Icons
-
-This project uses [Iconify](https://iconify.design). Usage examples:
-
-```html
-<!-- Using dynamic icons -->
-<Icon icon="ph:gear" />
-
-<!-- Using static icons -->
-<span class="iconify ph--gear"></span>
-```
-
-Static icons need to install the corresponding icon library of [Iconify JSON](https://iconify.design/docs/usage/css/tailwind/tailwind4), currently using [Phosphor Icons](https://icon-sets.iconify.design/ph/) as the default, the corresponding configuration is as follows:
-
-```css
-/* Configure in src/assets/main.css */
-@plugin '@iconify/tailwind4' {
-  prefixes: ph;
-  scale: 1.2;
-}
 ```
