@@ -46,6 +46,15 @@ const { navigationMode } = toRefsPreferencesStore()
         />
       </svg>
     </ButtonAnimation>
+    <ButtonAnimation
+      :animation="false"
+      tag="a"
+      href="https://docs.lithe-admin.havenovelgod.com"
+      target="_blank"
+      title="文档"
+    >
+      <span class="iconify ph--file-doc" />
+    </ButtonAnimation>
     <MenuSearch />
     <FullScreen />
     <ThemeModePopover />
