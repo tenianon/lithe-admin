@@ -48,7 +48,7 @@ export default defineConfig(({ mode }) => {
                 test: /\/naive-ui/,
               },
               {
-                name: '@dnd-kit/vue',
+                name: 'dnd-kit',
                 test: /\/@dnd-kit\/vue/,
               },
               {
