@@ -37,7 +37,7 @@ export default defineConfig(() => {
                 test: /\/naive-ui/,
               },
               {
-                name: '@dnd-kit/vue',
+                name: 'dnd-kit',
                 test: /\/@dnd-kit\/vue/,
               },
               {
@@ -75,6 +75,7 @@ export default defineConfig(() => {
           },
         },
       },
+      cssMinify: false
     },
   }
 })
