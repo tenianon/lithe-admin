@@ -10,7 +10,7 @@
 
 [预览地址](https://lithe-admin.vercel.app)
 
-[📖文档地址](https://docs.lithe-admin.vercel.app)
+[📖文档地址](https://lithe-admin-docs.vercel.app)
 
 [English](https://github.com/tenianon/lithe-admin/blob/main/README.en_US.md) | 简体中文
 
