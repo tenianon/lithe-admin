@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://lithe-admin-serverless.havenovelgod.com/api/:path*"
+      "destination": "https://lithe-admin-serverless.vercel.app/api/:path*"
     },
     {
       "source": "/(.*)",
