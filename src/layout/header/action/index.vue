@@ -48,7 +48,7 @@ const { navigationMode } = toRefsPreferencesStore()
     <ButtonAnimation
       :animation="false"
       tag="a"
-      href="https://docs.lithe-admin.havenovelgod.com"
+      href="https://lithe-admin-docs.vercel.app"
       target="_blank"
       title="文档"
     >
