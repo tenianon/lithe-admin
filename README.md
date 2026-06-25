@@ -8,9 +8,9 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.2-4ABAFB?style=for-the-badge&logo=tailwindcss)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-4377C1?style=for-the-badge&logo=typescript)
 
-[预览地址(国内)](https://lithe-admin.havenovelgod.com) | [预览地址](https://lithe-admin.vercel.app)
+[预览地址](https://lithe-admin.vercel.app)
 
-[📖文档地址](https://docs.lithe-admin.havenovelgod.com)
+[📖文档地址](https://lithe-admin-docs.vercel.app) 
 
 [English](https://github.com/tenianon/lithe-admin/blob/main/README.en_US.md) | 简体中文
 
