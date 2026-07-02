@@ -6,7 +6,7 @@ import CollapseTransition from './CollapseTransition.vue'
 import type { CollapseTransitionTriggerProps, CollapseTransitionTriggerSlots } from './interface'
 
 const {
-  defaultCollapsed,
+  defaultCollapsed = false,
   direction = 'horizontal',
   type = 'transition',
   displayDirective = 'show',
@@ -17,7 +17,7 @@ const {
 
 defineSlots<CollapseTransitionTriggerSlots>()
 
-const collapsed = defineModel<boolean>({ default: undefined })
+const collapsed = defineModel<boolean>()
 
 defineOptions({
   inheritAttrs: false,
